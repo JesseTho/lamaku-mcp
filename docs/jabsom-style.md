@@ -58,18 +58,9 @@ The style ships the element defaults; you write plain semantic HTML and it lands
 
 **A callout** is a `<blockquote>` — green ground, Kelly Green rule. One per page at most.
 
-**A table** wants `<div class="table-wrap">` around it so a wide table scrolls instead of
-breaking the page, plus a `<caption>` and `scope="col"` on headers.
-
-```html
-<div class="table-wrap">
-<table>
-  <caption>What each term means</caption>
-  <thead><tr><th scope="col">Term</th><th scope="col">Definition</th></tr></thead>
-  <tbody><tr><td>Never-skilling</td><td>Never building the skill at all.</td></tr></tbody>
-</table>
-</div>
-```
+**A table** wants `<div class="table-wrap">` around it so a wide one scrolls instead of
+breaking the page on a phone, plus a `<caption>` and `scope="col"` on headers. The style
+supplies the scrolling behaviour; the wrapper element is yours to write.
 
 **Video** is a plain `<iframe>` with a `title`. The style caps it to the content width. Always
 give the direct link as well, so a blocked embed does not leave the learner with nothing.
@@ -87,7 +78,7 @@ the seal and wordmark are institutional identification and take a description.
 
 ## Accessibility
 
-Everything in [`course-style.md`](course-style.md) applies, and two points matter here:
+Everything in [`course-style.md`](course-style.md) applies, and two points matter especially here:
 
 - **ʻŌlelo Hawaiʻi renders correctly or the page is wrong.** ʻOkina (ʻ, U+02BB) and kahakō
   (ā ē ī ō ū) must survive into the page. Write the character; never an apostrophe standing in
@@ -101,9 +92,9 @@ Target WCAG 2.2 AA. Mānoa Green on white is well past AA for body and large tex
 
 | Destination | Style |
 |---|---|
-| A JABSOM course, anywhere | `jabsom` |
-| A UH course outside JABSOM, on Lamakū | `uh` |
-| Anywhere else | `plain` |
+| A JABSOM course, anywhere | `template: "jabsom"` |
+| A UH course outside JABSOM, on Lamakū | `template: "uh"` |
+| Anywhere else | `template: "plain"` |
 
 `jabsom` is self-contained, so unlike `uh` it is safe to ship off-instance — the page looks
 the same in Moodle, Canvas, or a browser opening the file directly.
