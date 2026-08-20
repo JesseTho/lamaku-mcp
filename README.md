@@ -1,0 +1,199 @@
+# lamaku-mcp
+
+An MCP server for **Lamakū**, the University of Hawaiʻi's D2L Brightspace LMS.
+
+Reads your course data and — unlike every other D2L MCP server — lets an
+instructor **author** course material: announcements, content modules, links,
+assignments, grade items and categories, discussion forums and topics.
+
+Student identities are pseudonymised by default. See [FERPA guard](#ferpa-guard).
+
+---
+
+## Status
+
+Every write route below was verified against a real Lamakū sandbox course by
+creating an object and deleting it again. Nothing here is inferred from the
+D2L documentation alone — the docs turned out to be wrong or incomplete on
+several payload shapes.
+
+| Capability | Status |
+|---|---|
+| Announcements — create, delete | ✅ verified |
+| Content modules — create, nest, delete | ✅ verified |
+| Content links (URL topics) | ✅ verified |
+| Assignment folders + categories | ✅ verified |
+| Grade items + categories | ✅ verified |
+| Discussion forums + topics | ✅ verified |
+| Checklists | ✅ available, not yet wired to a tool |
+| Reading everything above, plus quizzes, surveys, calendar, classlist | ✅ verified |
+| **Quiz creation** | ❌ `POST /quizzes/` returns an identical opaque 400 for a valid payload, `{}`, `[]` and malformed JSON, across every `le` version from 1.40 to 1.96. Quizzes remain readable. |
+| **Rubric creation** | ❌ No rubrics API exists on this instance. Existing rubrics *can* be attached to an assignment by id. |
+| **Course creation** | ❌ Org-level admin. Not available to an instructor account; ask UH ITS. |
+| **Grade value writing** | ⚠️ Untested. The sandbox has no student enrolments to grade, and testing it in a live section would alter a real student's record. |
+
+### Roles matter more than you'd expect
+
+The same person holds different roles per course, and the API enforces them
+differently. Observed on one account: `Instructor` on sandboxes, `Designer` on
+one section, `Teaching Assistant` on another, `Participant` elsewhere, and
+`Instructor-Content Copy Only` on a template — the last of which passes on
+announcements but is refused by the assignment routes.
+
+Every authoring tool therefore runs a **role preflight** before spending the
+call, so you get a straight explanation instead of a bare 403.
+
+---
+
+## Setup
+
+```bash
+pnpm install
+pnpm build
+node dist/cli.js login          # opens a browser; complete UH login + Duo yourself
+```
+
+Register with Claude Code:
+
+```bash
+claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js
+```
+
+Or for any MCP client that speaks stdio:
+
+```jsonc
+{
+  "mcpServers": {
+    "lamaku": {
+      "command": "node",
+      "args": ["/absolute/path/to/lamaku-mcp/dist/index.js"],
+      "env": { "LAMAKU_HOST": "lamaku.hawaii.edu" }
+    }
+  }
+}
+```
+
+### Configuration
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `LAMAKU_HOST` | `lamaku.hawaii.edu` | Brightspace hostname. Any D2L instance works. |
+| `LAMAKU_FERPA` | `strict` | `off` disables student pseudonymisation. |
+| `LAMAKU_BROWSER` | auto | Force `chrome`, `msedge`, or `chromium` at login. |
+| `LAMAKU_DOWNLOAD_DIR` | under app data | Where downloaded files land. |
+| `LAMAKU_LE_VERSION` / `LAMAKU_LP_VERSION` | latest | Pin an API version. |
+
+---
+
+## FERPA guard
+
+Student names, usernames, emails and institutional IDs are protected education
+records. This server is handing data to a language model, and from there into a
+vendor's logs — so by default it does not emit them.
+
+- Students become a stable handle: `student:4f2a91`
+- Handles are an HMAC under a salt generated on your machine and never
+  transmitted, so they are **not reversible** and not comparable across installs
+- Handles are **stable across calls**, so an assistant can still reason about
+  "the same student who missed lab 3" without knowing who that is
+- The raw `userId` is dropped too, since it is a direct key back into
+  Brightspace and any system sharing the same institutional ID
+- **Course staff are not redacted** — a co-instructor's name is not a protected
+  record, and hiding it makes rosters unreadable for no gain
+- `revealStudents: true` on a tool call returns real names, for when you have
+  actually asked for them
+
+This is a disclosure control, not an access control. You can always read your
+roster in Brightspace itself; the point is to keep it out of prompts and model
+retention unless you deliberately ask.
+
+```bash
+node scripts/verify-privacy.mjs   # asserts nothing leaks
+```
+
+---
+
+## Safety model
+
+Writes are irreversible and land in a real course, so every authoring tool is
+gated twice:
+
+1. **Role preflight** — refuses before the call if your role in that course
+   cannot perform the action.
+2. **Confirmation token** — the first call only ever returns a *preview* of
+   what would be sent. Nothing reaches Brightspace until you call again with
+   the token. Tokens are single-use and expire in five minutes.
+
+New objects are created **hidden from students by default**. Unhide them
+deliberately.
+
+```bash
+LAMAKU_SANDBOX=<courseId> node scripts/verify-writes.mjs
+```
+
+That script creates and deletes real objects, so point it only at a sandbox.
+It refuses to run without an explicit course id.
+
+---
+
+## Tools
+
+**Session** `auth_status`, `whoami`
+
+**Reading** `list_courses`, `list_assignments`, `get_assignment`,
+`list_my_submissions`, `download_submission_file`, `get_grades`,
+`get_final_grade`, `get_upcoming_deadlines`, `list_modules`, `get_module`,
+`get_topic`, `download_topic_file`, `get_announcements`, `list_forums`,
+`list_topics`, `read_posts`
+
+**Authoring** `create_announcement`, `delete_announcement`,
+`create_content_module`, `create_content_link`, `delete_content_module`,
+`create_assignment`, `create_assignment_category`, `delete_assignment`,
+`create_grade_item`, `create_grade_category`, `delete_grade_item`,
+`create_discussion_forum`, `create_discussion_topic`
+
+**Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
+
+```bash
+pnpm tools    # print the live list with signatures
+```
+
+---
+
+## Notes for anyone extending this
+
+Rich text is **not one shape**. Which one an endpoint accepts is not derivable
+from the API version, the product code, or the parent object:
+
+| Shape | Used by |
+|---|---|
+| `{Content, Type}` | grades, content modules, dropbox folders, discussion **topics** |
+| `{Text, Html}` | discussion **forums**, announcements |
+
+A forum and a topic *inside that forum* disagree. Sending the wrong one yields a
+bare `400 Invalid Parameters` naming no field. The shapes are pinned per
+endpoint in [`src/api/richtext.ts`](src/api/richtext.ts).
+
+Other traps:
+
+- Announcements need `multipart/mixed`, not JSON or `form-data`, and `StartDate`
+  is mandatory even for an unpublished draft
+- `GradeSchemeId` must be `0` for "course default" — `null` is rejected
+- Discussion `RatingType` is a string enum; `0` is rejected
+- A `400` does **not** imply you have permission. Many routes validate the body
+  before checking the role, so probing with a malformed payload over-reports
+  access. Only a real create proves anything.
+
+---
+
+## Acknowledgements
+
+Derived from [mycourses-mcp](https://github.com/sahildayal/mycourses-mcp) by
+Sahil Dayal (MIT), which contributed the browser-session auth, the confirmation
+gate, and the client and multipart layers. The instructor authoring tools, the
+FERPA guard, the role preflight and the Lamakū targeting are new here.
+
+Not affiliated with or endorsed by the University of Hawaiʻi or D2L. Check UH's
+acceptable-use policy before pointing this at your account.
+
+MIT licensed.
