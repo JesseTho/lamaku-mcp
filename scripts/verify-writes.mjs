@@ -125,7 +125,63 @@ if (quiz.json?.quizId) {
   check('quiz deleted', qGone.json?.status === 'deleted', `id=${qGone.json?.quizId}`);
 }
 
-console.log('\n7. FERPA guard on discussion authors');
+console.log('\n7. Checklist with nested categories and items');
+const clPreview = await call('create_checklist', {
+  course: SANDBOX,
+  name: '[E2E] probe checklist',
+  categories: [
+    { name: 'Week 1', items: [{ name: 'Read chapter 1' }, { name: 'Post intro' }] },
+    { name: 'Week 2', items: [{ name: 'Lab writeup' }] },
+  ],
+});
+check('checklist previews the whole tree', clPreview.json?.willDo?.items === 3, `items=${clPreview.json?.willDo?.items}`);
+
+const cl = await call('create_checklist', {
+  course: SANDBOX,
+  name: '[E2E] probe checklist',
+  categories: [
+    { name: 'Week 1', items: [{ name: 'Read chapter 1' }, { name: 'Post intro' }] },
+    { name: 'Week 2', items: [{ name: 'Lab writeup' }] },
+  ],
+  confirmToken: clPreview.json?.confirmToken,
+});
+check('checklist created', cl.json?.status === 'created', `id=${cl.json?.checklistId}`);
+
+const listed = await call('list_checklists', { course: SANDBOX });
+const mine = (listed.json?.checklists ?? []).find((c) => c.checklistId === cl.json?.checklistId);
+check('reads back 2 categories', mine?.categories?.length === 2);
+check(
+  'reads back 3 items',
+  (mine?.categories ?? []).reduce((n, c) => n + c.items.length, 0) === 3,
+);
+
+const addPreview = await call('add_checklist_item', {
+  course: SANDBOX,
+  checklistId: cl.json?.checklistId,
+  categoryId: mine?.categories?.[0]?.categoryId,
+  name: 'Added later',
+});
+const added = await call('add_checklist_item', {
+  course: SANDBOX,
+  checklistId: cl.json?.checklistId,
+  categoryId: mine?.categories?.[0]?.categoryId,
+  name: 'Added later',
+  confirmToken: addPreview.json?.confirmToken,
+});
+check('item appended to existing category', added.json?.status === 'created');
+
+const clDel = await call('delete_checklist', {
+  course: SANDBOX,
+  checklistId: cl.json?.checklistId,
+});
+const clGone = await call('delete_checklist', {
+  course: SANDBOX,
+  checklistId: cl.json?.checklistId,
+  confirmToken: clDel.json?.confirmToken,
+});
+check('checklist deleted', clGone.json?.status === 'deleted');
+
+console.log('\n8. FERPA guard on discussion authors');
 // Walks whatever threads the sandbox happens to have rather than pinning ids.
 const forums = await call('list_forums', { course: SANDBOX });
 let authors = [];

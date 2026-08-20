@@ -17,6 +17,7 @@ import * as discussions from './tools/discussions.js';
 import * as grades from './tools/grades.js';
 import * as instructorAnnouncements from './tools/instructor/announcements.js';
 import * as instructorAssignments from './tools/instructor/assignments.js';
+import * as instructorChecklists from './tools/instructor/checklists.js';
 import * as instructorContent from './tools/instructor/content.js';
 import * as instructorDiscussions from './tools/instructor/discussions.js';
 import * as instructorGrades from './tools/instructor/grades.js';
@@ -49,6 +50,7 @@ export function createServer(): { server: McpServer; client: D2LClient } {
   instructorGrades.register(server, client);
   instructorDiscussions.register(server, client);
   instructorQuizzes.register(server, client);
+  instructorChecklists.register(server, client);
 
   return { server, client };
 }

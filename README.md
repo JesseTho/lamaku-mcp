@@ -26,7 +26,7 @@ several payload shapes.
 | Grade items + categories | ✅ verified |
 | Discussion forums + topics | ✅ verified |
 | Quizzes — create, delete | ✅ verified (shell only; see below) |
-| Checklists | ✅ available, not yet wired to a tool |
+| Checklists — create with nested categories and items, append, delete | ✅ verified |
 | Reading everything above, plus surveys, calendar, classlist | ✅ verified |
 | **Quiz questions** | ❌ Brightspace exposes `GET` for questions but no create/update route. Quizzes are created empty and questions added in the UI. |
 | **Rubric authoring** | ⛔ Route exists but needs `le 1.97+` (LMS v20.26.8). Lamakū serves `le 1.96` — one version short, so this arrives with the next Brightspace upgrade. |
@@ -154,14 +154,14 @@ It refuses to run without an explicit course id.
 `list_my_submissions`, `download_submission_file`, `get_grades`,
 `get_final_grade`, `get_upcoming_deadlines`, `list_modules`, `get_module`,
 `get_topic`, `download_topic_file`, `get_announcements`, `list_forums`,
-`list_topics`, `read_posts`, `list_quizzes`
+`list_topics`, `read_posts`, `list_quizzes`, `list_checklists`
 
 **Authoring** `create_announcement`, `delete_announcement`,
 `create_content_module`, `create_content_link`, `delete_content_module`,
 `create_assignment`, `create_assignment_category`, `delete_assignment`,
 `create_grade_item`, `create_grade_category`, `delete_grade_item`,
 `create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
-`delete_quiz`
+`delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
@@ -196,6 +196,12 @@ Other traps:
   the *same* opaque `Provided JSON is invalid` with no field named, so an
   incomplete body is indistinguishable from an unsupported endpoint. The full
   field set is in [`src/tools/instructor/quizzes.ts`](src/tools/instructor/quizzes.ts).
+- Checklists need `SortOrder` (>= 1) on both categories and items, and an
+  item's `CategoryId` is required and non-nullable — a checklist is not usable
+  until it has a category
+- **Collection shapes are inconsistent within one feature.** `GET /checklists/`
+  returns a bare array while its own `/categories/` and `/items/` sub-routes
+  wrap the same data in `{Objects, Next}`. Normalise both.
 - A `400` does **not** imply you have permission. Many routes validate the body
   before checking the role, so probing with a malformed payload over-reports
   access. Only a real create proves anything.
