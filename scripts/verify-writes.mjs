@@ -102,7 +102,30 @@ const after = await call('list_modules', { course: SANDBOX });
 const countAfter = after.json?.modules?.length ?? after.json?.count ?? null;
 check('module count back to baseline', countBefore === countAfter, `${countBefore} -> ${countAfter}`);
 
-console.log('\n6. FERPA guard on discussion authors');
+console.log('\n6. Quiz create and delete');
+const quizPreview = await call('create_quiz', {
+  course: SANDBOX,
+  name: '[E2E] probe quiz',
+  description: 'created by the end-to-end test',
+});
+check('quiz previews first', quizPreview.json?.status === 'confirmation_required');
+const quiz = await call('create_quiz', {
+  course: SANDBOX,
+  name: '[E2E] probe quiz',
+  confirmToken: quizPreview.json?.confirmToken,
+});
+check('quiz created', quiz.json?.status === 'created', `id=${quiz.json?.quizId}`);
+if (quiz.json?.quizId) {
+  const qDel = await call('delete_quiz', { course: SANDBOX, quizId: quiz.json.quizId });
+  const qGone = await call('delete_quiz', {
+    course: SANDBOX,
+    quizId: quiz.json.quizId,
+    confirmToken: qDel.json?.confirmToken,
+  });
+  check('quiz deleted', qGone.json?.status === 'deleted', `id=${qGone.json?.quizId}`);
+}
+
+console.log('\n7. FERPA guard on discussion authors');
 // Walks whatever threads the sandbox happens to have rather than pinning ids.
 const forums = await call('list_forums', { course: SANDBOX });
 let authors = [];

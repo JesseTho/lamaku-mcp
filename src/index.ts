@@ -20,6 +20,7 @@ import * as instructorAssignments from './tools/instructor/assignments.js';
 import * as instructorContent from './tools/instructor/content.js';
 import * as instructorDiscussions from './tools/instructor/discussions.js';
 import * as instructorGrades from './tools/instructor/grades.js';
+import * as instructorQuizzes from './tools/instructor/quizzes.js';
 import { PRIVACY_MODE } from './privacy.js';
 
 export function createServer(): { server: McpServer; client: D2LClient } {
@@ -47,6 +48,7 @@ export function createServer(): { server: McpServer; client: D2LClient } {
   instructorAssignments.register(server, client);
   instructorGrades.register(server, client);
   instructorDiscussions.register(server, client);
+  instructorQuizzes.register(server, client);
 
   return { server, client };
 }

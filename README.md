@@ -25,12 +25,22 @@ several payload shapes.
 | Assignment folders + categories | ✅ verified |
 | Grade items + categories | ✅ verified |
 | Discussion forums + topics | ✅ verified |
+| Quizzes — create, delete | ✅ verified (shell only; see below) |
 | Checklists | ✅ available, not yet wired to a tool |
-| Reading everything above, plus quizzes, surveys, calendar, classlist | ✅ verified |
-| **Quiz creation** | ❌ `POST /quizzes/` returns an identical opaque 400 for a valid payload, `{}`, `[]` and malformed JSON, across every `le` version from 1.40 to 1.96. Quizzes remain readable. |
-| **Rubric creation** | ❌ No rubrics API exists on this instance. Existing rubrics *can* be attached to an assignment by id. |
+| Reading everything above, plus surveys, calendar, classlist | ✅ verified |
+| **Quiz questions** | ❌ Brightspace exposes `GET` for questions but no create/update route. Quizzes are created empty and questions added in the UI. |
+| **Rubric authoring** | ⛔ Route exists but needs `le 1.97+` (LMS v20.26.8). Lamakū serves `le 1.96` — one version short, so this arrives with the next Brightspace upgrade. |
+| **Rubric assessment** (scoring a student against an existing rubric) | ⚠️ Available — `/assessment` needs only `le 1.93+` and the route answers on 1.96. Unverified end-to-end because the sandbox has no rubrics to score against. |
 | **Course creation** | ❌ Org-level admin. Not available to an instructor account; ask UH ITS. |
 | **Grade value writing** | ⚠️ Untested. The sandbox has no student enrolments to grade, and testing it in a live section would alter a real student's record. |
+
+### Reading a 404 against a 400
+
+Brightspace distinguishes the two in a way worth relying on when probing:
+`404` means the route does not exist at that API version, `400` means it exists
+and rejected your input. That is how the rubric split above was established —
+`/rubrics/` returns 404 on 1.96 while `/assessment` returns 400, exactly
+matching the documented 1.97 and 1.93 minimums.
 
 ### Roles matter more than you'd expect
 
@@ -144,13 +154,14 @@ It refuses to run without an explicit course id.
 `list_my_submissions`, `download_submission_file`, `get_grades`,
 `get_final_grade`, `get_upcoming_deadlines`, `list_modules`, `get_module`,
 `get_topic`, `download_topic_file`, `get_announcements`, `list_forums`,
-`list_topics`, `read_posts`
+`list_topics`, `read_posts`, `list_quizzes`
 
 **Authoring** `create_announcement`, `delete_announcement`,
 `create_content_module`, `create_content_link`, `delete_content_module`,
 `create_assignment`, `create_assignment_category`, `delete_assignment`,
 `create_grade_item`, `create_grade_category`, `delete_grade_item`,
-`create_discussion_forum`, `create_discussion_topic`
+`create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
+`delete_quiz`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
@@ -180,6 +191,11 @@ Other traps:
   is mandatory even for an unpublished draft
 - `GradeSchemeId` must be `0` for "course default" — `null` is rejected
 - Discussion `RatingType` is a string enum; `0` is rejected
+- **Quiz creation rejects partial bodies.** Every documented field must be
+  present. A nearly-complete payload, `{}`, `[]` and malformed JSON all return
+  the *same* opaque `Provided JSON is invalid` with no field named, so an
+  incomplete body is indistinguishable from an unsupported endpoint. The full
+  field set is in [`src/tools/instructor/quizzes.ts`](src/tools/instructor/quizzes.ts).
 - A `400` does **not** imply you have permission. Many routes validate the body
   before checking the role, so probing with a malformed payload over-reports
   access. Only a real create proves anything.
