@@ -38,25 +38,112 @@ function slug(title: string): string {
   return cleaned || 'page';
 }
 
+export type PageTemplate = 'uh' | 'plain';
+
+/**
+ * UH hosts a shared template library on the Lamaku instance itself, and the
+ * Course Starter Template builds every page against it. Because it is served
+ * from the same origin as course content, an authored page can link it with an
+ * absolute path — this is not a CDN dependency, and it is the one exception to
+ * keeping a page self-contained.
+ *
+ * See docs/course-style.md for the component vocabulary these stylesheets
+ * provide.
+ */
+const UH_ASSETS = '/shared/HTML-Template-Library/_assets';
+
+const UH_STYLESHEETS = [
+  `${UH_ASSETS}/thirdpartylib/bootstrap-4.3.1/css/bootstrap.min.css`,
+  `${UH_ASSETS}/thirdpartylib/fontawesome-free-5.9.0-web/css/all.min.css`,
+  `${UH_ASSETS}/css/styles.min.css`,
+  `${UH_ASSETS}/css/SYS_custom.css`,
+];
+
 /**
  * Brightspace renders the uploaded file as-is, so it needs to be a complete
- * document. The styling stays deliberately minimal: Brightspace wraps content
- * in its own theme, and heavy page CSS fights it.
+ * document. The 'uh' template reproduces the starter template's skeleton:
+ * a decorative banner, a `col-sm-10 offset-sm-1` content column that sets the
+ * measure, and the seal footer. The banner carries alt="" deliberately — the
+ * template's own pages use alt="banner", which announces a word that carries
+ * nothing.
  */
-function wrapHtml(title: string, bodyHtml: string): string {
-  return [
+function wrapHtml(
+  title: string,
+  bodyHtml: string,
+  template: PageTemplate = 'uh',
+): string {
+  const head = [
     '<!DOCTYPE html>',
     '<html lang="en">',
     '<head>',
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
+    ...(template === 'uh'
+      ? UH_STYLESHEETS.map((href) => `<link rel="stylesheet" href="${href}">`)
+      : []),
     `<title>${escapeHtml(title)}</title>`,
     '</head>',
+  ];
+
+  if (template === 'plain') {
+    return [...head, '<body>', bodyHtml, '</body>', '</html>'].join('\n');
+  }
+
+  return [
+    ...head,
     '<body>',
+    '<div class="container-fluid">',
+    '<div class="content-wrapper">',
+    '<div class="row">',
+    '<div class="col-12 banner-img">',
+    `<p><img src="${UH_ASSETS}/img/SYS_banner.png" alt=""></p>`,
+    '</div>',
+    '<div class="col-sm-10 offset-sm-1">',
     bodyHtml,
+    '</div>',
+    '</div>',
+    '<div class="col-12"><footer>',
+    `<p><img src="${UH_ASSETS}/img/SYS_seal.png" alt="University of Hawaiʻi seal"></p>`,
+    '</footer></div>',
+    '</div>',
+    '</div>',
     '</body>',
     '</html>',
   ].join('\n');
+}
+
+/**
+ * Cheap checks against docs/course-style.md. These are reported in the preview
+ * rather than enforced, because a deliberate exception is sometimes right and
+ * a silent rewrite of someone's markup is not.
+ */
+function styleWarnings(html: string): string[] {
+  const warnings: string[] = [];
+  if (/8000db/i.test(html)) {
+    warnings.push(
+      'Contains an instructor note (#8000db). Those are author guidance and ' +
+        'must not appear on a published page.',
+    );
+  }
+  if (/<h1[\s>]/i.test(html)) {
+    warnings.push('Contains <h1>. Brightspace owns h1; page titles start at h2.');
+  }
+  if (/<img(?![^>]*\balt=)/i.test(html)) {
+    warnings.push('An <img> has no alt attribute. Decorative images need alt="".');
+  }
+  if (/<table(?![^>]*class=)/i.test(html) || (/<table/i.test(html) && !/table-responsive/i.test(html))) {
+    warnings.push(
+      'A <table> is not wrapped in <div class="table-responsive">, so it will ' +
+        'break the layout on a narrow screen.',
+    );
+  }
+  if (/<svg/i.test(html) && !/(role="img"|<title|aria-label)/i.test(html)) {
+    warnings.push('An inline <svg> has no text alternative (role="img", <title> or aria-label).');
+  }
+  if (/<iframe(?![^>]*\btitle=)/i.test(html)) {
+    warnings.push('An <iframe> has no title attribute.');
+  }
+  return warnings;
 }
 
 function escapeHtml(s: string): string {
@@ -127,23 +214,34 @@ export function register(server: McpServer, client: D2LClient): void {
               'include <html>, <head> or <body> tags; they are added automatically.',
           ),
         hidden: z.boolean().optional().describe('Hide from students. Default true.'),
+        template: z
+          .enum(['uh', 'plain'])
+          .optional()
+          .describe(
+            'Page chrome. "uh" (default) wraps the content in the UH shared ' +
+              'template — stylesheets, banner, content column, seal footer — so ' +
+              'the page matches other Lamaku courses. "plain" emits a bare ' +
+              'document with no institutional styling.',
+          ),
         dueDate: z.string().optional().describe('ISO due date, if the page is dated.'),
         confirmToken: z.string().optional(),
       },
     },
-    async ({ course, moduleId, title, html, hidden, dueDate, confirmToken }) =>
+    async ({ course, moduleId, title, html, hidden, template, dueDate, confirmToken }) =>
       guard(async () => {
         if (confirmToken) return ok(await consume('create_content_page', confirmToken));
 
         const orgUnitId = await resolveOrgUnitId(client, course);
         const role = await requireAuthoring(client, orgUnitId, 'create content');
         const isHidden = hidden ?? true;
+        const chrome = template ?? 'uh';
         const space = await contentSpace(client, orgUnitId);
         const filename = `${slug(title)}.html`;
-        const document = wrapHtml(title, html);
+        const document = wrapHtml(title, html, chrome);
 
         // Rough proxy for the density limits a course page should respect.
         const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+        const warnings = styleWarnings(html);
 
         return ok(
           stage(
@@ -153,6 +251,7 @@ export function register(server: McpServer, client: D2LClient): void {
               courseId: orgUnitId,
               moduleId,
               title,
+              template: chrome,
               path: `${space}/${filename}`,
               words,
               hiddenFromStudents: isHidden,
@@ -163,6 +262,7 @@ export function register(server: McpServer, client: D2LClient): void {
                       `under 600 is better still — consider splitting this page.`,
                   }
                 : {}),
+              ...(warnings.length ? { styleWarnings: warnings } : {}),
             },
             async () => {
               const created = await client.postMultipart<{ Id?: number }>(
@@ -225,10 +325,14 @@ export function register(server: McpServer, client: D2LClient): void {
           .string()
           .optional()
           .describe('New title. Omit to keep the existing one.'),
+        template: z
+          .enum(['uh', 'plain'])
+          .optional()
+          .describe('Page chrome, as for create_content_page. Default "uh".'),
         confirmToken: z.string().optional(),
       },
     },
-    async ({ course, topicId, html, title, confirmToken }) =>
+    async ({ course, topicId, html, title, template, confirmToken }) =>
       guard(async () => {
         if (confirmToken) return ok(await consume('update_content_page', confirmToken));
 
@@ -252,7 +356,9 @@ export function register(server: McpServer, client: D2LClient): void {
 
         const filename = topic.Url.split('/').pop() ?? 'page.html';
         const newTitle = title ?? topic.Title ?? filename;
+        const chrome = template ?? 'uh';
         const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+        const warnings = styleWarnings(html);
 
         return ok(
           stage(
@@ -261,6 +367,7 @@ export function register(server: McpServer, client: D2LClient): void {
               course: role.courseName ?? orgUnitId,
               topicId,
               title: newTitle,
+              template: chrome,
               path: topic.Url,
               words,
               note:
@@ -273,6 +380,7 @@ export function register(server: McpServer, client: D2LClient): void {
                       `consider splitting this page.`,
                   }
                 : {}),
+              ...(warnings.length ? { styleWarnings: warnings } : {}),
             },
             async () => {
               // Brightspace exposes no route that replaces a topic's file
@@ -306,7 +414,7 @@ export function register(server: McpServer, client: D2LClient): void {
                   {
                     filename,
                     contentType: 'text/html',
-                    data: Buffer.from(wrapHtml(newTitle, html), 'utf8'),
+                    data: Buffer.from(wrapHtml(newTitle, html, chrome), "utf8"),
                   },
                 ],
               );
