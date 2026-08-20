@@ -2,7 +2,7 @@
 
 An MCP server for **Lamakū**, the University of Hawaiʻi's D2L Brightspace LMS.
 
-Reads your course data and — unlike every other D2L MCP server — lets an
+Reads your course data and lets an
 instructor **author** course material: announcements, content modules, links,
 assignments, grade items and categories, discussion forums and topics.
 
