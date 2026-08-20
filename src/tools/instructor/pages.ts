@@ -205,4 +205,133 @@ export function register(server: McpServer, client: D2LClient): void {
         );
       }),
   );
+
+  server.registerTool(
+    'update_content_page',
+    {
+      title: 'Rewrite an existing content page (requires confirmation)',
+      description:
+        'Replaces the HTML of a page already in a module, keeping the same ' +
+        'topic id, so existing links and completion tracking survive. Use this ' +
+        'to revise a page rather than deleting and recreating it. Two-step.',
+      inputSchema: {
+        course: z.union([z.string(), z.number()]),
+        topicId: z.number().describe('Topic id of the page to rewrite.'),
+        html: z
+          .string()
+          .min(1)
+          .describe('Replacement body HTML. Do not include <html>/<head>/<body>.'),
+        title: z
+          .string()
+          .optional()
+          .describe('New title. Omit to keep the existing one.'),
+        confirmToken: z.string().optional(),
+      },
+    },
+    async ({ course, topicId, html, title, confirmToken }) =>
+      guard(async () => {
+        if (confirmToken) return ok(await consume('update_content_page', confirmToken));
+
+        const orgUnitId = await resolveOrgUnitId(client, course);
+        const role = await requireAuthoring(client, orgUnitId, 'edit content');
+
+        const topicPath = await client.le(`/${orgUnitId}/content/topics/${topicId}`);
+        const topic = await client.get<{
+          Title?: string;
+          Url?: string;
+          ParentModuleId?: number;
+          IsHidden?: boolean;
+        }>(topicPath);
+
+        if (!topic?.Url) {
+          throw new Error(
+            `Topic ${topicId} has no file path, so it is not an authored page. ` +
+              `Only file topics created by create_content_page can be rewritten.`,
+          );
+        }
+
+        const filename = topic.Url.split('/').pop() ?? 'page.html';
+        const newTitle = title ?? topic.Title ?? filename;
+        const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+
+        return ok(
+          stage(
+            'update_content_page',
+            {
+              course: role.courseName ?? orgUnitId,
+              topicId,
+              title: newTitle,
+              path: topic.Url,
+              words,
+              note:
+                'The page is rewritten in place. Its topic id does not change, so ' +
+                'links to it and any completion tracking survive.',
+              ...(words > 900
+                ? {
+                    lengthWarning:
+                      `${words} words. Course pages read better under 900 — ` +
+                      `consider splitting this page.`,
+                  }
+                : {}),
+            },
+            async () => {
+              // Brightspace exposes no route that replaces a topic's file
+              // directly; PUT against the topic or its /file child both answer
+              // 500. Re-posting a topic at an existing Url does overwrite the
+              // file, so the update is done by writing through a throwaway
+              // topic and then pruning it. The original topic keeps pointing at
+              // the same path and therefore serves the new content.
+              const scratch = await client.postMultipart<{ Id?: number }>(
+                await client.le(
+                  `/${orgUnitId}/content/modules/${topic.ParentModuleId}/structure/`,
+                ),
+                {
+                  Title: `${newTitle} (updating)`,
+                  ShortTitle: 'updating',
+                  Type: TOPIC,
+                  TopicType: FILE_TOPIC,
+                  Url: topic.Url,
+                  StartDate: null,
+                  EndDate: null,
+                  DueDate: null,
+                  IsHidden: true,
+                  IsLocked: false,
+                  OpenAsExternalResource: false,
+                  Description: asInput(''),
+                  MajorUpdate: null,
+                  MajorUpdateText: null,
+                  ResetCompletionTracking: null,
+                },
+                [
+                  {
+                    filename,
+                    contentType: 'text/html',
+                    data: Buffer.from(wrapHtml(newTitle, html), 'utf8'),
+                  },
+                ],
+              );
+
+              if (scratch?.Id != null) {
+                await client.delete(
+                  await client.le(`/${orgUnitId}/content/topics/${scratch.Id}`),
+                );
+              }
+
+              if (title && title !== topic.Title) {
+                await client.putJson(topicPath, { ...topic, Title: title });
+              }
+
+              return {
+                status: 'created',
+                action: 'updated',
+                topicId,
+                title: newTitle,
+                path: topic.Url,
+                words,
+              };
+            },
+          ),
+        );
+      }),
+  );
 }
