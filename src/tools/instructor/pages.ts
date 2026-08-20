@@ -38,7 +38,7 @@ function slug(title: string): string {
   return cleaned || 'page';
 }
 
-export type PageTemplate = 'uh' | 'plain';
+export type PageTemplate = 'uh' | 'jabsom' | 'plain';
 
 /**
  * UH hosts a shared template library on the Lamaku instance itself, and the
@@ -50,6 +50,16 @@ export type PageTemplate = 'uh' | 'plain';
  * See docs/course-style.md for the component vocabulary these stylesheets
  * provide.
  */
+/**
+ * JABSOM Design System: Manoa Green headings in Inter, Source Serif 4 for
+ * long-form reading. Tokens are inlined rather than linked, because unlike
+ * the UH shared library there is no copy of this system hosted on the
+ * instance. Inlining also makes a jabsom page render correctly off-instance.
+ */
+const JABSOM_HEAD = "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap\"><style>:root{\n--manoa-green:#024731;--kelly-green:#009A44;--ink:#1B2A23;\n--green-900:#022A1E;--green-700:#0A5C3F;--green-600:#0E7A4F;--green-100:#E2F2E8;--green-50:#F1F8F4;\n--neutral-0:#FFFFFF;--neutral-50:#F6F8F6;--neutral-100:#EDF1EE;--neutral-200:#DEE5E0;\n--neutral-300:#C7D1CA;--neutral-500:#74837A;--neutral-600:#566159;--neutral-900:#1B2A23;\n--accent-orange:#AE5E00;--accent-red:#AA0000;\n--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;\n--font-serif:'Source Serif 4',Georgia,'Times New Roman',serif;\n--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.5rem;--sp6:2rem;--sp7:3rem;\n}\n.jabsom-page{\nfont-family:var(--font-serif);color:var(--ink);background:var(--neutral-0);\nfont-size:1.0625rem;line-height:1.65;margin:0 auto;padding:var(--sp6) var(--sp5) var(--sp7);\nmax-width:68ch;\n}\n.jabsom-page .jabsom-bar{height:6px;background:var(--manoa-green);\nborder-radius:3px;margin-bottom:var(--sp5)}\n.jabsom-page h2{\nfont-family:var(--font-sans);font-weight:600;font-size:2.0625rem;line-height:1.15;\nletter-spacing:-.02em;color:var(--manoa-green);margin:0 0 var(--sp5);text-wrap:balance;\n}\n.jabsom-page h3{\nfont-family:var(--font-sans);font-weight:600;font-size:1.3125rem;line-height:1.25;\ncolor:var(--manoa-green);margin:var(--sp6) 0 var(--sp3);padding-top:var(--sp3);\nborder-top:1px solid var(--neutral-200);text-wrap:balance;\n}\n.jabsom-page h4{font-family:var(--font-sans);font-weight:600;font-size:1.125rem;\ncolor:var(--green-700);margin:var(--sp5) 0 var(--sp2)}\n.jabsom-page p{margin:0 0 var(--sp4);text-wrap:pretty}\n.jabsom-page a{color:var(--green-600);text-underline-offset:2px}\n.jabsom-page a:focus-visible{outline:2px solid var(--kelly-green);outline-offset:2px}\n.jabsom-page strong{font-weight:600;color:var(--green-900)}\n.jabsom-page ul,.jabsom-page ol{margin:0 0 var(--sp4);padding-left:1.35rem}\n.jabsom-page li{margin-bottom:var(--sp2)}\n.jabsom-page blockquote{\nmargin:var(--sp5) 0;padding:var(--sp4) var(--sp5);background:var(--green-50);\nborder-left:4px solid var(--kelly-green);border-radius:0 4px 4px 0;\n}\n.jabsom-page blockquote p:last-child{margin-bottom:0}\n.jabsom-page table{border-collapse:collapse;width:100%;font-family:var(--font-sans);\nfont-size:.9375rem;margin:var(--sp4) 0}\n.jabsom-page caption{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;\nfont-weight:600;color:var(--neutral-600);text-align:left;padding-bottom:var(--sp2)}\n.jabsom-page th,.jabsom-page td{text-align:left;padding:.55rem .8rem;\nborder-bottom:1px solid var(--neutral-200);vertical-align:top}\n.jabsom-page th{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;\ncolor:var(--neutral-600);font-weight:600;border-bottom:2px solid var(--neutral-300)}\n.jabsom-page .table-wrap{overflow-x:auto}\n.jabsom-page img,.jabsom-page video{max-width:100%;height:auto}\n.jabsom-page iframe{max-width:100%;border:0}\n.jabsom-page code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.875em;\nbackground:var(--neutral-100);padding:.1em .35em;border-radius:3px}\n.jabsom-page hr{border:0;border-top:1px solid var(--neutral-200);margin:var(--sp6) 0}\n.jabsom-foot{margin-top:var(--sp7);padding-top:var(--sp3);\nborder-top:3px solid var(--manoa-green);font-family:var(--font-sans);\nfont-size:.8125rem;color:var(--neutral-500)}\n@media (prefers-color-scheme:dark){\n.jabsom-page{background:var(--neutral-0)}\n}</style>";
+const JABSOM_OPEN = "<div class=\"jabsom-page\"><div class=\"jabsom-bar\" aria-hidden=\"true\"></div>";
+const JABSOM_CLOSE = "<div class=\"jabsom-foot\">John A. Burns School of Medicine \u00b7 University of Hawai\u02bbi at M\u0101noa</div></div>";
+
 const UH_ASSETS = '/shared/HTML-Template-Library/_assets';
 
 const UH_STYLESHEETS = [
@@ -80,10 +90,17 @@ function wrapHtml(
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     ...(template === 'uh'
       ? UH_STYLESHEETS.map((href) => `<link rel="stylesheet" href="${href}">`)
-      : []),
+      : template === 'jabsom'
+        ? [JABSOM_HEAD]
+        : []),
     `<title>${escapeHtml(title)}</title>`,
     '</head>',
   ];
+
+  if (template === 'jabsom') {
+    return [...head, '<body>', JABSOM_OPEN, bodyHtml, JABSOM_CLOSE,
+            '</body>', '</html>'].join(String.fromCharCode(10));
+  }
 
   if (template === 'plain') {
     return [...head, '<body>', bodyHtml, '</body>', '</html>'].join('\n');
@@ -215,12 +232,14 @@ export function register(server: McpServer, client: D2LClient): void {
           ),
         hidden: z.boolean().optional().describe('Hide from students. Default true.'),
         template: z
-          .enum(['uh', 'plain'])
+          .enum(['uh', 'jabsom', 'plain'])
           .optional()
           .describe(
             'Page chrome. "uh" (default) wraps the content in the UH shared ' +
               'template — stylesheets, banner, content column, seal footer — so ' +
-              'the page matches other Lamaku courses. "plain" emits a bare ' +
+              'the page matches other Lamaku courses. "jabsom" uses the JABSOM ' +
+              'Design System with its tokens inlined, which also renders ' +
+              'correctly off-instance. "plain" emits a bare ' +
               'document with no institutional styling.',
           ),
         dueDate: z.string().optional().describe('ISO due date, if the page is dated.'),
@@ -326,9 +345,9 @@ export function register(server: McpServer, client: D2LClient): void {
           .optional()
           .describe('New title. Omit to keep the existing one.'),
         template: z
-          .enum(['uh', 'plain'])
+          .enum(['uh', 'jabsom', 'plain'])
           .optional()
-          .describe('Page chrome, as for create_content_page. Default "uh".'),
+          .describe('Page chrome, as for create_content_page: uh, jabsom, or plain. Default "uh".'),
         confirmToken: z.string().optional(),
       },
     },

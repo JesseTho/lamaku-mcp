@@ -27,11 +27,15 @@ several payload shapes.
 | Discussion forums + topics | ✅ verified |
 | Quizzes — create, delete | ✅ verified (shell only; see below) |
 | Checklists — create with nested categories and items, append, delete | ✅ verified |
+| **Content pages** — authored HTML, three templates | ✅ verified |
+| **Media upload** — video, audio, images, PDF, captions into course files | ✅ verified |
 | Reading everything above, plus surveys, calendar, classlist | ✅ verified |
 | **Quiz questions** | ❌ Brightspace exposes `GET` for questions but no create/update route. Quizzes are created empty and questions added in the UI. |
 | **Rubric authoring** | ⛔ Route exists but needs `le 1.97+` (LMS v20.26.8). Lamakū serves `le 1.96` — one version short, so this arrives with the next Brightspace upgrade. |
 | **Rubric assessment** (scoring a student against an existing rubric) | ⚠️ Available — `/assessment` needs only `le 1.93+` and the route answers on 1.96. Unverified end-to-end because the sandbox has no rubrics to score against. |
 | **Course creation** | ❌ Org-level admin. Not available to an instructor account; ask UH ITS. |
+| **Discussion delete** | ❌ No route. Forums and topics can be created but only removed in the UI. |
+| **Grade item listing** | ❌ Only `get_grades`, which returns the caller's own grades. Items can be created and deleted by id but never enumerated. |
 | **Grade value writing** | ⚠️ Untested. The sandbox has no student enrolments to grade, and testing it in a live section would alter a real student's record. |
 
 ### Reading a 404 against a 400
@@ -161,13 +165,44 @@ It refuses to run without an explicit course id.
 `create_assignment`, `create_assignment_category`, `delete_assignment`,
 `create_grade_item`, `create_grade_category`, `delete_grade_item`,
 `create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
-`delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`
+`delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`,
+`create_content_page`, `update_content_page`, `create_content_file`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
 ```bash
 pnpm tools    # print the live list with signatures
 ```
+
+## Authoring a course end to end
+
+The three content tools are meant to be used together, in this order.
+
+1. **`create_content_module`** — one per module.
+2. **`create_content_file`** — upload the video, audio and images first. Each call returns the
+   enforced content path and an `embedAs` snippet.
+3. **`create_content_page`** — write the page, pasting the `embedAs` snippets where the media
+   belongs. Doing it the other way round means rewriting every page once you know the paths.
+4. **`create_content_link`** for external sources, then `create_discussion_forum` /
+   `create_discussion_topic` and `create_assignment` for the parts a Common Cartridge cannot
+   carry at all.
+
+Page chrome comes from `template`:
+
+| Template | What it does |
+|---|---|
+| `uh` (default) | Links the UH shared HTML Template Library — banner, content column, seal footer. Correct on a UH instance and nowhere else. |
+| `jabsom` | JABSOM Design System with tokens inlined: Mānoa Green headings in Inter, Source Serif 4 body. Self-contained, so it also renders correctly off-instance. |
+| `plain` | A bare document with no institutional styling. |
+
+See [`docs/course-style.md`](docs/course-style.md) for the UH template and
+[`docs/jabsom-style.md`](docs/jabsom-style.md) for the JABSOM one, covering what a page should look like, including the available components and the accessibility obligations that come
+with them.
+
+**When the cartridge is still the better route.** Quiz questions have no create route, so
+`create_quiz` produces an empty shell. A course whose assessment is quizzes should be built as
+an IMS Common Cartridge and imported, then have its forums and assignments added through this
+server afterwards.
 
 ---
 
