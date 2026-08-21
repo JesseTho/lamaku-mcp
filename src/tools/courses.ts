@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { D2LClient } from '../api/client.js';
-import type { AuthProvider } from '../auth/provider.js';
+import { AuthError, type AuthProvider } from '../auth/provider.js';
 import type { MyOrgUnitInfo, WhoAmI } from '../api/types.js';
 import { formatDate, guard, ok } from './shared.js';
 
@@ -184,7 +184,30 @@ export function register(
           .apiVersions()
           .then((map) => Object.fromEntries(map))
           .catch(() => null);
-        return ok({ ...status, apiVersions: versions });
+
+        // describe() reports what is stored and how old it is, which is not the
+        // same question as whether Brightspace still accepts it. A stored
+        // session an hour past expiry looks healthy by age and fails on every
+        // call, so this makes one cheap authenticated request and reports what
+        // actually happened.
+        let live: { usable: boolean; detail: string };
+        try {
+          const me = await client.get<WhoAmI>(await client.lp('/users/whoami'));
+          live = {
+            usable: true,
+            detail: `Verified against Lamaku just now, signed in as ${me.UniqueName ?? me.Identifier}.`,
+          };
+        } catch (error) {
+          live = {
+            usable: false,
+            detail:
+              error instanceof AuthError
+                ? 'Lamaku rejected the stored session. Run `lamaku-mcp login`.'
+                : `Could not verify: ${error instanceof Error ? error.message : String(error)}`,
+          };
+        }
+
+        return ok({ ...status, live, apiVersions: versions });
       }),
   );
 
