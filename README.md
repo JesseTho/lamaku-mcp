@@ -166,7 +166,8 @@ It refuses to run without an explicit course id.
 `create_grade_item`, `create_grade_category`, `delete_grade_item`,
 `create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
 `delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`,
-`create_content_page`, `update_content_page`, `create_content_file`
+`create_content_page`, `update_content_page`, `create_content_file`,
+`set_module_description`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 

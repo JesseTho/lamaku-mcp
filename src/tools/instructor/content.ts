@@ -213,4 +213,117 @@ export function register(server: McpServer, client: D2LClient): void {
         );
       }),
   );
+
+  server.registerTool(
+    'set_module_description',
+    {
+      title: 'Set a module description, with an optional cover image (requires confirmation)',
+      description:
+        "Rewrites a content module's description. Brightspace renders an image in " +
+        'a module description as that module\'s cover image, so this is how a module ' +
+        'gets a cover. Upload the image with create_content_file first and pass the ' +
+        'path it returns. Two-step: preview, then confirm.',
+      inputSchema: {
+        course: z.union([z.string(), z.number()]),
+        moduleId: z.number().describe('Module whose description is being set.'),
+        text: z
+          .string()
+          .optional()
+          .describe('Description text, or HTML. Omit to set only the cover image.'),
+        imagePath: z
+          .string()
+          .optional()
+          .describe(
+            'Path to an image already in the course content space, as returned by ' +
+              'create_content_file. Rendered as the module cover image.',
+          ),
+        imageAlt: z
+          .string()
+          .optional()
+          .describe(
+            'Alt text for the cover image. Pass an empty string for a purely ' +
+              'decorative cover; anything carrying meaning needs a description of ' +
+              'the meaning rather than of the picture.',
+          ),
+        confirmToken: z.string().optional(),
+      },
+    },
+    async ({ course, moduleId, text, imagePath, imageAlt, confirmToken }) =>
+      guard(async () => {
+        if (confirmToken) return ok(await consume('set_module_description', confirmToken));
+
+        const orgUnitId = await resolveOrgUnitId(client, course);
+        const role = await requireAuthoring(client, orgUnitId, 'edit content');
+
+        if (text === undefined && imagePath === undefined) {
+          throw new Error('Pass text, imagePath, or both. There is nothing to set otherwise.');
+        }
+
+        const path = await client.le(`/${orgUnitId}/content/modules/${moduleId}`);
+        const current = await client.get<Record<string, unknown> & { Title?: string }>(path);
+
+        const alt = imageAlt ?? '';
+        const img = imagePath
+          ? `<p><img src="${escapeAttr(imagePath)}" alt="${escapeAttr(alt)}"></p>`
+          : '';
+        const body = text
+          ? /<[a-z][\s\S]*>/i.test(text)
+            ? text
+            : `<p>${escapeAttr(text)}</p>`
+          : '';
+
+        const warnings: string[] = [];
+        if (imagePath && imageAlt === undefined) {
+          warnings.push(
+            'No imageAlt was given, so the image is marked decorative with alt="". ' +
+              'That is right for a purely decorative cover and wrong if the image ' +
+              'carries information a reader would otherwise miss.',
+          );
+        }
+        if (imagePath && !imagePath.startsWith('/content/enforced/')) {
+          warnings.push(
+            'imagePath is not a course content path. An image hosted outside the ' +
+              'course may not render for students, and will not survive a course copy.',
+          );
+        }
+
+        return ok(
+          stage(
+            'set_module_description',
+            {
+              course: role.courseName ?? orgUnitId,
+              moduleId,
+              module: current?.Title ?? String(moduleId),
+              coverImage: imagePath ?? 'none',
+              altText: imagePath ? (alt === '' ? '(decorative)' : alt) : 'not applicable',
+              html: `${img}${body}`,
+              note: 'Replaces the whole description. Anything currently there is lost.',
+              ...(warnings.length ? { warnings } : {}),
+            },
+            async () => {
+              // PUT replaces the object, so the current fields are carried
+              // forward and only Description is changed.
+              await client.putJson(path, {
+                ...current,
+                Description: { Content: `${img}${body}`, Type: 'Html' },
+              });
+              return {
+                status: 'created',
+                action: 'description set',
+                moduleId,
+                coverImage: imagePath ?? null,
+              };
+            },
+          ),
+        );
+      }),
+  );
+}
+
+function escapeAttr(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
