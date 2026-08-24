@@ -27,3 +27,16 @@ downloads/
 
 .DS_Store
 Thumbs.db
+
+# Impeccable design skill, installed with `npx impeccable install`.
+# Vendored tooling rather than part of this product, so it stays local.
+.github/skills/impeccable/
+.github/agents/impeccable-*.agent.md
+.github/hooks/impeccable.json
+
+# Impeccable's own working directory. The contents are ignored rather than the
+# directory, because git skips an ignored directory entirely and the negation
+# below would never be reached.
+.impeccable/*
+# design.json is DESIGN.md's machine-readable half and ships with it.
+!.impeccable/design.json
