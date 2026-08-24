@@ -21,6 +21,34 @@ const CRLF = CR + LF;
  * part per file. Note the odd `name=""` in the file part — that is what D2L's
  * documented examples use, and their parser expects it.
  */
+/**
+ * RFC 7578 multipart/form-data with a single named file part, which is the
+ * shape D2L calls "simple file upload" and what the course import route wants.
+ *
+ * Distinct from buildMultipartMixed: there is no JSON metadata part, the
+ * top-level type is form-data rather than mixed, and the part carries a real
+ * `name` instead of D2L's odd empty one.
+ */
+export function buildMultipartForm(
+  file: UploadPart,
+  fieldName = 'file',
+): MultipartBody {
+  const boundary = `----lamakumcp${randomBytes(16).toString('hex')}`;
+  const head = Buffer.from(
+    `--${boundary}${CRLF}` +
+      `Content-Disposition: form-data; name="${fieldName}"; ` +
+      `filename="${sanitize(file.filename)}"${CRLF}` +
+      `Content-Type: ${file.contentType}${CRLF}${CRLF}`,
+    'utf8',
+  );
+  const tail = Buffer.from(`${CRLF}--${boundary}--${CRLF}`, 'utf8');
+  return {
+    body: Buffer.concat([head, file.data, tail]),
+    contentType: `multipart/form-data; boundary=${boundary}`,
+  };
+}
+
+
 export function buildMultipartMixed(
   metadata: unknown,
   files: UploadPart[],

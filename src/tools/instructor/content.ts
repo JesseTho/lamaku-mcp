@@ -131,12 +131,31 @@ export function register(server: McpServer, client: D2LClient): void {
         const role = await requireAuthoring(client, orgUnitId, 'create content');
         const isHidden = hidden ?? true;
 
+        // Confirm the parent exists before staging. Brightspace reports an
+        // unknown parent module as `400 {"Errors":[]}` on the POST, which
+        // arrives only after the user has approved a preview naming a module
+        // that was never there. A preview that cannot be trusted defeats the
+        // point of the two-step gate.
+        const parent = await client
+          .get<{ Title?: string }>(
+            await client.le(`/${orgUnitId}/content/modules/${moduleId}`),
+          )
+          .catch(() => null);
+        if (!parent) {
+          throw new Error(
+            `No content module ${moduleId} in this course. list_modules shows ` +
+              `the valid ids. Checked before staging, because Brightspace ` +
+              `reports an unknown parent as an empty 400.`,
+          );
+        }
+
         return ok(
           stage(
             'create_content_link',
             {
               course: role.courseName ?? orgUnitId,
               moduleId,
+              intoModule: parent.Title ?? '(untitled)',
               title,
               url,
               hiddenFromStudents: isHidden,
@@ -208,6 +227,62 @@ export function register(server: McpServer, client: D2LClient): void {
                 moduleId,
                 title: contentModule?.Title ?? null,
               };
+            },
+          ),
+        );
+      }),
+  );
+
+  server.registerTool(
+    'delete_content_topic',
+    {
+      title: 'Delete a content topic (requires confirmation)',
+      description:
+        'Removes a single topic — a page, an uploaded file, or a link — without ' +
+        'touching the module around it. Use delete_content_module to remove a ' +
+        'module and everything in it. Two-step: preview, then confirm.',
+      inputSchema: {
+        course: z.union([z.string(), z.number()]).describe('Course id or name fragment.'),
+        topicId: z.number().describe('Topic to delete.'),
+        confirmToken: z.string().optional(),
+      },
+    },
+    async ({ course, topicId, confirmToken }) =>
+      guard(async () => {
+        if (confirmToken) return ok(await consume('delete_content_topic', confirmToken));
+
+        const orgUnitId = await resolveOrgUnitId(client, course);
+        const role = await requireAuthoring(client, orgUnitId, 'delete content');
+        const path = await client.le(`/${orgUnitId}/content/topics/${topicId}`);
+        const topic = await client
+          .get<{ Title?: string; TopicType?: number; Url?: string | null }>(path)
+          .catch(() => null);
+        if (!topic) {
+          throw new Error(
+            `No content topic ${topicId} in this course. get_module lists the ` +
+              `topic ids inside a module.`,
+          );
+        }
+
+        // A managed file topic owns the file behind it; a link topic does not.
+        const isManagedFile = topic.TopicType === 1;
+
+        return ok(
+          stage(
+            'delete_content_topic',
+            {
+              course: role.courseName ?? orgUnitId,
+              topicId,
+              title: topic.Title ?? '(untitled)',
+              kind: isManagedFile ? 'uploaded file or authored page' : 'link',
+              warning: isManagedFile
+                ? 'Removes the topic and the file behind it, including any video ' +
+                  'or image a page still references. Permanent.'
+                : 'Removes the link. The page it points at is untouched.',
+            },
+            async () => {
+              await client.delete(path);
+              return { status: 'deleted', topicId, title: topic.Title ?? null };
             },
           ),
         );

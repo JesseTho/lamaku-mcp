@@ -62,8 +62,8 @@ export function register(server: McpServer, client: D2LClient): void {
         return ok({
           courseId: orgUnitId,
           count: forums.length,
+          hiddenCount: forums.filter((f) => f.IsHidden).length,
           forums: forums
-            .filter((f) => !f.IsHidden)
             .map((f) => ({
               forumId: f.ForumId,
               name: f.Name,
@@ -97,8 +97,8 @@ export function register(server: McpServer, client: D2LClient): void {
           courseId: orgUnitId,
           forumId,
           count: topics.length,
+          hiddenCount: topics.filter((t) => t.IsHidden).length,
           topics: topics
-            .filter((t) => !t.IsHidden)
             .map((t) => ({
               topicId: t.TopicId,
               name: t.Name,
