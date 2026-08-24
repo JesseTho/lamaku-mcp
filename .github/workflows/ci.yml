@@ -5,11 +5,11 @@ on:
     branches: [main]
   pull_request:
 
-# Nothing here talks to Brightspace. The unit tests cover the pure logic —
+# Nothing here talks to Brightspace. The unit tests cover the pure logic:
 # multipart framing, the rich-text shapes, the confirmation gate, the FERPA
-# guard — none of which needs a live instance. The scripts that do need one
-# (verify-writes, verify-content) create and delete real objects and stay
-# manual, run against a sandbox by a person who knows which sandbox.
+# guard. None of it needs a live instance. The scripts that do (verify-writes,
+# verify-content) create and delete real objects and stay manual, run against a
+# sandbox by a person who knows which sandbox.
 permissions:
   contents: read
 
@@ -24,21 +24,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The committed lockfile is pnpm's, so pnpm has to exist before
+      # setup-node looks for one to cache against.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: npm
+          cache: pnpm
 
       - name: Install
-        run: npm ci --ignore-scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Typecheck
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Test
-        run: npm test
+        run: pnpm test
 
       - name: Tool inventory
         # Catches a tool that compiles but fails to register, which a
         # typecheck alone will not surface.
-        run: npm run tools
+        run: pnpm run tools

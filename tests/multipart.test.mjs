@@ -7,7 +7,7 @@ import {
 } from '../dist/api/multipart.js';
 
 const CRLF = '\r\n';
-const part = (data: string) => ({
+const part = (data) => ({
   filename: 'notes.txt',
   contentType: 'text/plain',
   data: Buffer.from(data, 'utf8'),
@@ -77,7 +77,7 @@ describe('buildMultipartForm', () => {
 
   it('terminates with the closing boundary', () => {
     const { body, contentType } = buildMultipartForm(part('zipdata'));
-    const boundary = /boundary=(.+)$/.exec(contentType)![1];
+    const boundary = /boundary=(.+)$/.exec(contentType)[1];
     assert.ok(body.toString('utf8').endsWith(`--${boundary}--${CRLF}`));
   });
 
