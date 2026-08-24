@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-24T00:00:00Z",
+  "title": "Design System: lamaku-mcp documentation",
+  "extensions": {
+    "colorMeta": {
+      "manoa-green": {
+        "role": "primary",
+        "displayName": "Mānoa Green",
+        "canonical": "#024731",
+        "tonalRamp": ["#011a12", "#012a1d", "#024731", "#046444", "#0a8158", "#3aa87f", "#7fc9a5", "#cfe9dc"]
+      },
+      "note-blue": {
+        "role": "secondary",
+        "displayName": "Note Blue",
+        "canonical": "#0a5c7a",
+        "tonalRamp": ["#03202b", "#063a4d", "#0a5c7a", "#0f7ba3", "#2f9bc2", "#63b6d5", "#9ed2e7", "#eef5f8"]
+      },
+      "caution-amber": {
+        "role": "secondary",
+        "displayName": "Caution Amber",
+        "canonical": "#8a4b04",
+        "tonalRamp": ["#2c1801", "#4d2a02", "#8a4b04", "#b46508", "#d4863a", "#e0a869", "#eec89f", "#fbf2e7"]
+      },
+      "stop-red": {
+        "role": "secondary",
+        "displayName": "Stop Red",
+        "canonical": "#8c1d18",
+        "tonalRamp": ["#2c0907", "#4d100d", "#8c1d18", "#b32a23", "#cf5851", "#e89b95", "#f3c6c2", "#fbeceb"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1a1c1a",
+        "tonalRamp": ["#0d0e0d", "#1a1c1a", "#2b302c", "#414742", "#646b65", "#868d87", "#d9ddd9", "#f6f7f6"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#16181a", "#1d2022", "#212528", "#31363a", "#868d87", "#d9ddd9", "#f2f4f2", "#ffffff"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Page title", "purpose": "The h1. One per page, never repeated." },
+      "headline": { "displayName": "Section title", "purpose": "The h2, always preceded by a hairline rule." },
+      "title": { "displayName": "Subsection", "purpose": "The h3." },
+      "body": { "displayName": "Running text", "purpose": "Prose, capped at 46rem for a ~75 character measure." },
+      "label": { "displayName": "Nav group label", "purpose": "Uppercase group headings in the sidebar and rail. Nowhere else." },
+      "mono": { "displayName": "Typed things", "purpose": "Commands, tool names, environment variables, JSON, paths." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "scroll-smooth", "value": "scroll-behavior: smooth with scroll-padding-top: 1.5rem", "purpose": "Anchor jumps. Disabled entirely under prefers-reduced-motion, along with all transitions and animations." }
+    ],
+    "breakpoints": [
+      { "name": "collapse", "value": "64rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Note",
+      "kind": "custom",
+      "refersTo": "note",
+      "description": "Something worth knowing before you continue. The label text carries the meaning; colour reinforces it.",
+      "html": "<div class=\"ds-note\"><strong>Note</strong><p>Everything is created hidden from students. Releasing is a deliberate separate step.</p></div>",
+      "css": ".ds-note { border: 1px solid var(--rule, #d9ddd9); border-left: 4px solid var(--note, #0a5c7a); background: var(--note-bg, #eef5f8); padding: .8rem 1rem; border-radius: 0 4px 4px 0; color: var(--ink, #1a1c1a); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.65; } .ds-note > strong { display: block; font-size: .8125rem; color: var(--note, #0a5c7a); margin-bottom: .25rem; } .ds-note p { font-size: .9375rem; margin: 0; }"
+    },
+    {
+      "name": "Caution",
+      "kind": "custom",
+      "refersTo": "note-caution",
+      "description": "Something that will surprise you if you skip it.",
+      "html": "<div class=\"ds-note ds-note-w\"><strong>Importing the same package twice</strong><p>Two copies of everything. It contains, import into an empty course, or verify there is no overlap first.</p></div>",
+      "css": ".ds-note-w { border-left-color: var(--warn, #8a4b04); background: var(--warn-bg, #fbf2e7); } .ds-note-w > strong { color: var(--warn, #8a4b04); }"
+    },
+    {
+      "name": "Stop",
+      "kind": "custom",
+      "refersTo": "note-stop",
+      "description": "Something that destroys data or affects real students.",
+      "html": "<div class=\"ds-note ds-note-s\"><strong>Delete cannot be undone</strong><p>There is no recovery through this API. Delete previews the object name along with a forum's post count, so you can see what you are about to lose.</p></div>",
+      "css": ".ds-note-s { border-left-color: var(--stop, #8c1d18); background: var(--stop-bg, #fbeceb); } .ds-note-s > strong { color: var(--stop, #8c1d18); }"
+    },
+    {
+      "name": "Nav link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sidebar and rail links. The current section takes a 2px green left border that is transparent at rest, so nothing shifts when it lights up.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#a\">Building a course</a><a href=\"#b\" class=\"here\">Page templates</a><a href=\"#c\">Course imports</a></nav>",
+      "css": ".ds-nav { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: .875rem; } .ds-nav a { display: block; padding: .22rem 0 .22rem .7rem; margin-left: -.7rem; color: var(--ink-2, #414742); text-decoration: none; border-left: 2px solid transparent; } .ds-nav a:hover { color: var(--accent, #024731); text-decoration: underline; } .ds-nav a.here { color: var(--accent, #024731); border-left-color: var(--accent, #024731); font-weight: 600; } .ds-nav a:focus-visible { outline: 2px solid var(--accent, #024731); outline-offset: 2px; border-radius: 2px; }"
+    },
+    {
+      "name": "Code block",
+      "kind": "custom",
+      "refersTo": "code-block",
+      "description": "Scrolls inside its own box. Comment lines take .c in muted ink, which is the entire syntax highlighting vocabulary.",
+      "html": "<pre class=\"ds-pre\"><code><span class=\"c\"># install and sign in</span>\ngit clone https://github.com/JesseTho/lamaku-mcp\ncd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build\nnode dist/cli.js login</code></pre>",
+      "css": ".ds-pre { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: .8125rem; line-height: 1.6; background: var(--ground-code, #f2f4f2); border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: .9rem 1rem; overflow-x: auto; margin: 0; color: var(--ink, #1a1c1a); } .ds-pre .c { color: var(--ink-3, #646b65); }"
+    },
+    {
+      "name": "Numbered step",
+      "kind": "custom",
+      "refersTo": "step-marker",
+      "description": "A CSS counter drives the circle. Used once, for the seven-step course walkthrough. Numbers appear nowhere else on the page.",
+      "html": "<ol class=\"ds-steps\"><li><strong>Create the modules</strong><p>One create_content_module per module. They arrive in creation order.</p></li><li><strong>Upload media before writing pages</strong><p>The upload returns the path the page must reference.</p></li></ol>",
+      "css": ".ds-steps { counter-reset: step; list-style: none; padding: 0; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-steps > li { counter-increment: step; position: relative; padding-left: 2.4rem; margin-bottom: 1.5rem; } .ds-steps > li::before { content: counter(step); position: absolute; left: 0; top: .05rem; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ground-alt, #f6f7f6); border: 1px solid var(--rule-strong, #868d87); color: var(--ink-2, #414742); font-size: .8125rem; font-weight: 600; display: flex; align-items: center; justify-content: center; } .ds-steps > li > strong { display: block; margin-bottom: .2rem; } .ds-steps p { font-size: .9375rem; margin: 0; }"
+    },
+    {
+      "name": "Reference table",
+      "kind": "card",
+      "refersTo": "table-header",
+      "description": "Always wrapped so a wide table scrolls inside its own box. The caption doubles as the table's title.",
+      "html": "<div class=\"ds-tw\"><table><caption>Environment variables. All are optional.</caption><thead><tr><th>Variable</th><th>Default</th><th>Purpose</th></tr></thead><tbody><tr><th>LAMAKU_HOST</th><td>lamaku.hawaii.edu</td><td>Brightspace hostname.</td></tr><tr><th>LAMAKU_FERPA</th><td>strict</td><td>off disables student pseudonymisation.</td></tr></tbody></table></div>",
+      "css": ".ds-tw { overflow-x: auto; border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-tw table { border-collapse: collapse; width: 100%; font-size: .875rem; } .ds-tw caption { text-align: left; padding: .6rem .8rem; font-size: .75rem; color: var(--ink-3, #646b65); border-bottom: 1px solid var(--rule, #d9ddd9); background: var(--ground-alt, #f6f7f6); } .ds-tw th, .ds-tw td { text-align: left; padding: .5rem .8rem; border-bottom: 1px solid var(--rule, #d9ddd9); vertical-align: top; } .ds-tw thead th { background: var(--ground-alt, #f6f7f6); font-size: .75rem; font-weight: 600; color: var(--ink-2, #414742); } .ds-tw tbody tr:last-child td, .ds-tw tbody tr:last-child th { border-bottom: 0; }"
+    },
+    {
+      "name": "Skip link",
+      "kind": "custom",
+      "refersTo": "nav-link",
+      "description": "First tab stop on the page. Off-canvas until focused.",
+      "html": "<a class=\"ds-skip\" href=\"#content\">Skip to content</a>",
+      "css": ".ds-skip { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--accent, #024731); color: #fff; padding: .6rem 1rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; text-decoration: none; } .ds-skip:focus { left: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Reference Manual",
+    "overview": "This is documentation for someone who will open it four times a year for five years. It is built to be correct and scanned, not to look current. The bar was set explicitly by MDN, the Django docs, and the PostgreSQL manual: three sites that have survived a decade of taste cycles by never participating in one.\n\nThe category default for a developer tool is a marketing homepage with a gradient hero, a feature grid, and a call to action. This system refuses that outright. There is no hero, no pitch, no logo lockup. The first viewport carries the product name, one sentence saying what it is, one paragraph saying what it does, and the install command. A reader who came to install something can start in the first ten seconds.\n\nThe one place expression is spent is the accent: Mānoa Green, #024731, the University of Hawaiʻi's own dark green, used for links, the current-section marker, and the focus ring, and nowhere else. It carries maybe two percent of the page's area. Everything around it is white, near-black, and hairline grey, because the accent only reads as a choice when nothing competes with it.",
+    "keyCharacteristics": [
+      "Zero webfonts. The system stack renders instantly and cannot rot when a font host changes.",
+      "Light ground by default, with a full dark palette under prefers-color-scheme.",
+      "Hairline rules instead of shadows. The system is entirely flat.",
+      "Tables and notes are first-class structure, not decoration.",
+      "WCAG 2.2 AA verified by script, not assumed."
+    ],
+    "rules": [
+      { "name": "The Two Percent Rule", "body": "Mānoa Green appears on links, the current-section marker, and the focus ring. It is never a background, never a heading colour, never a border on a card. Its rarity is what makes a link obvious.", "section": "colors" },
+      { "name": "The Verified Contrast Rule", "body": "No colour pair ships on inspection. contrast.py checks all seventeen pairs across both themes against 4.5:1 for text and 3:1 for boundaries. A failing pair is a bug, not a judgement call. This rule already caught the step-marker outline at 1.9:1.", "section": "colors" },
+      { "name": "The Typed-Things Rule", "body": "Mono marks anything the reader will type, paste, or see echoed back by a machine: commands, tool names, environment variables, JSON, file paths. It is never used for emphasis, and prose never sets a word in mono for flavour.", "section": "typography" },
+      { "name": "The Flat Rule", "body": "No box-shadow, no filter: drop-shadow, no gradient used to fake a light source. If something needs to separate from its surroundings, it gets a hairline and a tonal step.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do run contrast.py before shipping any colour change. Seventeen pairs, both themes, 4.5:1 and 3:1.",
+      "Do define every colour as a token on bare :root and redefine only the tokens inside @media (prefers-color-scheme: dark). A colour whose only definition lives inside the media query renders one theme's text on the other theme's ground.",
+      "Do wrap every table in .tw and give it a caption.",
+      "Do put the semantic meaning in the note's label text, not only in its colour.",
+      "Do keep new script as progressive enhancement. The page must be fully readable and fully navigable with JavaScript off.",
+      "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference."
+    ],
+    "donts": [
+      "Don't add a webfont. Not for headings, not for code, not for one accent word. The system stack is the reason this page will look the same in ten years.",
+      "Don't add a shadow, a gradient, or a glow.",
+      "Don't use Mānoa Green as a background, a heading colour, or a card border. Links, current marker, focus ring, skip link.",
+      "Don't add a hero, a feature grid, a testimonial, or a call-to-action button. This is a manual.",
+      "Don't put a UH logo, seal, or wordmark on the page. The project is not affiliated with or endorsed by the University of Hawaiʻi or D2L.",
+      "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason."
+    ]
+  }
+}
