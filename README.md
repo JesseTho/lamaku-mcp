@@ -193,6 +193,10 @@ The unit tests cover the places where a bug is silent rather than loud: multipar
 two rich-text shapes, the confirmation gate's single use and action scoping, and the FERPA guard.
 They need no credentials and run in CI on Node 20 and 22.
 
+The tests are plain `.mjs` against the compiled output in `dist`, so building is part of
+testing and there are no experimental flags to keep working. That is also what keeps the Node 20
+floor honest: type stripping needs 22.6, and the package claims 20.
+
 Writing them found a real bug, which is the argument for having them. `scrubNames` anchored every
 name part with a trailing `\b`, so a part ending in punctuation never matched. Brightspace display
 names are frequently "Last, First", which meant `Smith,` went through unscrubbed. It had looked

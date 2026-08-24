@@ -50,8 +50,8 @@
     "verify:privacy": "node scripts/verify-privacy.mjs",
     "verify:writes": "node scripts/verify-writes.mjs",
     "prepublishOnly": "npm run typecheck && npm test && tsc",
-    "test": "node --test --experimental-strip-types tests/*.test.ts",
-    "test:watch": "node --test --watch --experimental-strip-types tests/*.test.ts",
+    "test": "node --test tests/*.test.mjs",
+    "test:watch": "node --test --watch tests/*.test.mjs",
     "pretest": "tsc"
   },
   "dependencies": {

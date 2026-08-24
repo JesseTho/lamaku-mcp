@@ -34,7 +34,7 @@ describe('confirmation tokens', () => {
     });
     const result = await consume('demo_confirm', staged.confirmToken);
     assert.equal(ran, true);
-    assert.equal((result as { id: number }).id, 99);
+    assert.equal((result).id, 99);
   });
 
   it('refuses to spend the same token twice', async () => {
@@ -85,13 +85,13 @@ describe('confirmation tokens', () => {
  */
 describe('rich text shapes', () => {
   it('asInput produces the {Content, Type} shape', () => {
-    const out = asInput('<p>hi</p>') as Record<string, unknown>;
+    const out = asInput('<p>hi</p>');
     assert.ok('Content' in out && 'Type' in out);
     assert.equal('Text' in out, false);
   });
 
   it('asPair produces the {Text, Html} shape', () => {
-    const out = asPair('<p>hi</p>') as Record<string, unknown>;
+    const out = asPair('<p>hi</p>');
     assert.ok('Text' in out && 'Html' in out);
     assert.equal('Content' in out, false);
   });
@@ -106,13 +106,13 @@ describe('rich text shapes', () => {
   it('asPair routes HTML to Html and leaves Text null', () => {
     // It does not down-convert. Brightspace renders whichever half is
     // populated, so putting HTML in Text would show the tags to a learner.
-    const html = asPair('<p>hello</p>') as { Text: string | null; Html: string | null };
+    const html = asPair('<p>hello</p>');
     assert.equal(html.Text, null);
     assert.match(String(html.Html), /<p>hello<\/p>/);
   });
 
   it('asPair routes plain text to Text and leaves Html null', () => {
-    const plain = asPair('hello') as { Text: string | null; Html: string | null };
+    const plain = asPair('hello');
     assert.equal(plain.Html, null);
     assert.equal(plain.Text, 'hello');
   });
