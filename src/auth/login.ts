@@ -35,16 +35,27 @@ async function harvest(
 
   // The key is normally `XSRF.Token`, but D2L has shuffled it before. Scan
   // rather than hard-code so a rename doesn't silently break every write.
-  const xsrfToken = await page.evaluate(() => {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && /xsrf/i.test(key)) {
-        const value = localStorage.getItem(key);
-        if (value) return value;
+  //
+  // This runs on a poll while the user is still moving through SSO and Duo,
+  // so the page is very often mid-navigation. Playwright answers that with
+  // "Execution context was destroyed", which is not a failure to log in - it
+  // means ask again in a moment. Swallowing it here turned an intermittently
+  // fatal login into a retry.
+  let xsrfToken: string | null = null;
+  try {
+    xsrfToken = await page.evaluate(() => {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && /xsrf/i.test(key)) {
+          const value = localStorage.getItem(key);
+          if (value) return value;
+        }
       }
-    }
+      return null;
+    });
+  } catch {
     return null;
-  });
+  }
 
   if (!xsrfToken) return null;
 
@@ -129,12 +140,20 @@ export async function interactiveLogin(
 
     const deadline = Date.now() + timeoutMs;
     while (Date.now() < deadline) {
-      const session = await harvest(context, host);
-      if (session) {
-        log('  Session captured.');
-        return session;
+      // Any error here is a transient state of a page being redirected
+      // through the IdP, not a reason to abandon a sign-in the user is part
+      // way through. Keep polling until the deadline and let the timeout be
+      // the only thing that gives up.
+      try {
+        const session = await harvest(context, host);
+        if (session) {
+          log('  Session captured.');
+          return session;
+        }
+      } catch {
+        // fall through to the wait and try again
       }
-      await page.waitForTimeout(1500);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     }
     throw new Error(
       `Timed out after ${Math.round(timeoutMs / 60_000)} minutes waiting for sign-in.`,

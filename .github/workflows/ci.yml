@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Nothing here talks to Brightspace. The unit tests cover the pure logic —
+# multipart framing, the rich-text shapes, the confirmation gate, the FERPA
+# guard — none of which needs a live instance. The scripts that do need one
+# (verify-writes, verify-content) create and delete real objects and stay
+# manual, run against a sandbox by a person who knows which sandbox.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 is the floor declared in package.json engines; 22 is current LTS.
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Tool inventory
+        # Catches a tool that compiles but fails to register, which a
+        # typecheck alone will not surface.
+        run: npm run tools

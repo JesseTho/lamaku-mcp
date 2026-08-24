@@ -148,6 +148,23 @@ deliberately.
 LAMAKU_SANDBOX=<courseId> node scripts/verify-writes.mjs
 ```
 
+## Tests
+
+```bash
+npm test          # unit tests, no Brightspace needed
+npm run typecheck
+```
+
+The unit tests cover the parts where a bug is silent: multipart framing, the two rich-text
+shapes, the confirmation gate's single-use and action-scoping, and the FERPA guard. They need
+no credentials and run in CI on Node 20 and 22.
+
+The `verify-*.mjs` scripts are integration checks. They need a live session and
+`verify-writes.mjs` creates and deletes real objects, so it refuses to run without an explicit
+sandbox course id. Those stay manual.
+
+Security policy, including what the FERPA guard does and does not protect: [SECURITY.md](SECURITY.md).
+
 That script creates and deletes real objects, so point it only at a sandbox.
 It refuses to run without an explicit course id.
 

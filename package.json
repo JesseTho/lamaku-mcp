@@ -49,7 +49,10 @@
     "tools": "node scripts/list-tools.mjs",
     "verify:privacy": "node scripts/verify-privacy.mjs",
     "verify:writes": "node scripts/verify-writes.mjs",
-    "prepublishOnly": "tsc --noEmit && tsc"
+    "prepublishOnly": "npm run typecheck && npm test && tsc",
+    "test": "node --test --experimental-strip-types tests/*.test.ts",
+    "test:watch": "node --test --watch --experimental-strip-types tests/*.test.ts",
+    "pretest": "tsc"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
