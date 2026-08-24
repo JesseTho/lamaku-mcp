@@ -2,7 +2,7 @@
 
 An MCP server for **Lamakū**, the University of Hawaiʻi's D2L Brightspace LMS.
 
-Reads your course data and — unlike every other D2L MCP server — lets an
+Reads your course data and lets an
 instructor **author** course material: announcements, content modules, links,
 assignments, grade items and categories, discussion forums and topics.
 
@@ -170,9 +170,9 @@ It refuses to run without an explicit course id.
 `create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
 `delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`,
 `create_content_page`, `update_content_page`, `create_content_file`,
-`update_content_module`, `update_content_topic`, `release_course_content`,
-`delete_content_topic`, `delete_discussion_forum`, `delete_discussion_topic`,
-`import_course_package`, `get_import_status`
+`update_content_module`, `update_content_topic`, `set_module_description`,
+`release_course_content`, `delete_content_topic`, `delete_discussion_forum`,
+`delete_discussion_topic`, `import_course_package`, `get_import_status`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
@@ -205,11 +205,14 @@ See [`docs/course-style.md`](docs/course-style.md) for the UH template and
 [`docs/jabsom-style.md`](docs/jabsom-style.md) for the JABSOM one, covering what a page should look like, including the available components and the accessibility obligations that come
 with them.
 
-5. **`import_course_package`** for anything the API cannot author. Quiz questions are the
+5. **`set_module_description`** to give each module a cover image, once its
+   header image is uploaded. Brightspace renders an image in a module description
+   as the module's cover.
+6. **`import_course_package`** for anything the API cannot author. Quiz questions are the
    clearest case: `create_quiz` can only make an empty shell, but a Common Cartridge carries
    QTI and importing one creates the questions, their answer keys and their feedback. Poll
    `get_import_status` until `COMPLETED`.
-6. **`release_course_content`** last. Everything above is created hidden on purpose, so this
+7. **`release_course_content`** last. Everything above is created hidden on purpose, so this
    is the step that publishes the course. It previews exactly what becomes visible first.
 
 **What else an import can carry.** A Common Cartridge brings pages, weblinks, files, QTI

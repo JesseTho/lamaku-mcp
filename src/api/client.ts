@@ -15,6 +15,20 @@ export class D2LApiError extends Error {
   }
 }
 
+/**
+ * Whether a 403 body is Brightspace saying "you are not signed in" rather than
+ * "your role cannot do this". The first is recoverable by refreshing; the
+ * second is not, and retrying it wastes a login prompt on a permission wall.
+ */
+function looksLikeAuthFailure(body: string): boolean {
+  const head = body.slice(0, 500).toLowerCase();
+  if (/authentication required|not authenticated|invalid token|session (has )?expired/.test(head)) {
+    return true;
+  }
+  // A login page served where JSON was expected is the same signal.
+  return /<form[^>]+login|d2l\/login/.test(head);
+}
+
 /** Simple token bucket. Brightspace is not generous with burst traffic. */
 class RateLimiter {
   private tokens: number;
@@ -147,7 +161,20 @@ export class D2LClient {
     });
 
     // A 302 to the login page is Brightspace's way of saying "session gone".
-    const expired = response.status === 401 || response.status === 302;
+    let expired = response.status === 401 || response.status === 302;
+
+    // An expired session does not always answer 401. Several routes answer 403
+    // with the bare string "Authentication required", which is indistinguishable
+    // from a real permission denial by status alone. Treating every 403 as an
+    // expiry would be worse — restricted roles genuinely get 403 on the dropbox
+    // routes — so the body is what separates them. Getting this wrong sends
+    // someone hunting a permissions problem that does not exist.
+    let forbiddenBody: string | null = null;
+    if (!expired && response.status === 403) {
+      forbiddenBody = await response.text().catch(() => '');
+      if (looksLikeAuthFailure(forbiddenBody)) expired = true;
+    }
+
     if (expired && !isRetry) {
       if (await this.auth.refresh()) {
         return this.request(method, path, init, true);
@@ -163,7 +190,7 @@ export class D2LClient {
     }
 
     if (!response.ok) {
-      const body = await response.text().catch(() => '');
+      const body = forbiddenBody ?? (await response.text().catch(() => ''));
       throw new D2LApiError(
         `${method} ${path} failed with HTTP ${response.status}`,
         response.status,
