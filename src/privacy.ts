@@ -151,8 +151,22 @@ export function scrubNames(text: string, names: string[], reveal = false): strin
   if (reveal || PRIVACY_MODE === 'off' || !text) return text;
   let out = text;
   for (const name of names) {
-    for (const part of name.split(/\s+/).filter((p) => p.length > 2)) {
-      out = out.replace(new RegExp(`\\b${escapeRegex(part)}\\b`, 'gi'), '[student]');
+    for (const raw of name.split(/\s+/)) {
+      // Trim surrounding punctuation before matching. Brightspace display
+      // names are frequently "Last, First", and a part ending in a comma has
+      // no word boundary after it — so the trailing \b never matched and the
+      // surname went through in the clear. Same for initials ending in a dot.
+      const part = raw.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+      if (part.length <= 2) continue;
+
+      // Anchor only on the sides that actually begin or end with a word
+      // character, so "O'Brien-Smith" still anchors at both ends.
+      const lead = /^[\p{L}\p{N}]/u.test(part) ? '\\b' : '';
+      const tail = /[\p{L}\p{N}]$/u.test(part) ? '\\b' : '';
+      out = out.replace(
+        new RegExp(`${lead}${escapeRegex(part)}${tail}`, 'giu'),
+        '[student]',
+      );
     }
   }
   return out;

@@ -30,6 +30,17 @@ function looksLikeAuthFailure(body: string): boolean {
 }
 
 /** Simple token bucket. Brightspace is not generous with burst traffic. */
+/**
+ * Statuses worth retrying. 429 is the rate cap; 502/503/504 are a gateway or
+ * an instance briefly unavailable. 500 is deliberately absent — Brightspace
+ * returns it for malformed bodies, and retrying those just repeats the
+ * mistake more slowly.
+ */
+const RETRYABLE = new Set([429, 502, 503, 504]);
+const RETRY_LIMIT = 4;
+const RETRY_BASE_MS = 500;
+const RETRY_MAX_WAIT_MS = 20_000;
+
 class RateLimiter {
   private tokens: number;
   private last = Date.now();
@@ -153,12 +164,40 @@ export class D2LClient {
     };
     if (init.contentType) headers['Content-Type'] = init.contentType;
 
-    const response = await fetch(this.url(path, init.query), {
+    let response = await fetch(this.url(path, init.query), {
       method,
       headers,
       body: init.body,
       redirect: 'manual',
     });
+
+    // Reactive backoff, on top of the proactive token bucket above.
+    //
+    // The limiter keeps a single well-behaved client under the rate cap, but
+    // it cannot know about other clients on the same account, a slow instance,
+    // or a maintenance window. 429 and the transient 5xx family are worth
+    // waiting out rather than surfacing as a failed course build half way
+    // through. Retries are bounded and only ever applied to statuses that
+    // mean "try again", never to a 4xx that means "this request is wrong".
+    for (let attempt = 1; attempt <= RETRY_LIMIT; attempt++) {
+      if (!RETRYABLE.has(response.status)) break;
+
+      // Brightspace sends Retry-After on 429, in seconds. Honour it when
+      // present, since guessing shorter is how you stay rate limited.
+      const header = Number(response.headers.get('retry-after'));
+      const waitMs = Number.isFinite(header) && header > 0
+        ? Math.min(header * 1000, RETRY_MAX_WAIT_MS)
+        : Math.min(RETRY_BASE_MS * 2 ** (attempt - 1), RETRY_MAX_WAIT_MS);
+
+      await new Promise((resolve) => setTimeout(resolve, waitMs));
+      await this.limiter.take();
+      response = await fetch(this.url(path, init.query), {
+        method,
+        headers,
+        body: init.body,
+        redirect: 'manual',
+      });
+    }
 
     // A 302 to the login page is Brightspace's way of saying "session gone".
     let expired = response.status === 401 || response.status === 302;
