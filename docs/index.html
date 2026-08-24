@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lamaku-mcp</title>
+<meta name="description" content="An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace LMS. Reads your courses and writes to them: pages, media, discussions, assignments, whole course packages.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600&family=Alumni+Sans:wght@100;200;300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Lacquer and gold leaf. Dark by commitment, not by toggle. */
+  --lacquer:oklch(15% .006 95);
+  --lacquer-deep:oklch(10% .006 95);
+  --lacquer-raised:oklch(20% .006 95);
+  --graphite:oklch(25% .008 95);
+  --graphite-2:oklch(30% .008 95);
+
+  --kinpaku:oklch(84% .19 80.46);
+  --kinpaku-rich:oklch(77% .13 82);
+  --kinpaku-deep:oklch(61% .085 78);
+  --patina:oklch(70% .12 188);
+  --patina-deep:oklch(49% .08 188);
+  --vermilion:oklch(62% .15 35);
+
+  --text:oklch(88% 0 0);
+  --text-muted:oklch(72% 0 0);
+  --text-faint:oklch(62% 0 0);
+  --rule:oklch(78% 0 0/.22);
+  --edge:oklch(80% 0 0/.5);
+
+  --font:"Albert Sans","Avenir Next","Helvetica Neue",Arial,system-ui,sans-serif;
+  --font-display:"Alumni Sans","Albert Sans",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+
+  --measure:68ch;
+  --wide:88rem;
+  --r-sm:3px;
+  --r-md:8px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+body{
+  margin:0;
+  background:var(--lacquer);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:1rem;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:1.5rem}
+.wide{max-width:var(--wide);margin-inline:auto;padding-inline:1.5rem}
+
+/* ---------- masthead ---------- */
+header.top{
+  border-bottom:1px solid var(--rule);
+  position:sticky;top:0;z-index:10;
+  background:oklch(15% .006 95/.86);
+  backdrop-filter:blur(10px);
+}
+.top-in{
+  max-width:var(--wide);margin-inline:auto;padding:.9rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+}
+.wordmark{
+  font-family:var(--font);font-size:1.125rem;font-weight:500;
+  letter-spacing:.15em;text-transform:lowercase;color:var(--text);
+  text-decoration:none;white-space:nowrap;
+}
+.wordmark b{color:var(--kinpaku);font-weight:500}
+nav.top-nav{display:flex;gap:1.4rem;flex-wrap:wrap}
+nav.top-nav a{
+  font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-faint);text-decoration:none;
+}
+nav.top-nav a:hover,nav.top-nav a:focus-visible{color:var(--kinpaku)}
+@media (max-width:720px){nav.top-nav{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:6.5rem 0 4.5rem;border-bottom:1px solid var(--rule)}
+.eyebrow{
+  font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--kinpaku-deep);margin:0 0 1.6rem;font-weight:500;
+}
+h1{
+  font-family:var(--font-display);
+  font-size:clamp(3.4rem,6.5vw,5.6rem);
+  font-weight:100;line-height:1.02;letter-spacing:-.01em;
+  margin:0 0 1.6rem;color:var(--text);text-wrap:balance;
+}
+h1 em{font-style:normal;color:var(--kinpaku)}
+.lede{font-size:1.125rem;color:var(--text-muted);margin:0 0 2.2rem;text-wrap:pretty}
+.lede strong{color:var(--text);font-weight:500}
+
+.cta{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.btn{
+  font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;
+  padding:.7rem 1.3rem;border-radius:var(--r-sm);text-decoration:none;
+  border:1px solid var(--kinpaku);color:var(--lacquer);background:var(--kinpaku);
+  transition:background .15s,border-color .15s;
+}
+.btn:hover{background:var(--kinpaku-rich);border-color:var(--kinpaku-rich)}
+.btn.ghost{background:transparent;color:var(--kinpaku);}
+.btn.ghost:hover{background:oklch(84% .19 80.46/.1)}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--patina);outline-offset:3px}
+
+/* ---------- sections ---------- */
+section{padding:4.5rem 0;border-bottom:1px solid var(--rule)}
+section:last-of-type{border-bottom:0}
+h2{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,4vw,3rem);font-weight:200;line-height:1.06;
+  margin:0 0 .4rem;color:var(--text);letter-spacing:-.005em;text-wrap:balance;
+}
+h3{
+  font-size:1.125rem;font-weight:500;line-height:1.35;
+  margin:2.6rem 0 .6rem;color:var(--text);
+}
+h4{
+  font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text-faint);margin:2rem 0 .6rem;font-weight:500;
+}
+.sec-note{color:var(--text-faint);font-size:.9375rem;margin:0 0 2rem}
+p{margin:0 0 1.2rem;text-wrap:pretty}
+a{color:var(--kinpaku);text-decoration:none;border-bottom:1px solid oklch(84% .19 80.46/.35)}
+a:hover{border-bottom-color:var(--kinpaku)}
+strong{font-weight:600;color:var(--text)}
+ul,ol{margin:0 0 1.2rem;padding-left:1.3rem}
+li{margin-bottom:.5rem}
+li::marker{color:var(--kinpaku-deep)}
+
+code{
+  font-family:var(--mono);font-size:.84em;
+  background:var(--graphite-2);color:oklch(91% 0 0);
+  padding:.18em .42em;border-radius:var(--r-sm);
+}
+pre{
+  font-family:var(--mono);font-size:.8125rem;line-height:1.7;
+  background:var(--lacquer-deep);color:oklch(86% 0 0);
+  border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:1.1rem 1.2rem;overflow-x:auto;margin:0 0 1.4rem;
+}
+pre code{background:none;padding:0;font-size:1em}
+pre .c{color:var(--text-faint)}
+pre .k{color:var(--kinpaku)}
+pre .s{color:var(--patina)}
+
+/* ---------- steps ---------- */
+ol.steps{list-style:none;padding:0;counter-reset:s;margin:2rem 0 0}
+ol.steps>li{
+  counter-increment:s;position:relative;
+  padding:0 0 1.8rem 3.4rem;margin:0;
+  border-left:1px solid var(--rule);
+}
+ol.steps>li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.steps>li::before{
+  content:counter(s,decimal-leading-zero);
+  position:absolute;left:-.85rem;top:0;
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;
+  color:var(--kinpaku);background:var(--lacquer);
+  padding:.15rem .35rem;
+}
+ol.steps h3{margin:0 0 .4rem;font-size:1rem}
+ol.steps p{margin:0 0 .7rem;color:var(--text-muted);font-size:.9375rem}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));margin:2rem 0}
+.card{
+  background:var(--lacquer-raised);border:1px solid var(--rule);
+  border-radius:var(--r-md);padding:1.3rem 1.4rem;
+}
+.card h3{margin:0 0 .5rem;font-size:.9375rem}
+.card p{margin:0;font-size:.875rem;color:var(--text-muted);line-height:1.7}
+
+/* ---------- callouts ---------- */
+.note{
+  border-left:2px solid var(--patina);background:oklch(70% .12 188/.06);
+  padding:1rem 1.2rem;border-radius:0 var(--r-sm) var(--r-sm) 0;margin:1.6rem 0;
+}
+.note.warn{border-left-color:var(--vermilion);background:oklch(62% .15 35/.07)}
+.note.gold{border-left-color:var(--kinpaku);background:oklch(84% .19 80.46/.06)}
+.note p{margin:0;font-size:.9375rem}
+.note p+p{margin-top:.7rem}
+.note-label{
+  display:block;font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--patina);margin-bottom:.4rem;font-weight:500;
+}
+.note.warn .note-label{color:var(--vermilion)}
+.note.gold .note-label{color:var(--kinpaku)}
+
+/* ---------- table ---------- */
+.scroll{overflow-x:auto;margin:1.6rem 0}
+table{border-collapse:collapse;width:100%;font-size:.875rem}
+th,td{text-align:left;padding:.65rem .8rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{
+  font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-faint);font-weight:500;border-bottom-color:var(--edge);
+}
+td{color:var(--text-muted)}
+td strong,td code{color:var(--text)}
+tbody tr:last-child td{border-bottom:0}
+.tag{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.04em;
+  padding:.1rem .45rem;border-radius:var(--r-sm);white-space:nowrap;
+}
+.tag.ok{background:oklch(70% .12 188/.15);color:var(--patina)}
+.tag.no{background:oklch(62% .15 35/.15);color:var(--vermilion)}
+.tag.maybe{background:oklch(84% .19 80.46/.14);color:var(--kinpaku)}
+
+/* ---------- tool list ---------- */
+.tools{display:grid;gap:.35rem;margin:1rem 0 2rem}
+.tools code{
+  background:var(--graphite);font-size:.78rem;
+  padding:.28rem .5rem;border-radius:var(--r-sm);
+}
+.toolset{display:flex;flex-wrap:wrap;gap:.35rem;margin:.6rem 0 1.8rem}
+
+footer{
+  padding:3.5rem 0 5rem;color:var(--text-faint);font-size:.875rem;
+  border-top:1px solid var(--rule);
+}
+footer a{color:var(--text-muted);border-bottom-color:var(--rule)}
+footer a:hover{color:var(--kinpaku)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="wordmark" href="#top">lamaku<b>-mcp</b></a>
+    <nav class="top-nav">
+      <a href="#install">Install</a>
+      <a href="#safety">Safety</a>
+      <a href="#course">Build a course</a>
+      <a href="#tools">Tools</a>
+      <a href="#limits">Limits</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">MCP server · D2L Brightspace</p>
+    <h1>Build a course <em>without opening the LMS</em></h1>
+    <p class="lede">An MCP server for <strong>Lamakū</strong>, the University of Hawaiʻi's Brightspace instance. It reads your courses like the others do. It also <strong>writes</strong> to them: authored pages, uploaded video, discussions, assignments, and whole course packages.</p>
+    <div class="cta">
+      <a class="btn" href="#install">Get started</a>
+      <a class="btn ghost" href="https://github.com/JesseTho/lamaku-mcp">Source</a>
+    </div>
+  </div>
+</div>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What it is for</h2>
+    <p class="sec-note">And when something simpler will do.</p>
+    <p>The other D2L MCP servers are read-only. They check grades and due dates, which is a real job and a different one. If you want to ask what is due on Thursday, use one of those.</p>
+    <p>This one exists to construct a course and put it in Brightspace: modules, pages with real media in them, forums with the discussion prompts already written, an assignment with a rubric to come, quizzes carrying their answer keys.</p>
+    <p>Writes land in a live course, so most of the design here is about not doing that carelessly.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>54 tools</h3>
+        <p>Reading, authoring, and the student side. Every write route verified against a real sandbox by creating an object and deleting it again.</p>
+      </div>
+      <div class="card">
+        <h3>Preview before write</h3>
+        <p>The first call returns a plan and a token. Nothing reaches Brightspace until you call again with it.</p>
+      </div>
+      <div class="card">
+        <h3>FERPA by default</h3>
+        <p>Student names never reach the model unless you deliberately ask. Handles are stable so an assistant can still reason about them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <h2>Install</h2>
+    <p class="sec-note">Node 20 or newer. A UH account with Duo.</p>
+
+<pre><code><span class="c"># clone, install, build</span>
+git clone https://github.com/JesseTho/lamaku-mcp
+cd lamaku-mcp
+pnpm install
+pnpm build
+
+<span class="c"># opens a browser: sign in and approve Duo yourself</span>
+node dist/cli.js login</code></pre>
+
+    <p>The session is stored encrypted under your user profile. It lasts about a day of idleness and expires hard after a few days, at which point you run <code>login</code> again.</p>
+
+    <h3>Register with Claude Code</h3>
+<pre><code>claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js</code></pre>
+
+    <h3>Or any stdio MCP client</h3>
+<pre><code>{
+  <span class="s">"mcpServers"</span>: {
+    <span class="s">"lamaku"</span>: {
+      <span class="s">"command"</span>: <span class="s">"node"</span>,
+      <span class="s">"args"</span>: [<span class="s">"/absolute/path/to/lamaku-mcp/dist/index.js"</span>],
+      <span class="s">"env"</span>: { <span class="s">"LAMAKU_HOST"</span>: <span class="s">"lamaku.hawaii.edu"</span> }
+    }
+  }
+}</code></pre>
+
+    <div class="note">
+      <span class="note-label">Another institution</span>
+      <p>Set <code>BRIGHTSPACE_HOST</code> to your own D2L hostname. The API layer is not UH-specific, but only Lamakū has been tested, and the login flow assumes an interactive browser. For anything headless or shared, see OAuth in the README.</p>
+    </div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <h2>How writes are gated</h2>
+    <p class="sec-note">Two gates, both load-bearing.</p>
+
+    <p>A <strong>role preflight</strong> runs first and refuses before spending the call if your role in that course cannot do the thing. The same person holds different roles in different courses, and the API enforces them inconsistently, so this turns a bare 403 into a straight explanation.</p>
+
+    <p>Then the <strong>confirmation token</strong>. Calling a write tool returns only a preview of what would be sent. Nothing reaches Brightspace until you call the same tool again with the token that preview carried.</p>
+
+<pre><code><span class="c">// first call: nothing has happened yet</span>
+{
+  <span class="s">"status"</span>: <span class="s">"confirmation_required"</span>,
+  <span class="s">"action"</span>: <span class="s">"delete_discussion_forum"</span>,
+  <span class="s">"willDo"</span>: {
+    <span class="s">"course"</span>: <span class="s">"Sandbox 2"</span>,
+    <span class="s">"name"</span>: <span class="s">"Module 3: diagnosing failed feeds"</span>,
+    <span class="s">"topicCount"</span>: 1,
+    <span class="s">"warning"</span>: <span class="s">"Deletes the forum, its 1 topic(s), and every post inside them."</span>
+  },
+  <span class="s">"confirmToken"</span>: <span class="s">"0vVbBxC1c2gq"</span>,
+  <span class="s">"expiresAt"</span>: <span class="s">"2026-08-24T20:03:50Z"</span>
+}</code></pre>
+
+    <p>Tokens are single use, expire in five minutes, and are scoped to the action they were minted for. A token approved for one preview cannot authorise a different operation.</p>
+
+    <div class="note gold">
+      <span class="note-label">Everything starts hidden</span>
+      <p>New objects are created hidden from students on purpose, so a half-built course is never briefly live. <code>release_course_content</code> is the deliberate last step, and it previews exactly what becomes visible before it does anything.</p>
+    </div>
+  </div>
+</section>
+
+<section id="course">
+  <div class="wrap">
+    <h2>Build a course, end to end</h2>
+    <p class="sec-note">Order matters, mostly because media paths do not exist until the media does.</p>
+
+    <ol class="steps">
+      <li>
+        <h3>Create the modules</h3>
+        <p>One <code>create_content_module</code> per module. They arrive hidden and in creation order; <code>update_content_module</code> takes a <code>sortOrder</code> if you need to rearrange.</p>
+      </li>
+      <li>
+        <h3>Upload the media first</h3>
+        <p><code>create_content_file</code> takes video, audio, images, PDFs and caption files. Each call returns the enforced content path and an <code>embedAs</code> snippet with that path already filled in.</p>
+        <p>Doing this after the pages means rewriting every page once you learn the paths.</p>
+      </li>
+      <li>
+        <h3>Write the pages</h3>
+        <p><code>create_content_page</code> takes body HTML and wraps it in a template. Paste the <code>embedAs</code> snippets where the media belongs.</p>
+      </li>
+      <li>
+        <h3>Add the parts a cartridge cannot carry</h3>
+        <p><code>create_content_link</code> for external sources, then <code>create_discussion_forum</code>, <code>create_discussion_topic</code> and <code>create_assignment</code>. No package format expresses these, so they have to be authored.</p>
+      </li>
+      <li>
+        <h3>Give each module a cover</h3>
+        <p><code>set_module_description</code> with an <code>imagePath</code> from step 2. Brightspace renders an image in a module description as that module's cover image.</p>
+      </li>
+      <li>
+        <h3>Import what the API cannot author</h3>
+        <p>Quiz questions are the clearest case: Brightspace exposes <code>GET</code> for them and no create route, so <code>create_quiz</code> can only make an empty shell. A Common Cartridge carries QTI, and <code>import_course_package</code> creates the questions, their answer keys and their feedback from it.</p>
+        <p>Poll <code>get_import_status</code> until it reports <code>COMPLETED</code>.</p>
+      </li>
+      <li>
+        <h3>Release it</h3>
+        <p><code>release_course_content</code> walks the whole tree and unhides in one pass, after showing you the list.</p>
+      </li>
+    </ol>
+
+    <h3>Page templates</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Template</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td><code>uh</code></td><td>The UH shared HTML Template Library: banner, content column, seal footer. Correct on a UH instance and nowhere else, since the stylesheets are same-origin.</td></tr>
+          <tr><td><code>jabsom</code></td><td>JABSOM Design System with its tokens inlined. Mānoa Green headings in Inter, Source Serif 4 body. Self-contained, so it renders correctly off-instance too.</td></tr>
+          <tr><td><code>plain</code></td><td>A bare document with no institutional styling.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What an import can carry</h3>
+    <p>A <strong>Common Cartridge</strong> brings pages, weblinks, files, QTI quizzes and question banks, discussion topics and LTI links. A <strong>Brightspace <code>.zip</code></strong> brings all of that plus D2L-native objects: rubrics, release conditions, grade schemes.</p>
+    <p>That second one is the practical way to move a rubric between courses while the rubric API waits on <code>le 1.97</code>. Groups, sections, attendance and awards cannot be expressed in either format.</p>
+
+    <div class="note warn">
+      <span class="note-label">Import adds, it does not replace</span>
+      <p>Importing the same package twice produces two copies of everything. Import into an empty course, or check for overlap first.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ferpa">
+  <div class="wrap">
+    <h2>The FERPA guard</h2>
+    <p class="sec-note">Why student names do not reach the model.</p>
+
+    <p>Student names, usernames, emails and institutional IDs are protected education records. This server hands course data to a language model, and from there into a vendor's logs, so by default it does not emit them.</p>
+
+    <p>Students become a stable handle like <code>student:4f2a91</code>, an HMAC under a salt generated on your machine and never transmitted. Not reversible, not comparable across installs, and stable across calls, so an assistant can still reason about the same student who missed lab 3 without knowing who that is.</p>
+
+    <p>The raw <code>userId</code> is dropped as well. It is a direct key back into Brightspace and into anything sharing the same institutional ID, so pseudonymising only the name would not be enough.</p>
+
+    <p>Course staff are not redacted. A co-instructor's name is not a protected record, and hiding it makes a roster unreadable for no gain. Pass <code>revealStudents: true</code> when you have deliberately asked for real names.</p>
+
+    <div class="note">
+      <span class="note-label">A disclosure control, not an access control</span>
+      <p>You can read your roster in Brightspace whenever you like. The point is keeping it out of prompts and model retention unless you meant to put it there. <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/SECURITY.md">SECURITY.md</a> covers what it does and does not protect.</p>
+    </div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="wrap">
+    <h2>Tools</h2>
+    <p class="sec-note">54 of them. <code>pnpm tools</code> prints the live list with signatures.</p>
+
+    <h4>Session</h4>
+    <div class="toolset">
+      <code>auth_status</code><code>whoami</code><code>check_capabilities</code>
+    </div>
+
+    <h4>Reading</h4>
+    <div class="toolset">
+      <code>list_courses</code><code>list_assignments</code><code>get_assignment</code><code>list_my_submissions</code><code>download_submission_file</code><code>get_grades</code><code>get_final_grade</code><code>get_upcoming_deadlines</code><code>list_modules</code><code>get_module</code><code>get_topic</code><code>download_topic_file</code><code>get_announcements</code><code>list_forums</code><code>list_topics</code><code>read_posts</code><code>list_quizzes</code><code>list_checklists</code>
+    </div>
+
+    <h4>Authoring</h4>
+    <div class="toolset">
+      <code>create_content_module</code><code>create_content_page</code><code>update_content_page</code><code>create_content_file</code><code>create_content_link</code><code>update_content_module</code><code>update_content_topic</code><code>set_module_description</code><code>release_course_content</code><code>delete_content_module</code><code>delete_content_topic</code><code>import_course_package</code><code>get_import_status</code><code>create_announcement</code><code>delete_announcement</code><code>create_assignment</code><code>create_assignment_category</code><code>delete_assignment</code><code>create_grade_item</code><code>create_grade_category</code><code>delete_grade_item</code><code>create_discussion_forum</code><code>create_discussion_topic</code><code>delete_discussion_forum</code><code>delete_discussion_topic</code><code>create_quiz</code><code>delete_quiz</code><code>create_checklist</code><code>add_checklist_item</code><code>delete_checklist</code>
+    </div>
+
+    <h4>Student side</h4>
+    <div class="toolset">
+      <code>submit_assignment</code><code>create_discussion_post</code><code>reply_to_post</code>
+    </div>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="wrap">
+    <h2>What it cannot do</h2>
+    <p class="sec-note">Four different kinds of no, which a column of red crosses would flatten into one.</p>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Capability</th><th></th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Quiz questions, directly</strong></td>
+            <td><span class="tag no">no route</span></td>
+            <td>Brightspace exposes <code>GET</code> and no create route. Import a cartridge; that works and is verified.</td>
+          </tr>
+          <tr>
+            <td><strong>Rubric authoring</strong></td>
+            <td><span class="tag maybe">version</span></td>
+            <td>Needs <code>le 1.97+</code>; Lamakū serves <code>1.96</code>, one version short. A Brightspace <code>.zip</code> import carries rubrics today.</td>
+          </tr>
+          <tr>
+            <td><strong>Grade value writing</strong></td>
+            <td><span class="tag maybe">untested</span></td>
+            <td>The sandbox has no student enrolments, and trying it in a live section would alter a real record.</td>
+          </tr>
+          <tr>
+            <td><strong>Grade item listing</strong></td>
+            <td><span class="tag no">no route</span></td>
+            <td><code>get_grades</code> returns the caller's own grades. Items can be created and deleted by id but never enumerated.</td>
+          </tr>
+          <tr>
+            <td><strong>Course creation</strong></td>
+            <td><span class="tag no">admin</span></td>
+            <td>Org-level permission, not available to an instructor account.</td>
+          </tr>
+          <tr>
+            <td><strong>Groups, sections, attendance, awards</strong></td>
+            <td><span class="tag no">absent</span></td>
+            <td>Not implemented, and not expressible in a course package either.</td>
+          </tr>
+          <tr>
+            <td><strong>OAuth on another instance</strong></td>
+            <td><span class="tag maybe">unproven</span></td>
+            <td>Scaffolded against <code>auth.brightspace.com</code>, never exercised outside UH. Treat as untested.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Reading a 404 against a 400</h3>
+    <p>Brightspace separates these usefully when you are probing. A <code>404</code> means the route does not exist at that API version. A <code>400</code> means it exists and rejected your input. That is how the rubric split above was settled.</p>
+    <p>One caveat on the same theme: a <code>400</code> does not prove you have permission. Several routes validate the body before checking the role, so probing with a malformed payload over-reports your access. Only a real create proves anything.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
+    <p>Not affiliated with or endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use policy before pointing this at your account.</p>
+    <p><a href="https://github.com/JesseTho/lamaku-mcp">Source</a> · <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/SECURITY.md">Security</a> · <a href="https://github.com/JesseTho/lamaku-mcp/issues">Issues</a></p>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>

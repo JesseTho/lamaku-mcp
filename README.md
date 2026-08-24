@@ -8,6 +8,9 @@ assignments, grade items, discussion forums and topics, and whole course package
 
 Student identities are pseudonymised by default. See [FERPA guard](#ferpa-guard).
 
+**[Usage guide](https://jessetho.github.io/lamaku-mcp/)** covers install, the safety model, and
+building a course end to end. This README is the reference; that is the walkthrough.
+
 ---
 
 ## What this is for
@@ -178,7 +181,8 @@ LAMAKU_SANDBOX=<courseId> node scripts/verify-writes.mjs
 ```
 
 That script creates and deletes real objects, so point it only at a sandbox. It refuses to run
-without an explicit course id.
+without an explicit course id. [`scripts/README.md`](scripts/README.md) says which of the others
+need a live session and which are safe anywhere.
 
 ---
 
