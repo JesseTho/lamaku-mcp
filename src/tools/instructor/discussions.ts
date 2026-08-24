@@ -180,4 +180,120 @@ export function register(server: McpServer, client: D2LClient): void {
         );
       }),
   );
+
+  server.registerTool(
+    'delete_discussion_topic',
+    {
+      title: 'Delete a discussion topic (requires confirmation)',
+      description:
+        'Removes a topic and every post in it. Permanent. Two-step: preview, ' +
+        'then confirm.',
+      inputSchema: {
+        course: z.union([z.string(), z.number()]).describe('Course id or name fragment.'),
+        forumId: z.number().describe('Forum the topic belongs to.'),
+        topicId: z.number().describe('Topic to delete.'),
+        confirmToken: z.string().optional(),
+      },
+    },
+    async ({ course, forumId, topicId, confirmToken }) =>
+      guard(async () => {
+        if (confirmToken) return ok(await consume('delete_discussion_topic', confirmToken));
+
+        const orgUnitId = await resolveOrgUnitId(client, course);
+        const role = await requireAuthoring(client, orgUnitId, 'delete discussions');
+        const path = await client.le(
+          `/${orgUnitId}/discussions/forums/${forumId}/topics/${topicId}`,
+        );
+        const topic = await client
+          .get<{ Name?: string }>(path)
+          .catch(() => null);
+        if (!topic) {
+          throw new Error(
+            `No topic ${topicId} in forum ${forumId}. list_topics shows the valid ids.`,
+          );
+        }
+
+        return ok(
+          stage(
+            'delete_discussion_topic',
+            {
+              course: role.courseName ?? orgUnitId,
+              forumId,
+              topicId,
+              name: topic.Name ?? '(untitled)',
+              warning:
+                'Deletes the topic AND every post and reply in it, including ' +
+                'student work. Permanent, and not recoverable through this API.',
+            },
+            async () => {
+              await client.delete(path);
+              return { status: 'deleted', topicId, name: topic.Name ?? null };
+            },
+          ),
+        );
+      }),
+  );
+
+  server.registerTool(
+    'delete_discussion_forum',
+    {
+      title: 'Delete a discussion forum (requires confirmation)',
+      description:
+        'Removes a forum, every topic inside it, and every post in those ' +
+        'topics. Permanent. Two-step: preview, then confirm.',
+      inputSchema: {
+        course: z.union([z.string(), z.number()]).describe('Course id or name fragment.'),
+        forumId: z.number().describe('Forum to delete.'),
+        confirmToken: z.string().optional(),
+      },
+    },
+    async ({ course, forumId, confirmToken }) =>
+      guard(async () => {
+        if (confirmToken) return ok(await consume('delete_discussion_forum', confirmToken));
+
+        const orgUnitId = await resolveOrgUnitId(client, course);
+        const role = await requireAuthoring(client, orgUnitId, 'delete discussions');
+        const path = await client.le(`/${orgUnitId}/discussions/forums/${forumId}`);
+        const forum = await client.get<Forum>(path).catch(() => null);
+        if (!forum) {
+          throw new Error(
+            `No forum ${forumId} in this course. list_forums shows the valid ids.`,
+          );
+        }
+
+        // Name the topics that go with it, so the blast radius is visible
+        // before the user approves rather than after.
+        const topics = await client
+          .get<{ Name?: string }[]>(
+            await client.le(`/${orgUnitId}/discussions/forums/${forumId}/topics/`),
+          )
+          .catch(() => [] as { Name?: string }[]);
+
+        return ok(
+          stage(
+            'delete_discussion_forum',
+            {
+              course: role.courseName ?? orgUnitId,
+              forumId,
+              name: forum.Name,
+              topicCount: topics.length,
+              topics: topics.map((t) => t.Name ?? '(untitled)'),
+              warning:
+                `Deletes the forum, its ${topics.length} topic(s), and every ` +
+                `post inside them, including student work. Permanent, and not ` +
+                `recoverable through this API.`,
+            },
+            async () => {
+              await client.delete(path);
+              return {
+                status: 'deleted',
+                forumId,
+                name: forum.Name,
+                topicsRemoved: topics.length,
+              };
+            },
+          ),
+        );
+      }),
+  );
 }

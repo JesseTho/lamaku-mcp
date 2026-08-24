@@ -46,8 +46,11 @@ async function fetchFolders(
   orgUnitId: number,
 ): Promise<DropboxFolder[]> {
   const path = await client.le(`/${orgUnitId}/dropbox/folders/`);
-  const folders = await client.get<DropboxFolder[]>(path, { cacheSeconds: 120 });
-  return folders.filter((f) => !f.IsHidden);
+  // Hidden folders are kept. An instructor who just created an assignment
+  // (hidden by default) needs to see it, and get_assignment's "no visible
+  // assignment with id N" was the worst version of this: it asserts the
+  // object does not exist seconds after the write returned that id.
+  return client.get<DropboxFolder[]>(path, { cacheSeconds: 120 });
 }
 
 async function fetchFolder(

@@ -2,9 +2,14 @@ import { existsSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-/** Brightspace host. UH Manoa's Lamaku unless overridden. */
+/**
+ * Brightspace host. UH Manoa's Lamaku unless overridden.
+ *
+ * BRIGHTSPACE_HOST is the neutral alias, for anyone pointing this at another
+ * D2L instance; LAMAKU_HOST wins if both are set.
+ */
 export const HOST =
-  process.env.LAMAKU_HOST ?? process.env.LAMAKU_HOST ?? 'lamaku.hawaii.edu';
+  process.env.LAMAKU_HOST ?? process.env.BRIGHTSPACE_HOST ?? 'lamaku.hawaii.edu';
 
 export type AuthKind = 'session' | 'oauth';
 

@@ -91,10 +91,19 @@ export function register(server: McpServer, client: D2LClient): void {
         const orgUnitId = await resolveOrgUnitId(client, course);
         const path = await client.le(`/${orgUnitId}/content/root/`);
         const modules = await client.get<ContentObject[]>(path, { cacheSeconds: 900 });
+        // Hidden items are returned, not filtered. Brightspace already scopes
+        // this response to what the caller may see, and the authoring tools
+        // create hidden by default - so filtering here meant an instructor
+        // could not list the course they had just built, while `count` still
+        // counted it. Each item carries isHidden; the split is reported so a
+        // caller can tell "nothing here" from "nothing released yet".
+        const hidden = modules.filter((m) => m.IsHidden).length;
         return ok({
           courseId: orgUnitId,
           count: modules.length,
-          modules: modules.filter((m) => !m.IsHidden).map(summarizeItem),
+          visibleCount: modules.length - hidden,
+          hiddenCount: hidden,
+          modules: modules.map(summarizeItem),
         });
       }),
   );
@@ -117,11 +126,14 @@ export function register(server: McpServer, client: D2LClient): void {
           `/${orgUnitId}/content/modules/${moduleId}/structure/`,
         );
         const children = await client.get<ContentObject[]>(path, { cacheSeconds: 900 });
+        const hiddenKids = children.filter((c) => c.IsHidden).length;
         return ok({
           courseId: orgUnitId,
           moduleId,
           count: children.length,
-          items: children.filter((c) => !c.IsHidden).map(summarizeItem),
+          visibleCount: children.length - hiddenKids,
+          hiddenCount: hiddenKids,
+          items: children.map(summarizeItem),
         });
       }),
   );

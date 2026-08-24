@@ -1,6 +1,6 @@
 import { HOST, versionOverrides } from '../config.js';
 import { AuthError, type AuthProvider } from '../auth/provider.js';
-import { buildMultipartMixed, type UploadPart } from './multipart.js';
+import { buildMultipartForm, buildMultipartMixed, type UploadPart } from './multipart.js';
 import type { ProductVersions } from './types.js';
 
 export class D2LApiError extends Error {
@@ -255,6 +255,14 @@ export class D2LClient {
   async delete(path: string): Promise<void> {
     await this.request('DELETE', path, {});
     this.cache.clear();
+  }
+
+  /** Simple file upload: multipart/form-data, one named part, no metadata. */
+  async postForm<T>(path: string, file: UploadPart, fieldName = 'file'): Promise<T> {
+    const { body, contentType } = buildMultipartForm(file, fieldName);
+    const response = await this.request('POST', path, { body, contentType });
+    this.cache.clear();
+    return (await this.parse<T>(response)) as T;
   }
 
   async postMultipart<T>(

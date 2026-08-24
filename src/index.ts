@@ -23,6 +23,8 @@ import * as instructorDiscussions from './tools/instructor/discussions.js';
 import * as instructorGrades from './tools/instructor/grades.js';
 import * as instructorPages from './tools/instructor/pages.js';
 import * as instructorMedia from './tools/instructor/media.js';
+import * as instructorImports from './tools/instructor/imports.js';
+import * as instructorVisibility from './tools/instructor/visibility.js';
 import * as instructorQuizzes from './tools/instructor/quizzes.js';
 import { PRIVACY_MODE } from './privacy.js';
 
@@ -55,6 +57,8 @@ export function createServer(): { server: McpServer; client: D2LClient } {
   instructorChecklists.register(server, client);
   instructorPages.register(server, client);
   instructorMedia.register(server, client);
+  instructorImports.register(server, client);
+  instructorVisibility.register(server, client);
 
   return { server, client };
 }

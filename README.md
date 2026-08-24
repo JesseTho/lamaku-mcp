@@ -29,12 +29,15 @@ several payload shapes.
 | Checklists — create with nested categories and items, append, delete | ✅ verified |
 | **Content pages** — authored HTML, three templates | ✅ verified |
 | **Media upload** — video, audio, images, PDF, captions into course files | ✅ verified |
+| **Content visibility** — release modules and topics to students, reorder, rename | ✅ verified |
+| **Course package import** — .imscc / Brightspace .zip, with job polling | ✅ verified |
+| **Quiz questions, via import** | ✅ verified — 17 questions with answer keys and feedback |
 | Reading everything above, plus surveys, calendar, classlist | ✅ verified |
-| **Quiz questions** | ❌ Brightspace exposes `GET` for questions but no create/update route. Quizzes are created empty and questions added in the UI. |
-| **Rubric authoring** | ⛔ Route exists but needs `le 1.97+` (LMS v20.26.8). Lamakū serves `le 1.96` — one version short, so this arrives with the next Brightspace upgrade. |
+| **Quiz questions, directly** | ❌ Brightspace exposes `GET` but no create/update route, so `create_quiz` makes an empty shell. Import a cartridge instead — see below. |
+| **Rubric authoring** | ⛔ Route exists but needs `le 1.97+` (LMS v20.26.8). Lamakū serves `le 1.96` — one version short, so this arrives with the next Brightspace upgrade. A Brightspace `.zip` import carries rubrics today, which routes around it. |
 | **Rubric assessment** (scoring a student against an existing rubric) | ⚠️ Available — `/assessment` needs only `le 1.93+` and the route answers on 1.96. Unverified end-to-end because the sandbox has no rubrics to score against. |
 | **Course creation** | ❌ Org-level admin. Not available to an instructor account; ask UH ITS. |
-| **Discussion delete** | ❌ No route. Forums and topics can be created but only removed in the UI. |
+| Discussion delete | ✅ verified — forums and topics, with the blast radius named in the preview |
 | **Grade item listing** | ❌ Only `get_grades`, which returns the caller's own grades. Items can be created and deleted by id but never enumerated. |
 | **Grade value writing** | ⚠️ Untested. The sandbox has no student enrolments to grade, and testing it in a live section would alter a real student's record. |
 
@@ -167,7 +170,9 @@ It refuses to run without an explicit course id.
 `create_discussion_forum`, `create_discussion_topic`, `create_quiz`,
 `delete_quiz`, `create_checklist`, `add_checklist_item`, `delete_checklist`,
 `create_content_page`, `update_content_page`, `create_content_file`,
-`set_module_description`
+`update_content_module`, `update_content_topic`, `set_module_description`,
+`release_course_content`, `delete_content_topic`, `delete_discussion_forum`,
+`delete_discussion_topic`, `import_course_package`, `get_import_status`
 
 **Student-side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
@@ -200,10 +205,24 @@ See [`docs/course-style.md`](docs/course-style.md) for the UH template and
 [`docs/jabsom-style.md`](docs/jabsom-style.md) for the JABSOM one, covering what a page should look like, including the available components and the accessibility obligations that come
 with them.
 
-**When the cartridge is still the better route.** Quiz questions have no create route, so
-`create_quiz` produces an empty shell. A course whose assessment is quizzes should be built as
-an IMS Common Cartridge and imported, then have its forums and assignments added through this
-server afterwards.
+5. **`set_module_description`** to give each module a cover image, once its
+   header image is uploaded. Brightspace renders an image in a module description
+   as the module's cover.
+6. **`import_course_package`** for anything the API cannot author. Quiz questions are the
+   clearest case: `create_quiz` can only make an empty shell, but a Common Cartridge carries
+   QTI and importing one creates the questions, their answer keys and their feedback. Poll
+   `get_import_status` until `COMPLETED`.
+7. **`release_course_content`** last. Everything above is created hidden on purpose, so this
+   is the step that publishes the course. It previews exactly what becomes visible first.
+
+**What else an import can carry.** A Common Cartridge brings pages, weblinks, files, QTI
+quizzes and question banks, discussion topics and LTI links. A Brightspace `.zip` export
+brings all of that plus D2L-native objects — rubrics, release conditions and grade schemes —
+which is the practical way to move a rubric between courses while the rubric API waits on
+`le 1.97`. Groups, sections, attendance and awards are not package-expressible.
+
+**Import adds, it does not replace.** Importing the same package twice produces two copies of
+everything. Import into an empty course, or check for overlap first.
 
 ---
 
