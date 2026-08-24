@@ -1,6 +1,6 @@
 ---
-name: lamaku-mcp documentation
-description: Institutional reference documentation for an MCP server that authors Brightspace courses.
+name: lamaku-mcp site
+description: The overview and the reference manual for an MCP server that authors Brightspace courses.
 colors:
   manoa-green: "#024731"
   manoa-green-hover: "#0a6a49"
@@ -106,9 +106,20 @@ components:
     backgroundColor: "{colors.paper-shade}"
     textColor: "{colors.ink-secondary}"
     padding: "0.5rem 0.8rem"
+  copy-button:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink-muted}"
+    typography: "{typography.mono}"
+    rounded: "{rounded.code}"
+    padding: "0.4rem 0.55rem"
+  copy-button-done:
+    backgroundColor: "{colors.paper-shade}"
+    textColor: "{colors.manoa-green}"
+    rounded: "{rounded.code}"
+    padding: "0.4rem 0.55rem"
 ---
 
-# Design System: lamaku-mcp documentation
+# Design System: lamaku-mcp site
 
 ## Overview
 
@@ -130,6 +141,12 @@ Hawaiʻi's own dark green, used for links, the current-section marker, and the f
 nowhere else. It carries maybe two percent of the page's area. Everything around it is white,
 near-black, and hairline grey, because the accent only reads as a choice when nothing competes
 with it.
+
+The site is two pages sharing one stylesheet. The **overview** at `/` is the front door: a single
+prose column that states what the tool does and what it will not do at equal weight, then hands
+over four install commands. The **manual** at `/guide/` is the reference: three columns, dense
+tables, twelve sections. Same world, two compositions, and the composition is the only thing that
+differs.
 
 **Key Characteristics:**
 
@@ -231,6 +248,16 @@ the full list rather than a control that will not open.
 Vertical rhythm runs on the type: `1rem` between paragraphs, `1.4rem` after a table or note,
 `2rem` before a subsection, `3rem` before a section.
 
+The overview uses none of that grid. It is one centred column at `38rem`, which measures about 70
+characters, and it has no sticky nav on either side because there is nothing to navigate. The
+manual's wider `46rem` is deliberate and not drift: its tables need the room, and its prose is
+read in fragments rather than start to finish.
+
+One element breaks the overview's column. The two-inventory ledger widens to `calc(100% + 12rem)`
+and re-centres with `margin-left: 50%; transform: translateX(-50%)`, so it reads as the page's
+centrepiece rather than a list inside an article. Below `60rem` the breakout is dropped, and below
+`48rem` the two inventories stack.
+
 ## Elevation & Depth
 
 **There are no shadows anywhere in this system.** Depth is conveyed entirely by a 1px hairline
@@ -296,6 +323,34 @@ A CSS counter drives a `1.6rem` circle on `paper-shade` with a `hairline-strong`
 once, for the seven-step course walkthrough, where the reader genuinely has to do things in
 order. Numbers appear nowhere else on the page.
 
+### Copy button
+
+Every `pre` gets one, injected by script so a reader without JavaScript never sees a control that
+cannot work. Mono at `0.6875rem`, `ink-muted` on the page ground with a hairline border, parked
+top-right inside a `5rem` gutter reserved in the block's padding.
+
+Visible at rest rather than on hover: this audience should not have to discover an affordance by
+sweeping the mouse, and hover does not exist on a phone at all. It brightens to `ink-secondary`
+when the block is hovered, to `manoa-green` on its own hover or focus, and holds `Copied` on the
+shaded ground for two seconds. The word is the state; the colour only agrees with it. A visually
+hidden `aria-live` region announces the same word.
+
+### The ledger
+
+Two `section` elements in an equal two-column grid, each headed by an `h3` over a `rule-strong`
+underline, each holding a description list. Terms are `0.9375rem` at 600 with a hairline above;
+descriptions are `0.875rem` in `ink-muted`.
+
+Equal columns are the whole argument, so nothing may tilt them: no colour on one side, no icon
+set, no count, no ordering that implies one is the exception. The right column is not styled as a
+warning.
+
+### Browser surfaces
+
+Selection is `manoa-green` with white text. The caret is `manoa-green`. Scrollbars take
+`rule-strong` on the page ground with a 3px ground-coloured inset, so the thumb reads as a bar
+rather than a gutter. These are drawn from the palette like everything else.
+
 ### Skip link
 
 Positioned off-canvas at `left: -9999px`, moves to `left: 0` on focus, `manoa-green` ground with
@@ -312,8 +367,10 @@ white text. First tab stop on the page.
   query renders one theme's text on the other theme's ground.
 - **Do** wrap every table in `.tw` and give it a caption.
 - **Do** put the semantic meaning in the note's label text, not only in its colour.
-- **Do** keep new script as progressive enhancement. The page must be fully readable and fully
-  navigable with JavaScript off.
+- **Do** keep new script as progressive enhancement. Both pages must be fully readable and fully
+  navigable with JavaScript off, which is why the copy buttons are built in script rather than
+  shipped in the markup.
+- **Do** theme the browser's own surfaces: selection, caret, scrollbar, focus ring.
 - **Do** render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM.
   This is a brand commitment, not a typographic preference.
 
@@ -324,9 +381,12 @@ white text. First tab stop on the page.
 - **Don't** add a shadow, a gradient, or a glow.
 - **Don't** use Mānoa Green as a background, a heading colour, or a card border. Links, current
   marker, focus ring, skip link.
-- **Don't** add a hero, a feature grid, a testimonial, or a call-to-action button. This is a
-  manual.
-- **Don't** put a UH logo, seal, or wordmark on the page. The project is not affiliated with or
-  endorsed by the University of Hawaiʻi or D2L.
+- **Don't** add a hero, a feature grid, a testimonial, or a call-to-action button, on either
+  page. The manual has no use for them, and the overview answers the same need with the ledger:
+  the honest inventory is the hero.
+- **Don't** style the two inventories differently from each other. Equal weight is the argument,
+  and any colour, icon or ordering that favours one side breaks it.
+- **Don't** put a UH logo, seal, or wordmark on the page. The project is not endorsed by the
+  University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.
 - **Don't** let a heading level skip. `h2` to `h4` is a bug; the tool-index group labels are
   `h3.grp` for exactly this reason.

@@ -3,639 +3,216 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>lamaku-mcp documentation</title>
-<meta name="description" content="Install and use lamaku-mcp: an MCP server that reads Lamakū courses and authors into them. Pages, media, discussions, assignments, and whole course packages, with every write previewed before it lands.">
+<title>lamaku-mcp</title>
+<meta name="description" content="An MCP server for Lamakū, UH's D2L Brightspace instance. It reads your courses and writes to them: modules, pages, media, discussions, assignments, whole course packages. What it does and what it does not do, both stated up front.">
 <meta name="color-scheme" content="light dark">
-<style>
-/* ---------------------------------------------------------------------------
-   Institutional reference documentation. No webfonts by design: a system
-   stack renders instantly, matches the reader's OS, and cannot rot when a
-   font host changes. The three sites this is built to sit beside all do the
-   same thing for the same reason.
-   --------------------------------------------------------------------------- */
-:root{
-  --ground:#ffffff;
-  --ground-alt:#f6f7f6;
-  --ground-code:#f2f4f2;
-  --ink:#1a1c1a;
-  --ink-2:#414742;
-  --ink-3:#646b65;
-  --rule:#d9ddd9;
-  --rule-strong:#868d87;   /* 3.4:1 on white, per WCAG 1.4.11 */
-  --accent:#024731;          /* Mānoa Green. 12.9:1 on white. */
-  --accent-hover:#0a6a49;
-  --note:#0a5c7a;
-  --note-bg:#eef5f8;
-  --warn:#8a4b04;
-  --warn-bg:#fbf2e7;
-  --stop:#8c1d18;
-  --stop-bg:#fbeceb;
-  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  --sidebar:17rem;
-  --rail:14rem;
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --ground:#16181a;
-    --ground-alt:#1d2022;
-    --ground-code:#212528;
-    --ink:#e6e9e7;
-    --ink-2:#b3bab5;
-    --ink-3:#8b938d;
-    --rule:#31363a;
-    --rule-strong:#68716b;   /* 3.5:1 on the dark ground */
-    --accent:#7fc9a5;        /* 8.4:1 on the dark ground. */
-    --accent-hover:#9fdcbd;
-    --note:#7cc0dd;
-    --note-bg:#152329;
-    --warn:#e0a869;
-    --warn-bg:#2a2117;
-    --stop:#e89b95;
-    --stop-bg:#2b1a19;
-  }
-}
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
-
-body{
-  margin:0;background:var(--ground);color:var(--ink);
-  font-family:var(--sans);font-size:16px;line-height:1.65;
-  -webkit-text-size-adjust:100%;
-}
-
-.skip{
-  position:absolute;left:-9999px;top:0;z-index:100;
-  background:var(--accent);color:#fff;padding:.6rem 1rem;
-}
-.skip:focus{left:0}
-
-a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
-a:hover{color:var(--accent-hover)}
-a:focus-visible,button:focus-visible,summary:focus-visible{
-  outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;
-}
-
-/* ---------- masthead ---------- */
-.masthead{
-  border-bottom:1px solid var(--rule);background:var(--ground);
-  position:sticky;top:0;z-index:20;
-}
-.masthead-in{
-  display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;
-  padding:.7rem 1.5rem;max-width:100rem;margin:0 auto;
-}
-.masthead .name{font-family:var(--mono);font-size:.95rem;font-weight:600;color:var(--ink);text-decoration:none}
-.masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
-.masthead .spacer{flex:1}
-.masthead .links{display:flex;gap:1rem;font-size:.8125rem}
-
-/* ---------- three-column shell ---------- */
-.shell{
-  display:grid;
-  grid-template-columns:var(--sidebar) minmax(0,48rem) var(--rail);
-  justify-content:center;
-  gap:2.5rem;max-width:100rem;margin:0 auto;padding:0 1.5rem;
-  align-items:start;
-}
-@media (max-width:64rem){
-  .shell{grid-template-columns:minmax(0,1fr);gap:0}
-  .sidebar,.rail{position:static;max-height:none;border:0;padding:0}
-  .rail{display:none}
-  .sidebar{border-bottom:1px solid var(--rule);margin-bottom:1.75rem;padding:.35rem 0 .5rem}
-  .sidebar-body{padding-bottom:.5rem}
-}
-
-.sidebar,.rail{
-  position:sticky;top:3.4rem;max-height:calc(100vh - 4rem);
-  overflow-y:auto;padding:1.75rem 0;font-size:.875rem;
-}
-.sidebar summary{
-  cursor:pointer;padding:.55rem 0;
-  font-size:.8125rem;font-weight:600;color:var(--ink-2);
-}
-.sidebar summary::marker{color:var(--ink-3)}
-@media (min-width:64.0625rem){.sidebar summary{display:none}}
-.sidebar h2,.rail h2{
-  font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--ink-3);margin:1.4rem 0 .5rem;font-weight:600;
-}
-.sidebar h2:first-child,.rail h2:first-child{margin-top:0}
-.sidebar ul,.rail ul{list-style:none;margin:0;padding:0}
-.sidebar li,.rail li{margin:0}
-.sidebar a,.rail a{
-  display:block;padding:.22rem 0;color:var(--ink-2);text-decoration:none;
-  border-left:2px solid transparent;padding-left:.7rem;margin-left:-.7rem;
-}
-.sidebar a:hover,.rail a:hover{color:var(--accent);text-decoration:underline}
-.sidebar a.here,.rail a.here{color:var(--accent);border-left-color:var(--accent);font-weight:600}
-.rail a{font-size:.8125rem;color:var(--ink-3)}
-
-/* ---------- content ---------- */
-main{padding:2.25rem 0 5rem;min-width:0;max-width:46rem}
-h1{
-  font-size:2.125rem;line-height:1.2;font-weight:600;letter-spacing:-.01em;
-  margin:0 0 .6rem;
-}
-.tagline{font-size:1.0625rem;color:var(--ink-2);margin:0 0 1.6rem}
-h2{
-  font-size:1.5rem;line-height:1.25;font-weight:600;letter-spacing:-.005em;
-  margin:3rem 0 .5rem;padding-top:1.4rem;border-top:1px solid var(--rule);
-}
-h3{font-size:1.125rem;line-height:1.35;font-weight:600;margin:2rem 0 .4rem}
-h4{font-size:.9375rem;font-weight:600;margin:1.4rem 0 .3rem;color:var(--ink-2)}
-h3.grp{font-size:.9375rem;color:var(--ink-2);margin:1.4rem 0 .3rem}
-p{margin:0 0 1rem}
-ul,ol{margin:0 0 1rem;padding-left:1.4rem}
-li{margin-bottom:.35rem}
-li>ul,li>ol{margin-top:.35rem}
-strong{font-weight:600}
-
-code{
-  font-family:var(--mono);font-size:.8125em;
-  background:var(--ground-code);padding:.12em .35em;border-radius:3px;
-  border:1px solid var(--rule);
-}
-pre{
-  font-family:var(--mono);font-size:.8125rem;line-height:1.6;
-  background:var(--ground-code);border:1px solid var(--rule);border-radius:4px;
-  padding:.9rem 1rem;overflow-x:auto;margin:0 0 1.2rem;
-}
-pre code{background:none;border:0;padding:0;font-size:1em}
-pre .c{color:var(--ink-3)}
-
-/* ---------- tables ---------- */
-.tw{overflow-x:auto;margin:0 0 1.4rem;border:1px solid var(--rule);border-radius:4px}
-table{border-collapse:collapse;width:100%;font-size:.875rem}
-caption{
-  text-align:left;padding:.6rem .8rem;font-size:.75rem;color:var(--ink-3);
-  border-bottom:1px solid var(--rule);background:var(--ground-alt);
-}
-th,td{text-align:left;padding:.5rem .8rem;border-bottom:1px solid var(--rule);vertical-align:top}
-thead th{background:var(--ground-alt);font-size:.75rem;font-weight:600;color:var(--ink-2)}
-tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
-td code{font-size:.78em}
-
-/* ---------- notes ---------- */
-.n{
-  border:1px solid var(--rule);border-left:4px solid var(--note);
-  background:var(--note-bg);padding:.8rem 1rem;border-radius:0 4px 4px 0;margin:0 0 1.3rem;
-}
-.n.w{border-left-color:var(--warn);background:var(--warn-bg)}
-.n.s{border-left-color:var(--stop);background:var(--stop-bg)}
-.n>strong:first-child{display:block;font-size:.8125rem;color:var(--note);margin-bottom:.25rem}
-.n.w>strong:first-child{color:var(--warn)}
-.n.s>strong:first-child{color:var(--stop)}
-.n p:last-child{margin-bottom:0}
-.n p{font-size:.9375rem}
-
-/* ---------- definition-style tool list ---------- */
-.tools{margin:0 0 1.4rem;font-size:.8125rem;line-height:2}
-.tools code{margin-right:.25rem}
-
-dl.fields{margin:0 0 1.4rem}
-dl.fields dt{font-family:var(--mono);font-size:.8125rem;font-weight:600;margin-top:.8rem}
-dl.fields dd{margin:.1rem 0 0;color:var(--ink-2);font-size:.9375rem}
-
-.steps{counter-reset:step;list-style:none;padding:0;margin:1.2rem 0 0}
-.steps>li{
-  counter-increment:step;position:relative;padding-left:2.4rem;margin-bottom:1.5rem;
-}
-.steps>li::before{
-  content:counter(step);position:absolute;left:0;top:.05rem;
-  width:1.6rem;height:1.6rem;border-radius:50%;
-  background:var(--ground-alt);border:1px solid var(--rule-strong);
-  color:var(--ink-2);font-size:.8125rem;font-weight:600;
-  display:flex;align-items:center;justify-content:center;
-}
-.steps>li>strong{display:block;margin-bottom:.2rem}
-.steps p{font-size:.9375rem;margin-bottom:.5rem}
-
-footer{
-  border-top:1px solid var(--rule);margin-top:3.5rem;padding-top:1.4rem;
-  font-size:.8125rem;color:var(--ink-3);
-}
-footer p{margin:0 0 .5rem}
-</style>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="site.css">
+<!--
+THESIS: The front door states what it does and what it will not do at equal
+weight, before it asks anyone to install anything. A reader should be able to
+rule it out in ninety seconds, which is the only honest way to earn the ones
+who do not.
+OWN-WORLD: Inherited whole from DESIGN.md. Same masthead, palette, system
+stack, hairlines and notes as the manual. No sidebar and no rail, because
+there is nothing here to navigate; the composition changed, the world did not.
+STORY: A UH instructor who has never heard of MCP learns what this is, reads
+the limits before the promises, sees what an hour of trying it costs, and
+copies four commands.
+FIRST VIEWPORT: Name, one sentence, the paragraph that explains MCP to someone
+who does not know it, and the two inventory headings already in reach.
+FORM: The Ledger, locked by the user from three dealt structures at surface
+scope. Seed 5994eeef, code-led.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the
+batched review, the contrast script green, and the surface brief written.
+-->
 </head>
 <body>
-<!--
-THESIS: A reference manual for people who will read it twice a year for five
-years, not a landing page. It refuses the marketing homepage the category
-ships for developer tools.
-OWN-WORLD: Light institutional ground, Mānoa Green as the single accent,
-system stack and no webfonts, hairline rules, tables and notes as first-class
-structure. Sidebar, content, on-this-page rail.
-STORY: A UH instructor arrives with a course to build, learns why a write
-previews before it lands, and follows seven steps to a course in Lamakū.
-FIRST VIEWPORT: Masthead with name and version. Sidebar nav left. H1, one-line
-tagline, the what-it-is paragraph, and the install command block visible
-without scrolling.
-FORM: The category standard, taken deliberately as the standing exit over the
-assigned Herbarium Sheet. Bar set by MDN, Django and PostgreSQL. Seed 7cdb7f1c.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
--->
 
 <a class="skip" href="#content">Skip to content</a>
 
 <header class="masthead">
   <div class="masthead-in">
-    <a class="name" href="#top">lamaku-mcp</a>
+    <a class="name" href="./">lamaku-mcp</a>
     <span class="ver">54 tools · MIT</span>
     <span class="spacer"></span>
     <span class="links">
+      <a href="guide/">Manual</a>
       <a href="https://github.com/JesseTho/lamaku-mcp">Repository</a>
-      <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/SECURITY.md">Security</a>
       <a href="https://github.com/JesseTho/lamaku-mcp/issues">Issues</a>
     </span>
   </div>
 </header>
 
-<div class="shell" id="top">
+<main id="content" class="solo">
 
-  <nav class="sidebar" aria-label="Documentation sections">
-    <details open>
-    <summary>Contents</summary>
-    <div class="sidebar-body">
-    <h2>Getting started</h2>
-    <ul>
-      <li><a href="#about">What it is</a></li>
-      <li><a href="#requirements">Requirements</a></li>
-      <li><a href="#install">Installation</a></li>
-      <li><a href="#configuration">Configuration</a></li>
-    </ul>
-    <h2>Using it</h2>
-    <ul>
-      <li><a href="#writes">How writes work</a></li>
-      <li><a href="#course">Building a course</a></li>
-      <li><a href="#templates">Page templates</a></li>
-      <li><a href="#imports">Course imports</a></li>
-    </ul>
-    <h2>Reference</h2>
-    <ul>
-      <li><a href="#tools">Tool index</a></li>
-      <li><a href="#privacy">Student privacy</a></li>
-      <li><a href="#limits">Known limitations</a></li>
-      <li><a href="#troubleshooting">Troubleshooting</a></li>
-    </ul>
-    </div>
-    </details>
-  </nav>
+  <h1>lamaku-mcp</h1>
+  <p class="tagline">An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace instance.</p>
 
-  <main id="content">
-    <h1>lamaku-mcp</h1>
-    <p class="tagline">An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace instance.</p>
+  <p class="lede">You describe a module to your AI assistant. It builds the module in your course:
+  the pages, the uploaded video, the discussion, the assignment, the grade item. You approve each
+  write before it happens, and everything is created hidden until you say otherwise.</p>
 
-    <p>It reads your courses, and it writes to them: content modules, authored HTML pages, uploaded video and images, links, discussions, assignments, grade items, and whole course packages. Every write is previewed before it lands, and student identities are withheld from the model by default.</p>
+  <p>MCP is the Model Context Protocol, a way for an assistant such as Claude to use tools outside
+  its own chat window. Installing this server hands your assistant 54 tools for Brightspace. It
+  runs on your own machine, signed in as you, with your permissions and no others.</p>
 
-<pre><code><span class="c"># install and sign in</span>
-git clone https://github.com/JesseTho/lamaku-mcp
-cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
-node dist/cli.js login</code></pre>
+  <p>Every other Brightspace MCP server is read-only. They check grades and due dates, which is
+  useful and much simpler. This one writes, and most of its design is about not damaging a live
+  course.</p>
 
-    <h2 id="about">What it is</h2>
+  <h2 id="ledger">What it does, and what it does not</h2>
 
-    <p><strong>MCP</strong> is the Model Context Protocol: a way for an AI assistant such as Claude to use external tools. Installing this server gives your assistant 54 tools for working with Brightspace, so you can describe a course in conversation and have it built.</p>
+  <p>Both columns are the same answer. The right one is not a footnote, and each entry there says
+  what to do instead.</p>
 
-    <p>Other Brightspace MCP servers are read-only. They check grades and due dates, which is a useful and much simpler job. This one authors, which is why most of its design is about not damaging a live course.</p>
+  <div class="ledger">
+    <section>
+      <h3>It does</h3>
+      <p class="sub">Every write route below was verified by creating a real object in a sandbox
+      course and deleting it again.</p>
+      <dl>
+        <dt>Reads the whole course</dt>
+        <dd>Modules, topics, files, assignments, submissions, grades, announcements,
+          discussions, quizzes, checklists, deadlines.</dd>
+        <dt>Writes content modules and pages</dt>
+        <dd>Authored HTML, styled from a template, placed in the module order you ask
+          for.</dd>
+        <dt>Uploads media into the course</dt>
+        <dd>Images, video, audio, PDFs. Verified to 36 MB; the largest upload took 24
+          seconds.</dd>
+        <dt>Creates course objects</dt>
+        <dd>Links, announcements, assignments and their categories, grade items, discussion
+          forums and topics, checklists.</dd>
+        <dt>Imports a whole course package</dt>
+        <dd>Common Cartridge or a Brightspace <code>.zip</code>. This is how quizzes and
+          rubrics get in.</dd>
+        <dt>Previews every write before it lands</dt>
+        <dd>The first call returns what it would do and a single-use token. Nothing is written
+          until you spend it, and it expires in five minutes.</dd>
+        <dt>Withholds student identities by default</dt>
+        <dd>Names, usernames, emails and ids are replaced with stable pseudonyms before
+          anything reaches the model.</dd>
+        <dt>Creates everything hidden</dt>
+        <dd>Releasing content to students is a separate, deliberate step.</dd>
+      </dl>
+    </section>
 
-    <div class="n">
-      <strong>Note</strong>
-      <p>This is not affiliated with or endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use policy before connecting it to your account.</p>
-    </div>
+    <section>
+      <h3>It does not</h3>
+      <p class="sub">Verified against Lamakū at Learning Environment API version 1.96. These are
+      the real edges, not a roadmap.</p>
+      <dl>
+        <dt>Write quiz questions directly</dt>
+        <dd>Brightspace exposes no route for it. Import a cartridge instead, which is
+          verified: 4 quizzes, 17 questions, every answer key and feedback string intact.</dd>
+        <dt>Author rubrics</dt>
+        <dd>Needs API version 1.97. Lamakū serves 1.96. A Brightspace <code>.zip</code> import
+          carries rubrics today.</dd>
+        <dt>Write grade values</dt>
+        <dd>Untested. The sandbox has no student enrolments, and trying it in a live section
+          would alter a real record.</dd>
+        <dt>List grade items</dt>
+        <dd><code>get_grades</code> returns the calling user's own grades. Items can be created
+          and deleted by id, but not enumerated.</dd>
+        <dt>Create a course</dt>
+        <dd>Organisation-level administrative permission, which an instructor account does not
+          have. Request a sandbox from UH ITS.</dd>
+        <dt>Touch groups, sections, attendance or awards</dt>
+        <dd>Not implemented, and not expressible in either import format either.</dd>
+        <dt>Run without a browser</dt>
+        <dd>Sign-in captures a session through a real window, so this does not suit CI or a
+          headless server.</dd>
+        <dt>Work outside UH, provenly</dt>
+        <dd>OAuth is implemented against <code>auth.brightspace.com</code> but has never been
+          exercised on a non-UH instance.</dd>
+      </dl>
+    </section>
+  </div>
 
-    <h2 id="requirements">Requirements</h2>
+  <h2 id="risk">Before you point it at a real course</h2>
 
-    <dl class="fields">
-      <dt>Node.js 20 or later</dt>
-      <dd>Node 22 is also tested. Earlier versions will not run it.</dd>
-      <dt>A Lamakū account</dt>
-      <dd>Any UH account with course access. Sign-in goes through UH SSO and Duo.</dd>
-      <dt>A sandbox course</dt>
-      <dd>Strongly recommended before touching a live section. Request one from UH ITS.</dd>
-      <dt>An MCP client</dt>
-      <dd>Claude Code, Claude Desktop, or anything that speaks MCP over stdio.</dd>
-    </dl>
+  <p>The thing worth understanding before installing is what happens when the assistant decides to
+  write something. It cannot simply write it.</p>
 
-    <h2 id="install">Installation</h2>
+  <p>A write call returns a preview: the object it would create, the course it would land in, and a
+  single-use token scoped to exactly that action. The write happens only when the token is spent,
+  and the token expires after five minutes. A delete previews the object's name and, for a forum,
+  its post count, so you see what you are about to lose.</p>
 
-<pre><code>git clone https://github.com/JesseTho/lamaku-mcp
+  <div class="n">
+    <strong>Note</strong>
+    <p>Build in a sandbox course first. Sandboxes are per-instructor and requested from UH ITS.
+    Nothing here can undo a delete.</p>
+  </div>
+
+  <p>Student privacy works the same way, on by default rather than available on request. Names,
+  usernames, email addresses and institutional ids are replaced with stable pseudonyms before any
+  course data reaches the model, so <code>Student 4b21</code> stays the same person across a whole
+  session without ever being named.</p>
+
+  <h2 id="cost">What it costs to try</h2>
+
+  <dl class="cost">
+    <dt>Node.js 20 or later</dt>
+    <dd>Node 22 is also tested. Earlier versions will not run it.</dd>
+    <dt>A Lamakū account</dt>
+    <dd>Any UH account with course access. Sign-in goes through UH SSO and Duo.</dd>
+    <dt>A sandbox course</dt>
+    <dd>Requested from UH ITS. Strongly recommended before you go near a live section.</dd>
+    <dt>An MCP client</dt>
+    <dd>Claude Code, Claude Desktop, or anything else that speaks MCP.</dd>
+    <dt>About ten minutes</dt>
+    <dd>Install and first sign-in. Sessions last around a day of idleness, then you sign in
+    again.</dd>
+  </dl>
+
+  <h2 id="install">Install it</h2>
+
+  <p>Four steps. Each block has a copy button.</p>
+
+  <ol class="steps">
+    <li><strong>Clone and build</strong>
+      <pre><code>git clone https://github.com/JesseTho/lamaku-mcp
 cd lamaku-mcp
 pnpm install
 pnpm build</code></pre>
+    </li>
+    <li><strong>Sign in</strong>
+      <p>A browser window opens. Complete the UH sign-in and approve the Duo prompt yourself. The
+      session is stored on your own machine.</p>
+      <pre><code>node dist/cli.js login</code></pre>
+    </li>
+    <li><strong>Register it with your assistant</strong>
+      <p>For Claude Code, run this from anywhere:</p>
+      <pre><code>claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js</code></pre>
+      <p>For another client, add the same command to its MCP configuration. The
+      <a href="guide/#install">manual</a> has the JSON.</p>
+    </li>
+    <li><strong>Check it worked</strong>
+      <p>Then ask your assistant to list your courses. If the session has expired, sign in again
+      with the command from step two.</p>
+      <pre><code>node dist/cli.js status</code></pre>
+    </li>
+  </ol>
 
-    <p>The repository commits a pnpm lockfile. <code>npm</code> works locally if you prefer it, but do not commit the <code>package-lock.json</code> it generates.</p>
+  <h2 id="next">Then read the manual</h2>
 
-    <h3>Signing in</h3>
+  <p>The <a href="guide/">manual</a> is the reference: how a write preview actually reads, the order
+  of operations for building a course from nothing, the page templates, what each import format
+  carries, all 54 tools by name, and what to do when a call comes back 403.</p>
 
-<pre><code>node dist/cli.js login</code></pre>
+  <p>The <a href="https://github.com/JesseTho/lamaku-mcp">repository</a> holds the source, the test
+  suite, and the scripts that verified every claim on this page.</p>
 
-    <p>A browser window opens. Complete the UH sign-in and approve the Duo prompt yourself; the window closes once the session is captured. The session is stored encrypted under your user profile.</p>
+  <footer>
+    <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
+    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L. Check UH's
+    acceptable-use policy before connecting it to your account.</p>
+  </footer>
 
-    <p>Sessions last about a day of idleness and expire after a few days. Re-running <code>login</code> is routine rather than a sign that something is wrong. Check the current state with <code>node dist/cli.js status</code>.</p>
+</main>
 
-    <h3>Registering with Claude Code</h3>
-
-<pre><code>claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js</code></pre>
-
-    <h3>Registering with another MCP client</h3>
-
-<pre><code>{
-  "mcpServers": {
-    "lamaku": {
-      "command": "node",
-      "args": ["/absolute/path/to/lamaku-mcp/dist/index.js"],
-      "env": { "LAMAKU_HOST": "lamaku.hawaii.edu" }
-    }
-  }
-}</code></pre>
-
-    <h2 id="configuration">Configuration</h2>
-
-    <div class="tw">
-      <table>
-        <caption>Environment variables. All are optional.</caption>
-        <thead><tr><th scope="col">Variable</th><th scope="col">Default</th><th scope="col">Purpose</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><code>LAMAKU_HOST</code></th><td><code>lamaku.hawaii.edu</code></td><td>Brightspace hostname.</td></tr>
-          <tr><th scope="row"><code>BRIGHTSPACE_HOST</code></th><td>unset</td><td>Neutral alias for the same setting. <code>LAMAKU_HOST</code> wins if both are set.</td></tr>
-          <tr><th scope="row"><code>LAMAKU_FERPA</code></th><td><code>strict</code></td><td><code>off</code> disables student pseudonymisation. See <a href="#privacy">Student privacy</a>.</td></tr>
-          <tr><th scope="row"><code>LAMAKU_AUTH</code></th><td><code>session</code></td><td><code>oauth</code> uses a registered client instead of a browser session. Unproven.</td></tr>
-          <tr><th scope="row"><code>LAMAKU_BROWSER</code></th><td>auto</td><td>Force <code>chrome</code>, <code>msedge</code>, or <code>chromium</code> at sign-in.</td></tr>
-          <tr><th scope="row"><code>LAMAKU_DOWNLOAD_DIR</code></th><td>app data</td><td>Where downloaded files are written.</td></tr>
-          <tr><th scope="row"><code>LAMAKU_LE_VERSION</code></th><td>latest</td><td>Pin a Learning Environment API version.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2 id="writes">How writes work</h2>
-
-    <p>Two checks run before anything changes in Brightspace.</p>
-
-    <h3>Role preflight</h3>
-    <p>The same person holds different roles in different courses, and Brightspace enforces them inconsistently. An account may be Instructor on a sandbox, Designer on one section, and Instructor-Content Copy Only on a template, where announcements succeed but assignments are refused. Each authoring tool checks your role before spending the call, so you get an explanation rather than a bare 403.</p>
-
-    <h3>Confirmation token</h3>
-    <p>Calling a write tool returns a preview. Nothing has been sent. The response describes what would happen and carries a token:</p>
-
-<pre><code>{
-  "status": "confirmation_required",
-  "action": "delete_discussion_forum",
-  "willDo": {
-    "course": "Sandbox 2",
-    "name": "Module 3: diagnosing failed feeds",
-    "topicCount": 1,
-    "warning": "Deletes the forum, its 1 topic(s), and every post inside them."
-  },
-  "confirmToken": "0vVbBxC1c2gq",
-  "expiresAt": "2026-08-24T20:03:50Z"
-}</code></pre>
-
-    <p>Calling the same tool again with that token performs the action. Tokens are single use, expire after five minutes, and are scoped to the action they were issued for, so a token approved for one preview cannot authorise a different operation.</p>
-
-    <div class="n w">
-      <strong>Everything is created hidden</strong>
-      <p>New modules, pages, files and links are hidden from students on creation, so a half-built course is never briefly visible. <code>release_course_content</code> publishes them as a deliberate final step, after showing you exactly what will become visible.</p>
-    </div>
-
-    <div class="n s">
-      <strong>Deletes cannot be undone</strong>
-      <p>There is no recovery through this API. Delete previews name what goes with the object: a forum preview lists every topic that will be removed with it. Read the preview.</p>
-    </div>
-
-    <h2 id="course">Building a course</h2>
-
-    <p>Order matters, because the content path for uploaded media is derived from the course code and does not exist until the upload happens.</p>
-
-    <ol class="steps">
-      <li>
-        <strong>Create the modules</strong>
-        <p>One <code>create_content_module</code> per module. They arrive in creation order; <code>update_content_module</code> takes a <code>sortOrder</code> if you need to rearrange them later.</p>
-      </li>
-      <li>
-        <strong>Upload media before writing pages</strong>
-        <p><code>create_content_file</code> accepts video, audio, images, PDFs and caption files. Each call returns the content path and an <code>embedAs</code> snippet with that path filled in. Writing pages first means rewriting them once you know the paths.</p>
-      </li>
-      <li>
-        <strong>Write the pages</strong>
-        <p><code>create_content_page</code> takes body HTML and wraps it in a template. Paste the <code>embedAs</code> snippets where the media belongs.</p>
-      </li>
-      <li>
-        <strong>Add what a package cannot carry</strong>
-        <p><code>create_content_link</code> for external sources, then <code>create_discussion_forum</code>, <code>create_discussion_topic</code> and <code>create_assignment</code>. No import format expresses these, so they must be authored.</p>
-      </li>
-      <li>
-        <strong>Set module cover images</strong>
-        <p><code>set_module_description</code> with an <code>imagePath</code> from step 2. Brightspace renders an image in a module description as that module's cover.</p>
-      </li>
-      <li>
-        <strong>Import quizzes</strong>
-        <p><code>import_course_package</code> with a Common Cartridge. This is the only way to create quiz questions. Poll <code>get_import_status</code> until it returns <code>COMPLETED</code>.</p>
-      </li>
-      <li>
-        <strong>Release the course</strong>
-        <p><code>release_course_content</code> walks the content tree and unhides everything in one pass, after listing what it will make visible.</p>
-      </li>
-    </ol>
-
-    <h2 id="templates">Page templates</h2>
-
-    <p><code>create_content_page</code> and <code>update_content_page</code> accept a <code>template</code>.</p>
-
-    <div class="tw">
-      <table>
-        <thead><tr><th scope="col">Template</th><th scope="col">Result</th></tr></thead>
-        <tbody>
-          <tr><th scope="row"><code>uh</code></th><td>The UH shared HTML Template Library: banner, content column, seal footer. The stylesheets are same-origin, so this is correct on a UH instance and unstyled anywhere else. Default.</td></tr>
-          <tr><th scope="row"><code>jabsom</code></th><td>The JABSOM Design System with its tokens inlined. Mānoa Green headings in Inter, Source Serif 4 body. Self-contained, so it also renders correctly outside Lamakū.</td></tr>
-          <tr><th scope="row"><code>plain</code></th><td>A bare document with no institutional styling.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>See <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/docs/course-style.md">course-style.md</a> and <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/docs/jabsom-style.md">jabsom-style.md</a> for the components each template provides and the accessibility obligations attached to them.</p>
-
-    <h2 id="imports">Course imports</h2>
-
-    <p><code>import_course_package</code> accepts an IMS Common Cartridge (<code>.imscc</code>) or a Brightspace course package (<code>.zip</code>), up to 2&nbsp;GB. It returns a job token; poll <code>get_import_status</code> until the status is <code>COMPLETED</code> or <code>IMPORTFAILED</code>.</p>
-
-    <div class="tw">
-      <table>
-        <caption>What each package format carries</caption>
-        <thead><tr><th scope="col">Format</th><th scope="col">Carries</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Common Cartridge</th><td>Pages, weblinks, files, QTI quizzes and question banks, discussion topics, LTI links.</td></tr>
-          <tr><th scope="row">Brightspace <code>.zip</code></th><td>Everything above, plus D2L-native objects: rubrics, release conditions, grade schemes.</td></tr>
-          <tr><th scope="row">Neither</th><td>Groups, sections, attendance, awards.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>The Brightspace format is the practical way to move a rubric between courses while the rubric API remains unavailable at this Lamakū version.</p>
-
-    <div class="n w">
-      <strong>Import adds, it does not replace</strong>
-      <p>Importing the same package twice produces two copies of everything it contains. Import into an empty course, or verify there is no overlap first.</p>
-    </div>
-
-    <h2 id="tools">Tool index</h2>
-
-    <p>Run <code>pnpm tools</code> for the current list with full signatures.</p>
-
-    <h3 class="grp">Session</h3>
-    <p class="tools"><code>auth_status</code> <code>whoami</code> <code>check_capabilities</code></p>
-
-    <h3 class="grp">Reading</h3>
-    <p class="tools"><code>list_courses</code> <code>list_modules</code> <code>get_module</code> <code>get_topic</code> <code>download_topic_file</code> <code>list_assignments</code> <code>get_assignment</code> <code>list_my_submissions</code> <code>download_submission_file</code> <code>get_grades</code> <code>get_final_grade</code> <code>get_upcoming_deadlines</code> <code>get_announcements</code> <code>list_forums</code> <code>list_topics</code> <code>read_posts</code> <code>list_quizzes</code> <code>list_checklists</code></p>
-
-    <h3 class="grp">Content authoring</h3>
-    <p class="tools"><code>create_content_module</code> <code>update_content_module</code> <code>delete_content_module</code> <code>create_content_page</code> <code>update_content_page</code> <code>create_content_file</code> <code>create_content_link</code> <code>update_content_topic</code> <code>delete_content_topic</code> <code>set_module_description</code> <code>release_course_content</code> <code>import_course_package</code> <code>get_import_status</code></p>
-
-    <h3 class="grp">Course objects</h3>
-    <p class="tools"><code>create_announcement</code> <code>delete_announcement</code> <code>create_assignment</code> <code>create_assignment_category</code> <code>delete_assignment</code> <code>create_grade_item</code> <code>create_grade_category</code> <code>delete_grade_item</code> <code>create_discussion_forum</code> <code>create_discussion_topic</code> <code>delete_discussion_forum</code> <code>delete_discussion_topic</code> <code>create_quiz</code> <code>delete_quiz</code> <code>create_checklist</code> <code>add_checklist_item</code> <code>delete_checklist</code></p>
-
-    <h3 class="grp">Student side</h3>
-    <p class="tools"><code>submit_assignment</code> <code>create_discussion_post</code> <code>reply_to_post</code></p>
-
-    <h2 id="privacy">Student privacy</h2>
-
-    <p>Student names, usernames, email addresses and institutional IDs are protected education records under FERPA. This server passes course data to a language model, and from there into a vendor's logs, so by default it does not emit them.</p>
-
-    <p>Each student becomes a stable handle such as <code>student:4f2a91</code>. The handle is an HMAC under a salt generated on your machine and never transmitted, so it is not reversible and not comparable between installations. It remains stable across calls, so an assistant can still reason about the same student who missed a particular lab without knowing who that is.</p>
-
-    <p>The raw user ID is dropped as well, because it is a direct key back into Brightspace and into any system sharing the same institutional identifier.</p>
-
-    <p>Course staff are not redacted; a co-instructor's name is not a protected record. Passing <code>revealStudents: true</code> on a call returns real names when you have deliberately asked for them.</p>
-
-    <div class="n">
-      <strong>A disclosure control, not an access control</strong>
-      <p>You can read your roster in Brightspace at any time. The purpose is keeping it out of prompts and model retention unless you intend otherwise. <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/SECURITY.md">SECURITY.md</a> describes what this does and does not protect.</p>
-    </div>
-
-    <h2 id="limits">Known limitations</h2>
-
-    <div class="tw">
-      <table>
-        <caption>Verified against Lamakū at Learning Environment API version 1.96.</caption>
-        <thead><tr><th scope="col">Capability</th><th scope="col">Status</th><th scope="col">Detail</th></tr></thead>
-        <tbody>
-          <tr>
-            <th scope="row">Quiz questions, directly</th><td>Unavailable</td>
-            <td>Brightspace exposes <code>GET</code> and no create route, so <code>create_quiz</code> produces an empty shell. Import a cartridge instead; this is verified.</td>
-          </tr>
-          <tr>
-            <th scope="row">Rubric authoring</th><td>Version-blocked</td>
-            <td>Requires API version 1.97 or later. Lamakū serves 1.96. A Brightspace package import carries rubrics today.</td>
-          </tr>
-          <tr>
-            <th scope="row">Grade value writing</th><td>Untested</td>
-            <td>The test sandbox has no student enrolments, and testing in a live section would alter a real record.</td>
-          </tr>
-          <tr>
-            <th scope="row">Grade item listing</th><td>Unavailable</td>
-            <td><code>get_grades</code> returns the calling user's own grades. Items can be created and deleted by ID but not enumerated.</td>
-          </tr>
-          <tr>
-            <th scope="row">Course creation</th><td>Permission</td>
-            <td>Organisation-level administrative permission, not available to an instructor account. Request courses from UH ITS.</td>
-          </tr>
-          <tr>
-            <th scope="row">Groups, sections, attendance, awards</th><td>Not implemented</td>
-            <td>Also not expressible in either import format.</td>
-          </tr>
-          <tr>
-            <th scope="row">OAuth on a non-UH instance</th><td>Unproven</td>
-            <td>Implemented against <code>auth.brightspace.com</code> but never exercised outside UH. The session path requires an interactive browser, so neither path suits headless use.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2 id="troubleshooting">Troubleshooting</h2>
-
-    <h3>A call fails with 403</h3>
-    <p>Usually a role problem rather than an expired session. The same account holds different roles per course. Run <code>whoami</code> and check your role in that specific course.</p>
-
-    <h3>A call fails with 400 and an empty error array</h3>
-    <p>Brightspace returns <code>400 {"Errors":[]}</code> for a malformed body and for an unknown parent object, naming no field. Check the IDs first: <code>list_modules</code> shows valid module IDs.</p>
-
-    <h3>Reading a 404 against a 400</h3>
-    <p>These distinguish two different failures. A <code>404</code> means the route does not exist at this API version. A <code>400</code> means it exists and rejected your input. A <code>400</code> does not prove you have permission, because several routes validate the body before checking the role.</p>
-
-    <h3>Sign-in does not complete</h3>
-    <p>The window can open behind others; check the taskbar before assuming it failed. Some execution policies block the browser launcher, in which case set <code>LAMAKU_BROWSER</code> to a browser you already have installed.</p>
-
-    <h3>Content is missing after building a course</h3>
-    <p>Everything is created hidden. Run <code>release_course_content</code>, or check <code>hiddenCount</code> in a listing.</p>
-
-    <footer>
-      <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
-      <p>Not affiliated with or endorsed by the University of Hawaiʻi or D2L.</p>
-    </footer>
-  </main>
-
-  <nav class="rail" aria-label="On this page">
-    <h2>On this page</h2>
-    <ul>
-      <li><a href="#about">What it is</a></li>
-      <li><a href="#requirements">Requirements</a></li>
-      <li><a href="#install">Installation</a></li>
-      <li><a href="#configuration">Configuration</a></li>
-      <li><a href="#writes">How writes work</a></li>
-      <li><a href="#course">Building a course</a></li>
-      <li><a href="#templates">Page templates</a></li>
-      <li><a href="#imports">Course imports</a></li>
-      <li><a href="#tools">Tool index</a></li>
-      <li><a href="#privacy">Student privacy</a></li>
-      <li><a href="#limits">Known limitations</a></li>
-      <li><a href="#troubleshooting">Troubleshooting</a></li>
-    </ul>
-  </nav>
-
-</div>
-
-<script>
-// Collapse the section nav on phones. The markup ships open, so a reader with
-// scripting off gets the full list rather than a control that cannot open.
-(function () {
-  var d = document.querySelector('.sidebar details');
-  if (!d || !window.matchMedia) return;
-  var narrow = window.matchMedia('(max-width:64rem)');
-  var ours = false, touched = false;
-  d.addEventListener('toggle', function () { if (!ours) touched = true; });
-  function sync() {
-    if (touched) return;
-    ours = true; d.open = !narrow.matches; ours = false;
-  }
-  sync();
-  if (narrow.addEventListener) narrow.addEventListener('change', sync);
-})();
-
-// Highlight the section currently in view, in both nav columns. Progressive
-// enhancement: without JavaScript every link still works as an anchor.
-(function () {
-  var ids = Array.prototype.map.call(
-    document.querySelectorAll('main h2[id]'), function (h) { return h.id; });
-  var links = {};
-  ids.forEach(function (id) {
-    links[id] = document.querySelectorAll('a[href="#' + id + '"]');
-  });
-  if (!('IntersectionObserver' in window)) return;
-  var seen = {};
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
-    var current = ids.filter(function (id) { return seen[id]; })[0];
-    ids.forEach(function (id) {
-      Array.prototype.forEach.call(links[id], function (a) {
-        a.classList.toggle('here', id === current);
-      });
-    });
-  }, { rootMargin: '0px 0px -75% 0px' });
-  ids.forEach(function (id) { io.observe(document.getElementById(id)); });
-})();
-</script>
-
+<script src="site.js" defer></script>
 </body>
 </html>

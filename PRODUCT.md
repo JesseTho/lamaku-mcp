@@ -92,8 +92,9 @@ for years rather than to look current. That commits the site to a system font st
 webfonts, a flat surface with no shadows, and no hero, feature grid or call to action. See
 DESIGN.md.
 
-Not affiliated with or endorsed by the University of Hawaiʻi or D2L, and the site must not imply
-otherwise. No UH logos, seals or wordmarks.
+The author works at UH, so the project is affiliated in the ordinary sense and must not claim
+otherwise. What it is not is **endorsed**: it does not speak for the University of Hawaiʻi or for
+D2L, and the site must not imply that it does. No UH logos, seals or wordmarks.
 
 ## Evidence on Hand
 
