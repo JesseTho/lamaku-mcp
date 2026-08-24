@@ -80,12 +80,13 @@ explanation instead of a bare 403.
 ## Setup
 
 ```bash
-npm install
-npm run build
+pnpm install
+pnpm build
 node dist/cli.js login          # opens a browser; complete UH login and Duo yourself
 ```
 
-`pnpm` works too, if you have it.
+The committed lockfile is pnpm's, and CI installs with `--frozen-lockfile`. `npm` works fine
+locally if you prefer it, but do not commit the `package-lock.json` it generates.
 
 Register with Claude Code:
 
@@ -147,7 +148,7 @@ Brightspace whenever you like. The point is keeping it out of prompts and model 
 you meant to put it there.
 
 ```bash
-npm test                          # includes the guard's unit tests
+pnpm test                         # includes the guard's unit tests
 node scripts/verify-privacy.mjs   # asserts nothing leaks end to end
 ```
 
@@ -184,8 +185,8 @@ without an explicit course id.
 ## Tests
 
 ```bash
-npm test          # unit tests, no Brightspace needed
-npm run typecheck
+pnpm test         # unit tests, no Brightspace needed
+pnpm typecheck
 ```
 
 The unit tests cover the places where a bug is silent rather than loud: multipart framing, the
@@ -224,7 +225,7 @@ The `verify-*.mjs` scripts are integration checks and stay manual. They need a l
 **Student side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
 ```bash
-npm run tools    # print the live list with signatures
+pnpm tools    # print the live list with signatures
 ```
 
 ---
