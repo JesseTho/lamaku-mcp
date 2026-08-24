@@ -8,8 +8,10 @@ assignments, grade items, discussion forums and topics, and whole course package
 
 Student identities are pseudonymised by default. See [FERPA guard](#ferpa-guard).
 
-**[Usage guide](https://jessetho.github.io/lamaku-mcp/)** covers install, the safety model, and
-building a course end to end. This README is the reference; that is the walkthrough.
+**[Overview](https://jessetho.github.io/lamaku-mcp/)** states what it does and what it does not
+do, then installs in four commands. The
+**[manual](https://jessetho.github.io/lamaku-mcp/guide/)** covers the safety model, building a
+course end to end, the page templates, and all 54 tools.
 
 ---
 
@@ -325,7 +327,7 @@ which contributed the browser-session auth, the confirmation gate, and the clien
 layers. The instructor authoring tools, the FERPA guard, the role preflight and the Lamakū
 targeting are new here.
 
-Not affiliated with or endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use
+Not endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use
 policy before pointing this at your account.
 
 MIT licensed.

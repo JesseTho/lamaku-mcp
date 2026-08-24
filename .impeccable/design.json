@@ -1,60 +1,139 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-08-24T00:00:00Z",
-  "title": "Design System: lamaku-mcp documentation",
+  "title": "Design System: lamaku-mcp site",
   "extensions": {
     "colorMeta": {
       "manoa-green": {
         "role": "primary",
         "displayName": "Mānoa Green",
         "canonical": "#024731",
-        "tonalRamp": ["#011a12", "#012a1d", "#024731", "#046444", "#0a8158", "#3aa87f", "#7fc9a5", "#cfe9dc"]
+        "tonalRamp": [
+          "#011a12",
+          "#012a1d",
+          "#024731",
+          "#046444",
+          "#0a8158",
+          "#3aa87f",
+          "#7fc9a5",
+          "#cfe9dc"
+        ]
       },
       "note-blue": {
         "role": "secondary",
         "displayName": "Note Blue",
         "canonical": "#0a5c7a",
-        "tonalRamp": ["#03202b", "#063a4d", "#0a5c7a", "#0f7ba3", "#2f9bc2", "#63b6d5", "#9ed2e7", "#eef5f8"]
+        "tonalRamp": [
+          "#03202b",
+          "#063a4d",
+          "#0a5c7a",
+          "#0f7ba3",
+          "#2f9bc2",
+          "#63b6d5",
+          "#9ed2e7",
+          "#eef5f8"
+        ]
       },
       "caution-amber": {
         "role": "secondary",
         "displayName": "Caution Amber",
         "canonical": "#8a4b04",
-        "tonalRamp": ["#2c1801", "#4d2a02", "#8a4b04", "#b46508", "#d4863a", "#e0a869", "#eec89f", "#fbf2e7"]
+        "tonalRamp": [
+          "#2c1801",
+          "#4d2a02",
+          "#8a4b04",
+          "#b46508",
+          "#d4863a",
+          "#e0a869",
+          "#eec89f",
+          "#fbf2e7"
+        ]
       },
       "stop-red": {
         "role": "secondary",
         "displayName": "Stop Red",
         "canonical": "#8c1d18",
-        "tonalRamp": ["#2c0907", "#4d100d", "#8c1d18", "#b32a23", "#cf5851", "#e89b95", "#f3c6c2", "#fbeceb"]
+        "tonalRamp": [
+          "#2c0907",
+          "#4d100d",
+          "#8c1d18",
+          "#b32a23",
+          "#cf5851",
+          "#e89b95",
+          "#f3c6c2",
+          "#fbeceb"
+        ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Ink",
         "canonical": "#1a1c1a",
-        "tonalRamp": ["#0d0e0d", "#1a1c1a", "#2b302c", "#414742", "#646b65", "#868d87", "#d9ddd9", "#f6f7f6"]
+        "tonalRamp": [
+          "#0d0e0d",
+          "#1a1c1a",
+          "#2b302c",
+          "#414742",
+          "#646b65",
+          "#868d87",
+          "#d9ddd9",
+          "#f6f7f6"
+        ]
       },
       "paper": {
         "role": "neutral",
         "displayName": "Paper",
         "canonical": "#ffffff",
-        "tonalRamp": ["#16181a", "#1d2022", "#212528", "#31363a", "#868d87", "#d9ddd9", "#f2f4f2", "#ffffff"]
+        "tonalRamp": [
+          "#16181a",
+          "#1d2022",
+          "#212528",
+          "#31363a",
+          "#868d87",
+          "#d9ddd9",
+          "#f2f4f2",
+          "#ffffff"
+        ]
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Page title", "purpose": "The h1. One per page, never repeated." },
-      "headline": { "displayName": "Section title", "purpose": "The h2, always preceded by a hairline rule." },
-      "title": { "displayName": "Subsection", "purpose": "The h3." },
-      "body": { "displayName": "Running text", "purpose": "Prose, capped at 46rem for a ~75 character measure." },
-      "label": { "displayName": "Nav group label", "purpose": "Uppercase group headings in the sidebar and rail. Nowhere else." },
-      "mono": { "displayName": "Typed things", "purpose": "Commands, tool names, environment variables, JSON, paths." }
+      "display": {
+        "displayName": "Page title",
+        "purpose": "The h1. One per page, never repeated."
+      },
+      "headline": {
+        "displayName": "Section title",
+        "purpose": "The h2, always preceded by a hairline rule."
+      },
+      "title": {
+        "displayName": "Subsection",
+        "purpose": "The h3."
+      },
+      "body": {
+        "displayName": "Running text",
+        "purpose": "Prose, capped at 46rem for a ~75 character measure."
+      },
+      "label": {
+        "displayName": "Nav group label",
+        "purpose": "Uppercase group headings in the sidebar and rail. Nowhere else."
+      },
+      "mono": {
+        "displayName": "Typed things",
+        "purpose": "Commands, tool names, environment variables, JSON, paths."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "scroll-smooth", "value": "scroll-behavior: smooth with scroll-padding-top: 1.5rem", "purpose": "Anchor jumps. Disabled entirely under prefers-reduced-motion, along with all transitions and animations." }
+      {
+        "name": "scroll-smooth",
+        "value": "scroll-behavior: smooth with scroll-padding-top: 1.5rem",
+        "purpose": "Anchor jumps. Disabled entirely under prefers-reduced-motion, along with all transitions and animations."
+      }
     ],
     "breakpoints": [
-      { "name": "collapse", "value": "64rem" }
+      {
+        "name": "collapse",
+        "value": "64rem"
+      }
     ]
   },
   "components": [
@@ -121,6 +200,22 @@
       "description": "First tab stop on the page. Off-canvas until focused.",
       "html": "<a class=\"ds-skip\" href=\"#content\">Skip to content</a>",
       "css": ".ds-skip { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--accent, #024731); color: #fff; padding: .6rem 1rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; text-decoration: none; } .ds-skip:focus { left: 0; }"
+    },
+    {
+      "name": "Copy button",
+      "kind": "button",
+      "refersTo": "copy-button",
+      "description": "Sits on every code block. Injected by script, so a reader without JavaScript never sees a control that cannot work. Visible at rest, because hover does not exist on a phone.",
+      "html": "<div class=\"ds-cw\"><pre class=\"ds-pre2\"><code>node dist/cli.js login</code></pre><button type=\"button\" class=\"ds-copy\" aria-label=\"Copy this command to the clipboard\">Copy</button></div>",
+      "css": ".ds-cw { position: relative; } .ds-cw > .ds-pre2 { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8125rem; line-height: 1.6; background: var(--ground-code, #f2f4f2); border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: .9rem 1rem; padding-right: 5rem; margin: 0; overflow-x: auto; color: var(--ink, #1a1c1a); } .ds-copy { position: absolute; top: .5rem; right: .5rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .6875rem; line-height: 1; padding: .4rem .55rem; cursor: pointer; color: var(--ink-3, #646b65); background: var(--ground, #fff); border: 1px solid var(--rule, #d9ddd9); border-radius: 3px; transition: color .12s, border-color .12s, background .12s; } .ds-cw:hover .ds-copy { color: var(--ink-2, #414742); border-color: var(--rule-strong, #868d87); } .ds-copy:hover, .ds-copy:focus-visible { color: var(--accent, #024731); border-color: var(--accent, #024731); outline: none; } .ds-copy[data-done] { color: var(--accent, #024731); border-color: var(--accent, #024731); background: var(--ground-alt, #f6f7f6); }"
+    },
+    {
+      "name": "The ledger",
+      "kind": "custom",
+      "refersTo": "table-header",
+      "description": "Two facing inventories at equal weight. Nothing may tilt them: no colour on one side, no icons, no counts, no ordering that implies one is the exception.",
+      "html": "<div class=\"ds-ledger\"><section><h3>It does</h3><dl><dt>Reads the whole course</dt><dd>Modules, topics, files, assignments, grades, discussions.</dd><dt>Previews every write before it lands</dt><dd>Nothing is written until you spend a single-use token.</dd></dl></section><section><h3>It does not</h3><dl><dt>Write quiz questions directly</dt><dd>Brightspace exposes no route for it. Import a cartridge instead.</dd><dt>Write grade values</dt><dd>Untested. The sandbox has no student enrolments.</dd></dl></section></div>",
+      "css": ".ds-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-ledger h3 { margin: 0 0 .2rem; padding-bottom: .5rem; font-size: 1rem; font-weight: 600; border-bottom: 1px solid var(--rule-strong, #868d87); } .ds-ledger dl { margin: .8rem 0 0; } .ds-ledger dt { font-weight: 600; font-size: .9375rem; padding-top: .65rem; border-top: 1px solid var(--rule, #d9ddd9); } .ds-ledger dl > dt:first-of-type { border-top: 0; padding-top: .2rem; } .ds-ledger dd { margin: .15rem 0 0; padding-bottom: .65rem; color: var(--ink-3, #646b65); font-size: .875rem; } @media (max-width: 48rem) { .ds-ledger { grid-template-columns: 1fr; } .ds-ledger > section + section { margin-top: 2.5rem; } }"
     }
   ],
   "narrative": {
@@ -131,13 +226,35 @@
       "Light ground by default, with a full dark palette under prefers-color-scheme.",
       "Hairline rules instead of shadows. The system is entirely flat.",
       "Tables and notes are first-class structure, not decoration.",
-      "WCAG 2.2 AA verified by script, not assumed."
+      "WCAG 2.2 AA verified by script, not assumed.",
+      "Two pages, one stylesheet: an overview that persuades and a manual that references. Same world, different composition."
     ],
     "rules": [
-      { "name": "The Two Percent Rule", "body": "Mānoa Green appears on links, the current-section marker, and the focus ring. It is never a background, never a heading colour, never a border on a card. Its rarity is what makes a link obvious.", "section": "colors" },
-      { "name": "The Verified Contrast Rule", "body": "No colour pair ships on inspection. contrast.py checks all seventeen pairs across both themes against 4.5:1 for text and 3:1 for boundaries. A failing pair is a bug, not a judgement call. This rule already caught the step-marker outline at 1.9:1.", "section": "colors" },
-      { "name": "The Typed-Things Rule", "body": "Mono marks anything the reader will type, paste, or see echoed back by a machine: commands, tool names, environment variables, JSON, file paths. It is never used for emphasis, and prose never sets a word in mono for flavour.", "section": "typography" },
-      { "name": "The Flat Rule", "body": "No box-shadow, no filter: drop-shadow, no gradient used to fake a light source. If something needs to separate from its surroundings, it gets a hairline and a tonal step.", "section": "elevation" }
+      {
+        "name": "The Two Percent Rule",
+        "body": "Mānoa Green appears on links, the current-section marker, and the focus ring. It is never a background, never a heading colour, never a border on a card. Its rarity is what makes a link obvious.",
+        "section": "colors"
+      },
+      {
+        "name": "The Verified Contrast Rule",
+        "body": "No colour pair ships on inspection. contrast.py checks all seventeen pairs across both themes against 4.5:1 for text and 3:1 for boundaries. A failing pair is a bug, not a judgement call. This rule already caught the step-marker outline at 1.9:1.",
+        "section": "colors"
+      },
+      {
+        "name": "The Typed-Things Rule",
+        "body": "Mono marks anything the reader will type, paste, or see echoed back by a machine: commands, tool names, environment variables, JSON, file paths. It is never used for emphasis, and prose never sets a word in mono for flavour.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Rule",
+        "body": "No box-shadow, no filter: drop-shadow, no gradient used to fake a light source. If something needs to separate from its surroundings, it gets a hairline and a tonal step.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Equal Column Rule",
+        "body": "The two inventories on the overview carry the same typographic rank. No colour on one side, no icon set, no count, no ordering that implies one is the exception. Equal weight is the argument the page makes.",
+        "section": "components"
+      }
     ],
     "dos": [
       "Do run contrast.py before shipping any colour change. Seventeen pairs, both themes, 4.5:1 and 3:1.",
@@ -145,15 +262,17 @@
       "Do wrap every table in .tw and give it a caption.",
       "Do put the semantic meaning in the note's label text, not only in its colour.",
       "Do keep new script as progressive enhancement. The page must be fully readable and fully navigable with JavaScript off.",
-      "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference."
+      "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference.",
+      "Do theme the browser's own surfaces: selection, caret, scrollbar, focus ring."
     ],
     "donts": [
       "Don't add a webfont. Not for headings, not for code, not for one accent word. The system stack is the reason this page will look the same in ten years.",
       "Don't add a shadow, a gradient, or a glow.",
       "Don't use Mānoa Green as a background, a heading colour, or a card border. Links, current marker, focus ring, skip link.",
-      "Don't add a hero, a feature grid, a testimonial, or a call-to-action button. This is a manual.",
-      "Don't put a UH logo, seal, or wordmark on the page. The project is not affiliated with or endorsed by the University of Hawaiʻi or D2L.",
-      "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason."
+      "Don't put a UH logo, seal, or wordmark on the page. The project is not endorsed by the University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.",
+      "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason.",
+      "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The manual has no use for them, and the overview answers the same need with the ledger: the honest inventory is the hero.",
+      "Don't style the two inventories differently from each other. Equal weight is the argument, and any colour, icon or ordering that favours one side breaks it."
     ]
   }
 }

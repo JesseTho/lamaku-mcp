@@ -38,5 +38,7 @@ Thumbs.db
 # directory, because git skips an ignored directory entirely and the negation
 # below would never be reached.
 .impeccable/*
-# design.json is DESIGN.md's machine-readable half and ships with it.
+# design.json is DESIGN.md's machine-readable half and ships with it, and the
+# surface briefs record per-page strategy that outlives any one session.
 !.impeccable/design.json
+!.impeccable/surfaces/
