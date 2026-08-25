@@ -3,6 +3,9 @@ name: lamaku-mcp site
 description: The overview and the reference manual for an MCP server that authors Brightspace courses.
 colors:
   manoa-green: "#024731"
+  band: "#024731"
+  band-dark: "#0a5c3f"
+  band-ink: "#cfe0d8"
   manoa-green-hover: "#0a6a49"
   manoa-green-dark: "#7fc9a5"
   paper: "#ffffff"
@@ -209,8 +212,13 @@ colour with its own tinted ground.
 ### Named Rules
 
 **The Two Percent Rule.** Mānoa Green appears on links, the current-section marker, and the
-focus ring. It is never a background, never a heading colour, never a border on a card. Its
-rarity is what makes a link obvious.
+focus ring. It is never a heading colour and never a border on a card. Its rarity is what makes a
+link obvious.
+
+**The One Band Exception.** The accent fills exactly one surface: the header band on the overview,
+and nowhere else on either page. The band has its own token rather than reusing `--accent`,
+because the dark-mode accent is a pale green and a full band of it would glare; dark mode uses
+`#0a5c3f` instead, which still reads as a band against the slate ground.
 
 **The Verified Contrast Rule.** No colour pair ships on inspection. `contrast.py` checks all
 seventeen pairs across both themes against 4.5:1 for text and 3:1 for boundaries. A failing pair
@@ -345,6 +353,20 @@ A CSS counter drives a `1.6rem` circle on `paper-shade` with a `hairline-strong`
 once, for the seven-step course walkthrough, where the reader genuinely has to do things in
 order. Numbers appear nowhere else on the page.
 
+### Template previews
+
+Live `<iframe>`s of the generated example pages, not screenshots, so a template change shows in
+the manual the next time `node scripts/build-style-examples.mjs` runs. The examples themselves are
+produced by the same `wrapHtml` the server calls, which is why it is exported.
+
+No transform on the frame. The page renders at the column's own width, which is a real render at a
+real text size rather than a shrunken one. Each frame is `17rem` tall with a gradient fade at the
+bottom edge, so a cut-off page reads as continuing rather than as broken.
+
+The `uh` preview is deliberately shown unstyled, because that is what it looks like off Lamakū,
+and its caption says so. Its four stylesheet requests will 404 here; that is the demonstration,
+not a defect.
+
 ### Copy button
 
 Every `pre` gets one, injected by script so a reader without JavaScript never sees a control that
@@ -375,9 +397,26 @@ footer.
 
 ### The product mark
 
-A `1.15rem` Mānoa Green rounded square with three rules in it, sitting before the wordmark in the
-masthead on both pages, and the same shape as `favicon.svg`. The rules are stroked in
-`var(--ground)` rather than white, so the mark inverts correctly in dark mode instead of glaring.
+**A torch.** *Lamakū* is the Hawaiian word for torch, so the mark is one: a flame, a collar and a
+tapered shaft, filled rather than stroked because a filled silhouette survives 16px and a stroked
+one does not. It sits in a Mānoa Green rounded square, `1.15rem` in the masthead of both pages,
+`2.4rem` in the band, and it is the same shape as `favicon.svg`.
+
+This one is drawn, not taken from Lucide, and the distinction is the point: **a logo is authored,
+an interface icon is sourced.** Lucide has no torch, and substituting a flame would have thrown
+away the word the product is named for.
+
+Its shapes are filled with `var(--ground)` on the masthead square and with `var(--band)` on the
+band's white square, so it inverts correctly in both themes rather than glaring.
+
+### The header band
+
+The overview's header: a full-bleed `--band` surface carrying the mark at `2.4rem`, the `h1` in
+white, and the tagline in `--band-ink`. Its inner width is `63.5rem`, the shell's two tracks plus
+their gap, so its left edge lands exactly on the sidebar's.
+
+It stacks to a column below `34rem`. The manual has no band; a reference page does not need a
+hero, and the shared masthead is what makes the two pages read as one site.
 
 ### The install block
 
@@ -440,8 +479,10 @@ white text. First tab stop on the page.
 - **Don't** put a paragraph on the overview to explain a feature. If it needs explaining, the
   feature line links to the manual and the explanation lives there.
 - **Don't** build a card grid. Same-size icon-heading-text cards in a row is a feature wall.
-- **Don't** hand-draw an icon or reach for an emoji. Take it from Lucide, vendor the path data,
-  and let the stylesheet set the weight.
+- **Don't** hand-draw an interface icon or reach for an emoji. Take it from Lucide, vendor the
+  path data, and let the stylesheet set the weight. The torch mark is the one authored shape,
+  because a logo is authored and an interface icon is sourced.
+- **Don't** fill any surface but the header band with the accent.
 - **Don't** write a heading as "What it does" or "What it is". Name the thing: Features, How to
   install, Documentation.
 - **Don't** put a UH logo, seal, or wordmark on the page. The project is not endorsed by the

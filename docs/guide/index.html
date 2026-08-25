@@ -33,10 +33,14 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <div class="masthead-in">
     <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
       <rect width="32" height="32" rx="4"/>
-      <g class="mk"><path d="M9 11h14"/><path d="M9 16h14"/><path d="M9 21h8"/></g>
+      <g class="mk" transform="translate(0,.5)">
+        <path d="M16 5.2c2.1 2.6 3.9 4.3 3.9 6.7a3.9 3.9 0 0 1-7.8 0c0-1.2.45-2.1 1.2-2.9.32.9.98 1.3 1.62 1.3-.66-1.8-.45-3.5 1.08-5.1Z"/>
+        <rect x="12.9" y="14.4" width="6.2" height="2" rx="1"/>
+        <path d="M14.75 17.4h2.5l-.62 9.1a.63.63 0 0 1-1.26 0Z"/>
+      </g>
     </svg>
     <a class="name" href="../">lamaku-mcp</a>
-    <span class="ver">54 tools · MIT</span>
+    <span class="ver">Agentic course authoring</span>
     <span class="spacer"></span>
     <span class="links">
       <a href="../">Overview</a>
@@ -292,6 +296,35 @@ pnpm build</code></pre>
           <tr><th scope="row"><code>plain</code></th><td>A bare document with no institutional styling.</td></tr>
         </tbody>
       </table>
+    </div>
+
+
+    <div class="tpl">
+      <figure>
+        <div class="frame">
+          <iframe src="../examples/jabsom.html" title="A course page in the jabsom template" loading="lazy"></iframe>
+        </div>
+        <figcaption><b>jabsom</b> · Mānoa Green headings in Inter over Source Serif 4 body, a
+        rule above each section, a green-tinted pull quote, and the school footer. The tokens are
+        inlined, so this is exactly what it looks like anywhere.
+        <a href="../examples/jabsom.html">Open full size</a>.</figcaption>
+      </figure>
+      <figure>
+        <div class="frame">
+          <iframe src="../examples/uh.html" title="A course page in the uh template" loading="lazy"></iframe>
+        </div>
+        <figcaption><b>uh</b> · Shown off-instance, which is why it is bare. On Lamakū the same
+        markup picks up the banner, the <code>col-sm-10</code> content column and the seal footer
+        from UH's own stylesheets. <a href="../examples/uh.html">Open full size</a>.</figcaption>
+      </figure>
+      <figure>
+        <div class="frame">
+          <iframe src="../examples/plain.html" title="A course page in the plain template" loading="lazy"></iframe>
+        </div>
+        <figcaption><b>plain</b> · No institutional styling at all. Use it when the course carries
+        its own, or when the page is going somewhere other than Lamakū.
+        <a href="../examples/plain.html">Open full size</a>.</figcaption>
+      </figure>
     </div>
 
     <p>See <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/docs/course-style.md">course-style.md</a> and <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/docs/jabsom-style.md">jabsom-style.md</a> for the components each template provides and the accessibility obligations attached to them.</p>

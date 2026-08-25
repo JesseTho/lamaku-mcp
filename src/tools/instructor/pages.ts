@@ -77,7 +77,7 @@ const UH_STYLESHEETS = [
  * template's own pages use alt="banner", which announces a word that carries
  * nothing.
  */
-function wrapHtml(
+export function wrapHtml(
   title: string,
   bodyHtml: string,
   template: PageTemplate = 'uh',
