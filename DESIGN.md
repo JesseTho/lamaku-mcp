@@ -2,29 +2,29 @@
 name: lamaku-mcp site
 description: The overview and the reference manual for an MCP server that authors Brightspace courses.
 colors:
-  manoa-green: "#024731"
-  band: "#024731"
-  band-dark: "#0a5c3f"
-  band-ink: "#cfe0d8"
-  manoa-green-hover: "#0a6a49"
-  manoa-green-dark: "#7fc9a5"
-  paper: "#ffffff"
-  paper-shade: "#f6f7f6"
-  paper-code: "#f2f4f2"
-  ink: "#1a1c1a"
-  ink-secondary: "#414742"
-  ink-muted: "#646b65"
-  hairline: "#d9ddd9"
-  hairline-strong: "#868d87"
-  note-blue: "#0a5c7a"
-  note-blue-bg: "#eef5f8"
-  caution-amber: "#8a4b04"
-  caution-amber-bg: "#fbf2e7"
-  stop-red: "#8c1d18"
-  stop-red-bg: "#fbeceb"
-  slate: "#16181a"
-  slate-shade: "#1d2022"
-  slate-code: "#212528"
+  terracotta: "#a9481d"
+  terracotta-hover: "#8a3a16"
+  terracotta-dark: "#f0a06a"
+  band: "#a34620"
+  band-dark: "#7a3617"
+  band-ink: "#f9e6d8"
+  cream: "#fbf7f1"
+  cream-shade: "#f3ebe0"
+  cream-code: "#f1e9dd"
+  ink: "#33261e"
+  ink-secondary: "#5c4636"
+  ink-muted: "#78614f"
+  hairline: "#e4d8c9"
+  hairline-strong: "#9c8267"
+  note-teal: "#1f5e6e"
+  note-teal-bg: "#e9f1f2"
+  caution-ochre: "#8a5a08"
+  caution-ochre-bg: "#f7efdf"
+  stop-red: "#9a2318"
+  stop-red-bg: "#f9eae6"
+  umber: "#201a16"
+  umber-shade: "#2a211a"
+  umber-code: "#2f251c"
 typography:
   display:
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif"
@@ -71,12 +71,12 @@ spacing:
   break: "3rem"
 components:
   note:
-    backgroundColor: "{colors.note-blue-bg}"
+    backgroundColor: "{colors.note-teal-bg}"
     textColor: "{colors.ink}"
     rounded: "{rounded.block}"
     padding: "0.8rem 1rem"
   note-caution:
-    backgroundColor: "{colors.caution-amber-bg}"
+    backgroundColor: "{colors.caution-ochre-bg}"
     textColor: "{colors.ink}"
     rounded: "{rounded.block}"
     padding: "0.8rem 1rem"
@@ -92,21 +92,21 @@ components:
     padding: "0.22rem 0 0.22rem 0.7rem"
   nav-link-current:
     backgroundColor: "transparent"
-    textColor: "{colors.manoa-green}"
+    textColor: "{colors.terracotta}"
     padding: "0.22rem 0 0.22rem 0.7rem"
   code-block:
-    backgroundColor: "{colors.paper-code}"
+    backgroundColor: "{colors.cream-code}"
     textColor: "{colors.ink}"
     typography: "{typography.mono}"
     rounded: "{rounded.block}"
     padding: "0.9rem 1rem"
   step-marker:
-    backgroundColor: "{colors.paper-shade}"
+    backgroundColor: "{colors.cream-shade}"
     textColor: "{colors.ink-secondary}"
     rounded: "{rounded.pill}"
     size: "1.6rem"
   table-header:
-    backgroundColor: "{colors.paper-shade}"
+    backgroundColor: "{colors.cream-shade}"
     textColor: "{colors.ink-secondary}"
     padding: "0.5rem 0.8rem"
   capability-item:
@@ -114,14 +114,14 @@ components:
     textColor: "{colors.ink}"
     padding: "0.35rem 0 0.35rem 1.4rem"
   copy-button:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.cream}"
     textColor: "{colors.ink-muted}"
     typography: "{typography.mono}"
     rounded: "{rounded.code}"
     padding: "0.4rem 0.55rem"
   copy-button-done:
-    backgroundColor: "{colors.paper-shade}"
-    textColor: "{colors.manoa-green}"
+    backgroundColor: "{colors.cream-shade}"
+    textColor: "{colors.terracotta}"
     rounded: "{rounded.code}"
     padding: "0.4rem 0.55rem"
 ---
@@ -143,11 +143,15 @@ pitch, no logo lockup. The first viewport carries the product name, one sentence
 is, one paragraph saying what it does, and the install command. A reader who came to install
 something can start in the first ten seconds.
 
-The one place expression is spent is the accent: Mānoa Green, `#024731`, the University of
-Hawaiʻi's own dark green, used for links, the current-section marker, and the focus ring, and
-nowhere else. It carries maybe two percent of the page's area. Everything around it is white,
-near-black, and hairline grey, because the accent only reads as a choice when nothing competes
-with it.
+The palette is Lamakū's own rather than a chosen one. Lamakū's identity is a cream ground, a
+terracotta that draws the Hawaiian islands across its banner, warm brown text, and a lit torch.
+The site takes those instead of inventing a scheme beside them, because a tool that writes into
+Lamakū should look like it belongs there.
+
+The terracotta, `#a9481d`, is the accent: links, the current-section marker, the focus ring, and
+the header band. Everything around it is cream, warm brown and a sand hairline. This is a warm
+palette that could drift into the cream-and-serif rut, and what keeps it out is that the type is a
+system sans and every surface is flat. No serif display, no card shadows, no paper texture.
 
 The site is two pages sharing one stylesheet, and they are deliberately unequal in weight. The
 **overview** at `/` opens the way a tool page is supposed to: a one-line tagline, then one
@@ -183,42 +187,49 @@ applied.
 
 ### Primary
 
-- **Mānoa Green** (`#024731`): Links, the current-section marker in both nav columns, the focus
-  ring, and the skip-link background. 12.9:1 on white. In dark mode it lifts to **Sea Foam**
-  (`#7fc9a5`) at 8.4:1 on the slate ground, because the dark green disappears there.
+- **Terracotta** (`#a9481d`): Links, the current-section marker in both nav columns, the focus
+  ring, and the skip-link background. 5.4:1 on the cream ground. In dark mode it lifts to
+  **Ember** (`#f0a06a`) at 8.1:1 on the umber ground, because the deep terracotta disappears
+  there.
 
 ### Secondary
 
 The three semantic note colours. They are signal, never decoration, and each pairs a label
 colour with its own tinted ground.
 
-- **Note Blue** (`#0a5c7a` on `#eef5f8`): Something worth knowing before you continue.
-- **Caution Amber** (`#8a4b04` on `#fbf2e7`): Something that will surprise you if you skip it.
-- **Stop Red** (`#8c1d18` on `#fbeceb`): Something that destroys data or affects real students.
+- **Note Teal** (`#1f5e6e` on `#e9f1f2`): Something worth knowing before you continue. Teal rather
+  than blue, so it sits inside the warm palette instead of on top of it.
+- **Caution Ochre** (`#8a5a08` on `#f7efdf`): Something that will surprise you if you skip it.
+- **Stop Red** (`#9a2318` on `#f9eae6`): Something that destroys data or affects real students.
+
+Caution ochre and the terracotta accent are neighbours on the wheel, and that is the one real
+weakness in this palette. It holds because the accent only ever appears as a link or a marker and
+never fills a note, and because every note names its kind in words.
 
 ### Neutral
 
-- **Paper** (`#ffffff`) and **Slate** (`#16181a`): The two grounds.
-- **Paper Shade** (`#f6f7f6`) / **Slate Shade** (`#1d2022`): Table headers, captions, step
+- **Cream** (`#fbf7f1`) and **Umber** (`#201a16`): The two grounds. Both are warm; neither is a
+  neutral grey with a hue bolted on afterwards.
+- **Cream Shade** (`#f3ebe0`) / **Umber Shade** (`#2a211a`): Table headers, captions, step
   markers, sidebar surfaces.
-- **Paper Code** (`#f2f4f2`) / **Slate Code** (`#212528`): Code blocks and inline code.
-- **Ink** (`#1a1c1a` / `#e6e9e7`): Body text, 17.1:1 light and 14.6:1 dark.
-- **Ink Secondary** (`#414742` / `#b3bab5`): The tagline, table headers, nav links at rest.
-- **Ink Muted** (`#646b65` / `#8b938d`): Section labels, captions, the on-this-page rail.
-- **Hairline** (`#d9ddd9` / `#31363a`): Every rule, border, and divider on the page.
-- **Hairline Strong** (`#868d87` / `#68716b`): Only the step-marker outline, where a UI boundary
+- **Cream Code** (`#f1e9dd`) / **Umber Code** (`#2f251c`): Code blocks and inline code.
+- **Ink** (`#33261e` / `#efe6da`): Body text, 13.7:1 light and 13.9:1 dark.
+- **Ink Secondary** (`#5c4636` / `#c3b4a3`): The tagline, table headers, nav links at rest.
+- **Ink Muted** (`#78614f` / `#9c8b79`): Section labels, captions, the on-this-page rail.
+- **Hairline** (`#e4d8c9` / `#3b2f26`): Every rule, border, and divider on the page.
+- **Hairline Strong** (`#9c8267` / `#82705e`): Only the step-marker outline, where a UI boundary
   needs 3:1.
 
 ### Named Rules
 
-**The Two Percent Rule.** Mānoa Green appears on links, the current-section marker, and the
+**The Two Percent Rule.** The terracotta appears on links, the current-section marker, and the
 focus ring. It is never a heading colour and never a border on a card. Its rarity is what makes a
 link obvious.
 
 **The One Band Exception.** The accent fills exactly one surface: the header band on the overview,
 and nowhere else on either page. The band has its own token rather than reusing `--accent`,
-because the dark-mode accent is a pale green and a full band of it would glare; dark mode uses
-`#0a5c3f` instead, which still reads as a band against the slate ground.
+because the dark-mode accent is a pale ember and a full band of it would glare; dark mode uses
+`#7a3617` instead, which still reads as a band against the umber ground.
 
 **The Verified Contrast Rule.** No colour pair ships on inspection. `contrast.py` checks all
 seventeen pairs across both themes against 4.5:1 for text and 3:1 for boundaries. A failing pair
@@ -320,7 +331,7 @@ not the navigation.
 ### Navigation
 
 Two columns of the same component at two weights. Links are `ink-secondary` at rest with no
-underline, `manoa-green` and underlined on hover, and `manoa-green` with a 2px green left border
+underline, `terracotta` and underlined on hover, and `terracotta` with a 2px left border
 and 600 weight when current. The rail is one step quieter: `0.8125rem` and `ink-muted`.
 
 The current state is set by an IntersectionObserver with `rootMargin: 0px 0px -75% 0px`, so a
@@ -375,7 +386,7 @@ top-right inside a `5rem` gutter reserved in the block's padding.
 
 Visible at rest rather than on hover: this audience should not have to discover an affordance by
 sweeping the mouse, and hover does not exist on a phone at all. It brightens to `ink-secondary`
-when the block is hovered, to `manoa-green` on its own hover or focus, and holds `Copied` on the
+when the block is hovered, to `terracotta` on its own hover or focus, and holds `Copied` on the
 shaded ground for two seconds. The word is the state; the colour only agrees with it. A visually
 hidden `aria-live` region announces the same word.
 
@@ -397,22 +408,24 @@ footer.
 
 ### The product mark
 
-**A torch.** *Lamakū* is the Hawaiian word for torch, so the mark is one: a flame, a collar and a
-tapered shaft, filled rather than stroked because a filled silhouette survives 16px and a stroked
-one does not. It sits in a Mānoa Green rounded square, `1.15rem` in the masthead of both pages,
-`2.4rem` in the band, and it is the same shape as `favicon.svg`.
+**A flame.** *Lamakū* is the Hawaiian word for torch and Lamakū's own logo is a lit torch, so the
+mark is Lucide's `flame` in a terracotta rounded square: `1.15rem` in the masthead of both pages,
+`2.4rem` in the band, and the same shape as `favicon.svg`.
 
-This one is drawn, not taken from Lucide, and the distinction is the point: **a logo is authored,
-an interface icon is sourced.** Lucide has no torch, and substituting a flame would have thrown
-away the word the product is named for.
+An authored torch came first and was discarded. It was recognisable and it was worse, because a
+shape drawn beside a sourced set never quite shares its geometry, and that mismatch is visible
+before anyone can say why. Lucide has no `torch`: `flashlight` is an electric one and
+`flame-kindling` reads as a campfire, so `flame` it is.
 
-Its shapes are filled with `var(--ground)` on the masthead square and with `var(--band)` on the
-band's white square, so it inverts correctly in both themes rather than glaring.
+Its stroke is `2.25`, heavier than the `1.75` the interface icons carry, because the mark is small
+and sits on a filled ground where the lighter weight thins out by 16px. Stroked in `var(--ground)`
+on the masthead square and `var(--band)` on the band's cream square, so it inverts correctly in
+both themes.
 
 ### The header band
 
 The overview's header: a full-bleed `--band` surface carrying the mark at `2.4rem`, the `h1` in
-white, and the tagline in `--band-ink`. Its inner width is `63.5rem`, the shell's two tracks plus
+cream, and the tagline in `--band-ink`. Its inner width is `63.5rem`, the shell's two tracks plus
 their gap, so its left edge lands exactly on the sidebar's.
 
 It stacks to a column below `34rem`. The manual has no band; a reference page does not need a
@@ -438,13 +451,13 @@ seven-word consequence here, and a whole section there.
 
 ### Browser surfaces
 
-Selection is `manoa-green` with white text. The caret is `manoa-green`. Scrollbars take
+Selection is `terracotta` with cream text. The caret is `terracotta`. Scrollbars take
 `rule-strong` on the page ground with a 3px ground-coloured inset, so the thumb reads as a bar
 rather than a gutter. These are drawn from the palette like everything else.
 
 ### Skip link
 
-Positioned off-canvas at `left: -9999px`, moves to `left: 0` on focus, `manoa-green` ground with
+Positioned off-canvas at `left: -9999px`, moves to `left: 0` on focus, `terracotta` ground with
 white text. First tab stop on the page.
 
 ## Do's and Don'ts
@@ -464,13 +477,15 @@ white text. First tab stop on the page.
 - **Do** theme the browser's own surfaces: selection, caret, scrollbar, focus ring.
 - **Do** render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM.
   This is a brand commitment, not a typographic preference.
+- **Do** keep the palette anchored to Lamakū's own. If Lamakū's identity changes this follows it,
+  rather than drifting on its own.
 
 ### Don't:
 
 - **Don't** add a webfont. Not for headings, not for code, not for one accent word. The system
   stack is the reason this page will look the same in ten years.
 - **Don't** add a shadow, a gradient, or a glow.
-- **Don't** use Mānoa Green as a background, a heading colour, or a card border. Links, current
+- **Don't** use the terracotta as a heading colour or a card border. Links, current
   marker, focus ring, skip link.
 - **Don't** add a hero, a feature grid, a testimonial, or a call-to-action button, on either page.
   The overview's whole argument is that it can be read in thirty seconds.
@@ -479,9 +494,8 @@ white text. First tab stop on the page.
 - **Don't** put a paragraph on the overview to explain a feature. If it needs explaining, the
   feature line links to the manual and the explanation lives there.
 - **Don't** build a card grid. Same-size icon-heading-text cards in a row is a feature wall.
-- **Don't** hand-draw an interface icon or reach for an emoji. Take it from Lucide, vendor the
-  path data, and let the stylesheet set the weight. The torch mark is the one authored shape,
-  because a logo is authored and an interface icon is sourced.
+- **Don't** hand-draw an icon or reach for an emoji, the mark included. Take it from Lucide,
+  vendor the path data, and let the stylesheet set the weight.
 - **Don't** fill any surface but the header band with the accent.
 - **Don't** write a heading as "What it does" or "What it is". Name the thing: Features, How to
   install, Documentation.

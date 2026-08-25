@@ -3,26 +3,29 @@
    stack renders instantly, matches the reader's OS, and cannot rot when a
    font host changes. The three sites this is built to sit beside all do the
    same thing for the same reason.
+
+   The palette is Lamaku's own: cream ground, terracotta, warm brown ink, after
+   the torch its name means. Every pair is verified rather than eyeballed.
    --------------------------------------------------------------------------- */
 :root{
-  --ground:#ffffff;
-  --ground-alt:#f6f7f6;
-  --ground-code:#f2f4f2;
-  --ink:#1a1c1a;
-  --ink-2:#414742;
-  --ink-3:#646b65;
-  --rule:#d9ddd9;
-  --rule-strong:#868d87;   /* 3.4:1 on white, per WCAG 1.4.11 */
-  --accent:#024731;          /* Mānoa Green. 12.9:1 on white. */
-  --band:#024731;            /* the header band. White on it: 12.9:1. */
-  --band-ink:#cfe0d8;
-  --accent-hover:#0a6a49;
-  --note:#0a5c7a;
-  --note-bg:#eef5f8;
-  --warn:#8a4b04;
-  --warn-bg:#fbf2e7;
-  --stop:#8c1d18;
-  --stop-bg:#fbeceb;
+  --ground:#fbf7f1;
+  --ground-alt:#f3ebe0;
+  --ground-code:#f1e9dd;
+  --ink:#33261e;
+  --ink-2:#5c4636;
+  --ink-3:#78614f;
+  --rule:#e4d8c9;
+  --rule-strong:#9c8267;   /* 3.4:1 on the ground, per WCAG 1.4.11 */
+  --accent:#a9481d;          /* Lamaku terracotta. 5.4:1 on the ground. */
+  --accent-hover:#8a3a16;
+  --band:#a34620;            /* the header band. White on it: 6.1:1. */
+  --band-ink:#f9e6d8;
+  --note:#1f5e6e;
+  --note-bg:#e9f1f2;
+  --warn:#8a5a08;
+  --warn-bg:#f7efdf;
+  --stop:#9a2318;
+  --stop-bg:#f9eae6;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   --sidebar:17rem;
@@ -30,24 +33,24 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --ground:#16181a;
-    --ground-alt:#1d2022;
-    --ground-code:#212528;
-    --ink:#e6e9e7;
-    --ink-2:#b3bab5;
-    --ink-3:#8b938d;
-    --rule:#31363a;
-    --rule-strong:#68716b;   /* 3.5:1 on the dark ground */
-    --accent:#7fc9a5;        /* 8.4:1 on the dark ground. */
-    --band:#0a5c3f;          /* lifted, or the band vanishes into the ground. */
-    --band-ink:#cfe0d8;
-    --accent-hover:#9fdcbd;
-    --note:#7cc0dd;
-    --note-bg:#152329;
-    --warn:#e0a869;
-    --warn-bg:#2a2117;
-    --stop:#e89b95;
-    --stop-bg:#2b1a19;
+    --ground:#201a16;
+    --ground-alt:#2a211a;
+    --ground-code:#2f251c;
+    --ink:#efe6da;
+    --ink-2:#c3b4a3;
+    --ink-3:#9c8b79;
+    --rule:#3b2f26;
+    --rule-strong:#82705e;   /* 3.6:1 on the dark ground */
+    --accent:#f0a06a;        /* 8.1:1 on the dark ground. */
+    --accent-hover:#f7be93;
+    --band:#7a3617;          /* deepened, or the band glares. */
+    --band-ink:#f9e6d8;
+    --note:#7fc3d2;
+    --note-bg:#17262a;
+    --warn:#e0a95f;
+    --warn-bg:#2b2114;
+    --stop:#ec9e93;
+    --stop-bg:#2c1b18;
   }
 }
 
@@ -85,7 +88,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .masthead .name{font-family:var(--mono);font-size:.95rem;font-weight:600;color:var(--ink);text-decoration:none}
 .mark{width:1.15rem;height:1.15rem;flex:none;align-self:center}
 .mark rect{fill:var(--accent)}
-.mark .mk{fill:var(--ground);stroke:none}
+/* Heavier than the 1.75 the interface icons use: the mark is small, sits on
+   a filled ground, and thins out at 16px at the lighter weight. */
+.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
 .masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
@@ -103,7 +108,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .band .tagline{color:var(--band-ink);margin:0;font-size:1.0625rem}
 .band .mark{width:2.4rem;height:2.4rem;align-self:flex-start;margin-top:.35rem}
 .band .mark rect{fill:#fff}
-.band .mark .mk{fill:var(--band)}
+.band .mark .mk{stroke:var(--band)}
 @media (max-width:34rem){
   .band-in{flex-direction:column;gap:.9rem;padding:2rem 0 2.2rem}
   .band .mark{width:2rem;height:2rem;margin-top:0}
