@@ -4,55 +4,10 @@
   "title": "Design System: lamaku-mcp site",
   "extensions": {
     "colorMeta": {
-      "manoa-green": {
-        "role": "primary",
-        "displayName": "Mānoa Green",
-        "canonical": "#024731",
-        "tonalRamp": [
-          "#011a12",
-          "#012a1d",
-          "#024731",
-          "#046444",
-          "#0a8158",
-          "#3aa87f",
-          "#7fc9a5",
-          "#cfe9dc"
-        ]
-      },
-      "note-blue": {
-        "role": "secondary",
-        "displayName": "Note Blue",
-        "canonical": "#0a5c7a",
-        "tonalRamp": [
-          "#03202b",
-          "#063a4d",
-          "#0a5c7a",
-          "#0f7ba3",
-          "#2f9bc2",
-          "#63b6d5",
-          "#9ed2e7",
-          "#eef5f8"
-        ]
-      },
-      "caution-amber": {
-        "role": "secondary",
-        "displayName": "Caution Amber",
-        "canonical": "#8a4b04",
-        "tonalRamp": [
-          "#2c1801",
-          "#4d2a02",
-          "#8a4b04",
-          "#b46508",
-          "#d4863a",
-          "#e0a869",
-          "#eec89f",
-          "#fbf2e7"
-        ]
-      },
       "stop-red": {
         "role": "secondary",
         "displayName": "Stop Red",
-        "canonical": "#8c1d18",
+        "canonical": "#9a2318",
         "tonalRamp": [
           "#2c0907",
           "#4d100d",
@@ -79,34 +34,79 @@
           "#f6f7f6"
         ]
       },
-      "paper": {
-        "role": "neutral",
-        "displayName": "Paper",
-        "canonical": "#ffffff",
-        "tonalRamp": [
-          "#16181a",
-          "#1d2022",
-          "#212528",
-          "#31363a",
-          "#868d87",
-          "#d9ddd9",
-          "#f2f4f2",
-          "#ffffff"
-        ]
-      },
       "band": {
         "role": "primary",
-        "displayName": "Band Green",
-        "canonical": "#024731",
+        "displayName": "Band Terracotta",
+        "canonical": "#a34620",
         "tonalRamp": [
-          "#011a12",
-          "#022a1e",
-          "#024731",
-          "#0a5c3f",
-          "#0e7a4f",
-          "#3aa87f",
-          "#7fc9a5",
-          "#cfe0d8"
+          "#2c1208",
+          "#4f2010",
+          "#7a3617",
+          "#a34620",
+          "#c26440",
+          "#db9070",
+          "#efbca4",
+          "#f9e6d8"
+        ]
+      },
+      "terracotta": {
+        "role": "primary",
+        "displayName": "Lamaku Terracotta",
+        "canonical": "#a9481d",
+        "tonalRamp": [
+          "#2c1208",
+          "#5a2410",
+          "#7f3517",
+          "#a9481d",
+          "#c4643a",
+          "#dc8f66",
+          "#efba9c",
+          "#f9e6d8"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Cream",
+        "canonical": "#fbf7f1",
+        "tonalRamp": [
+          "#201a16",
+          "#2a211a",
+          "#2f251c",
+          "#3b2f26",
+          "#78614f",
+          "#9c8267",
+          "#e4d8c9",
+          "#fbf7f1"
+        ]
+      },
+      "note-teal": {
+        "role": "secondary",
+        "displayName": "Note Teal",
+        "canonical": "#1f5e6e",
+        "tonalRamp": [
+          "#08181d",
+          "#123c46",
+          "#1f5e6e",
+          "#2c8296",
+          "#4ea6ba",
+          "#7fc3d2",
+          "#b3dee7",
+          "#e9f1f2"
+        ]
+      },
+      "caution-ochre": {
+        "role": "secondary",
+        "displayName": "Caution Ochre",
+        "canonical": "#8a5a08",
+        "tonalRamp": [
+          "#2b1c02",
+          "#4d3204",
+          "#8a5a08",
+          "#b3760d",
+          "#d09a35",
+          "#e0a95f",
+          "#eecb9b",
+          "#f7efdf"
         ]
       }
     },
@@ -168,10 +168,11 @@
         "clipboard-list",
         "package",
         "eye",
-        "shield-check"
+        "shield-check",
+        "flame"
       ],
       "rule": "Never hand-drawn, never an emoji. Always aria-hidden; the sentence beside it is the content.",
-      "logo": "The torch mark is authored, not from Lucide. Lamaku is the Hawaiian word for torch, Lucide has none, and a flame would throw away the word the product is named for. A logo is authored; an interface icon is sourced."
+      "logo": "The mark is Lucide flame in a terracotta square, at stroke 2.25 rather than 1.75 because it is small and sits on a filled ground. An authored torch came first and was discarded: a shape drawn beside a sourced set never quite shares its geometry. Lucide has no torch; flashlight is electric and flame-kindling reads as a campfire."
     }
   },
   "components": [
@@ -266,7 +267,7 @@
   ],
   "narrative": {
     "northStar": "The Reference Manual",
-    "overview": "This is documentation for someone who will open it four times a year for five years. It is built to be correct and scanned, not to look current. The bar was set explicitly by MDN, the Django docs, and the PostgreSQL manual: three sites that have survived a decade of taste cycles by never participating in one.\n\nThe category default for a developer tool is a marketing homepage with a gradient hero, a feature grid, and a call to action. This system refuses that outright. There is no hero, no pitch, no logo lockup. The first viewport carries the product name, one sentence saying what it is, one paragraph saying what it does, and the install command. A reader who came to install something can start in the first ten seconds.\n\nThe one place expression is spent is the accent: Mānoa Green, #024731, the University of Hawaiʻi's own dark green, used for links, the current-section marker, and the focus ring, and nowhere else. It carries maybe two percent of the page's area. Everything around it is white, near-black, and hairline grey, because the accent only reads as a choice when nothing competes with it.",
+    "overview": "This is documentation for someone who will open it four times a year for five years. It is built to be correct and scanned, not to look current. The bar was set explicitly by MDN, the Django docs, and the PostgreSQL manual: three sites that have survived a decade of taste cycles by never participating in one.\n\nThe category default for a developer tool is a marketing homepage with a gradient hero, a feature grid, and a call to action. This system refuses that outright. There is no hero, no pitch, no logo lockup. The first viewport carries the product name, one sentence saying what it is, one paragraph saying what it does, and the install command. A reader who came to install something can start in the first ten seconds.\n\nThe palette is Lamaku's own rather than a chosen one: cream ground, a terracotta that draws the Hawaiian islands across its banner, warm brown text, and a lit torch. The terracotta is the accent, on links, the current-section marker, the focus ring and the header band. What keeps a warm palette out of the cream-and-serif rut is that the type is a system sans and every surface is flat.",
     "keyCharacteristics": [
       "Zero webfonts. The system stack renders instantly and cannot rot when a font host changes.",
       "Light ground by default, with a full dark palette under prefers-color-scheme.",
@@ -278,7 +279,7 @@
     "rules": [
       {
         "name": "The Two Percent Rule",
-        "body": "Mānoa Green appears on links, the current-section marker, and the focus ring. It is never a background, never a heading colour, never a border on a card. Its rarity is what makes a link obvious.",
+        "body": "The terracotta appears on links, the current-section marker, and the focus ring. It is never a heading colour and never a border on a card. Its one filled surface is the header band. Its rarity is what makes a link obvious.",
         "section": "colors"
       },
       {
@@ -317,9 +318,9 @@
         "section": "colors"
       },
       {
-        "name": "A Logo Is Authored, An Icon Is Sourced",
-        "body": "The torch mark is drawn. Lamaku is the Hawaiian word for torch, Lucide has none, and substituting a flame would throw away the word the product is named for. Interface icons still come from Lucide, verbatim.",
-        "section": "components"
+        "name": "Lamaku's Own Palette",
+        "body": "The palette is Lamaku's identity, not a chosen one: cream ground, terracotta accent, warm brown ink, after the torch its name means. A tool that writes into Lamaku should look like it belongs there. If Lamaku's identity changes this follows it.",
+        "section": "colors"
       }
     ],
     "dos": [
@@ -330,12 +331,13 @@
       "Do keep new script as progressive enhancement. The page must be fully readable and fully navigable with JavaScript off.",
       "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference.",
       "Do theme the browser's own surfaces: selection, caret, scrollbar, focus ring.",
-      "Do keep the ISC notice with the Lucide paths, in the sprite comment and in the footer."
+      "Do keep the ISC notice with the Lucide paths, in the sprite comment and in the footer.",
+      "Do keep the palette anchored to Lamaku's own identity rather than drifting on its own."
     ],
     "donts": [
       "Don't add a webfont. Not for headings, not for code, not for one accent word. The system stack is the reason this page will look the same in ten years.",
       "Don't add a shadow, a gradient, or a glow.",
-      "Don't use Mānoa Green as a background, a heading colour, or a card border. Links, current marker, focus ring, skip link.",
+      "Don't use the terracotta as a background, a heading colour, or a card border. Links, current marker, focus ring, skip link.",
       "Don't put a UH logo, seal, or wordmark on the page. The project is not endorsed by the University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.",
       "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason.",
       "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The overview's whole argument is that it can be read in thirty seconds.",
@@ -343,8 +345,8 @@
       "Don't write a heading as \"What it does\" or \"What it is\". Name the thing: Features, How to install, Documentation.",
       "Don't put a paragraph on the overview to explain a feature. The feature line links to the manual and the explanation lives there.",
       "Don't build a card grid. Same-size icon-heading-text cards in a row is a feature wall.",
-      "Don't hand-draw an interface icon or reach for an emoji. Take it from Lucide. The torch mark is the one authored shape.",
-      "Don't fill any surface but the header band with the accent."
+      "Don't fill any surface but the header band with the accent.",
+      "Don't hand-draw an icon or reach for an emoji, the mark included. Take it from Lucide."
     ]
   }
 }
