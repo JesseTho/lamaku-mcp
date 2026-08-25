@@ -172,7 +172,7 @@
         "flame"
       ],
       "rule": "Never hand-drawn, never an emoji. Always aria-hidden; the sentence beside it is the content.",
-      "logo": "The mark is Lucide flame in a terracotta square, at stroke 2.25 rather than 1.75 because it is small and sits on a filled ground. An authored torch came first and was discarded: a shape drawn beside a sourced set never quite shares its geometry. Lucide has no torch; flashlight is electric and flame-kindling reads as a campfire."
+      "logo": "The mark is a torch, composed rather than drawn from nothing: Lucide flame scaled to 62% over a collar and a shaft in the same grammar, at stroke 2.5 because the mark is small and sits on a filled ground. The flame carries vector-effect:non-scaling-stroke, without which it draws thinner than the handle and the whole thing reads as wrong. Lucide has no torch; flashlight is electric and flame-kindling is a campfire. A fully hand-drawn torch was tried first and discarded for not sharing the set's geometry."
     }
   },
   "components": [
@@ -321,6 +321,11 @@
         "name": "Lamaku's Own Palette",
         "body": "The palette is Lamaku's identity, not a chosen one: cream ground, terracotta accent, warm brown ink, after the torch its name means. A tool that writes into Lamaku should look like it belongs there. If Lamaku's identity changes this follows it.",
         "section": "colors"
+      },
+      {
+        "name": "Borrow The Geometry, Add Only What Is Missing",
+        "body": "The mark is Lucide's flame plus a collar and a shaft drawn in the same grammar, not a torch authored from scratch. Anything scaled inside it needs vector-effect:non-scaling-stroke, or it draws a thinner line than what it sits on.",
+        "section": "components"
       }
     ],
     "dos": [
@@ -346,7 +351,8 @@
       "Don't put a paragraph on the overview to explain a feature. The feature line links to the manual and the explanation lives there.",
       "Don't build a card grid. Same-size icon-heading-text cards in a row is a feature wall.",
       "Don't fill any surface but the header band with the accent.",
-      "Don't hand-draw an icon or reach for an emoji, the mark included. Take it from Lucide."
+      "Don't hand-draw an interface icon or reach for an emoji. Take it from Lucide.",
+      "Don't extend the mark without vector-effect:non-scaling-stroke on anything scaled."
     ]
   }
 }
