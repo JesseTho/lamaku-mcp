@@ -106,6 +106,10 @@ components:
     backgroundColor: "{colors.paper-shade}"
     textColor: "{colors.ink-secondary}"
     padding: "0.5rem 0.8rem"
+  capability-item:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    padding: "0.35rem 0 0.35rem 1.4rem"
   copy-button:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink-muted}"
@@ -142,11 +146,12 @@ nowhere else. It carries maybe two percent of the page's area. Everything around
 near-black, and hairline grey, because the accent only reads as a choice when nothing competes
 with it.
 
-The site is two pages sharing one stylesheet. The **overview** at `/` is the front door: a single
-prose column that states what the tool does and what it will not do at equal weight, then hands
-over four install commands. The **manual** at `/guide/` is the reference: three columns, dense
-tables, twelve sections. Same world, two compositions, and the composition is the only thing that
-differs.
+The site is two pages sharing one stylesheet, and they are deliberately unequal in weight. The
+**overview** at `/` opens the way a tool page is supposed to: a two-sentence tagline, then one
+copy-pastable block that installs it. Six lines on what it does and a list of links follow, and
+that is the whole page. It is held under 200 words, because a first attempt at 981 read as a wall
+and taught the rule. The **manual** at `/guide/` is where everything else lives: three columns,
+dense tables, twelve sections, 1,800 words.
 
 **Key Characteristics:**
 
@@ -253,10 +258,8 @@ characters, and it has no sticky nav on either side because there is nothing to 
 manual's wider `46rem` is deliberate and not drift: its tables need the room, and its prose is
 read in fragments rather than start to finish.
 
-One element breaks the overview's column. The two-inventory ledger widens to `calc(100% + 12rem)`
-and re-centres with `margin-left: 50%; transform: translateX(-50%)`, so it reads as the page's
-centrepiece rather than a list inside an article. Below `60rem` the breakout is dropped, and below
-`48rem` the two inventories stack.
+Nothing breaks that column. The overview is one measure from the masthead to the footer, which is
+most of why it reads quickly.
 
 ## Elevation & Depth
 
@@ -335,15 +338,23 @@ when the block is hovered, to `manoa-green` on its own hover or focus, and holds
 shaded ground for two seconds. The word is the state; the colour only agrees with it. A visually
 hidden `aria-live` region announces the same word.
 
-### The ledger
+### The install block
 
-Two `section` elements in an equal two-column grid, each headed by an `h3` over a `rule-strong`
-underline, each holding a description list. Terms are `0.9375rem` at 600 with a hairline above;
-descriptions are `0.875rem` in `ink-muted`.
+The overview's centrepiece and its only code block. Four lines, in order, that take someone from
+nothing to a registered server, with a copy button. It sits directly under the tagline, above
+every explanation, because someone who already knows they want it should not have to read past it.
 
-Equal columns are the whole argument, so nothing may tilt them: no colour on one side, no icon
-set, no count, no ordering that implies one is the exception. The right column is not styled as a
-warning.
+A single line of `ink-muted` beneath carries the prerequisites and the sandbox warning. That line
+is the entire safety brief on this page; the rest is in the manual.
+
+### Capability list
+
+Six lines on the overview, one clause each, no bold lead-in and no explanatory second line. A
+`0.4rem` Mānoa Green dot marks each item and nothing else does; there are no rules between rows,
+because a divider and a marker doing the same job is noise.
+
+The constraint is the component: if an item needs a sentence of explanation, it belongs in the
+manual, not here.
 
 ### Browser surfaces
 
@@ -381,11 +392,10 @@ white text. First tab stop on the page.
 - **Don't** add a shadow, a gradient, or a glow.
 - **Don't** use Mānoa Green as a background, a heading colour, or a card border. Links, current
   marker, focus ring, skip link.
-- **Don't** add a hero, a feature grid, a testimonial, or a call-to-action button, on either
-  page. The manual has no use for them, and the overview answers the same need with the ledger:
-  the honest inventory is the hero.
-- **Don't** style the two inventories differently from each other. Equal weight is the argument,
-  and any colour, icon or ordering that favours one side breaks it.
+- **Don't** add a hero, a feature grid, a testimonial, or a call-to-action button, on either page.
+  The overview's whole argument is that it can be read in thirty seconds.
+- **Don't** let the overview grow, and don't push the install block below anything. Every
+  addition is a subtraction from how fast the page reads, and the manual is one click away.
 - **Don't** put a UH logo, seal, or wordmark on the page. The project is not endorsed by the
   University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.
 - **Don't** let a heading level skip. `h2` to `h4` is a bug; the tool-index group labels are

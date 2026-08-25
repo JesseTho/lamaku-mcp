@@ -4,27 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>lamaku-mcp</title>
-<meta name="description" content="An MCP server for Lamakū, UH's D2L Brightspace instance. It reads your courses and writes to them: modules, pages, media, discussions, assignments, whole course packages. What it does and what it does not do, both stated up front.">
+<meta name="description" content="An MCP server for Lamakū, UH's D2L Brightspace instance. Describe a course module to your AI assistant and it builds it, with every write previewed first.">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site.css">
 <!--
-THESIS: The front door states what it does and what it will not do at equal
-weight, before it asks anyone to install anything. A reader should be able to
-rule it out in ninety seconds, which is the only honest way to earn the ones
-who do not.
+THESIS: A tagline and one copy-pastable block, the way a tool page is
+supposed to open. Everything a reference would say lives in the manual, and a
+front door that explains everything explains nothing.
 OWN-WORLD: Inherited whole from DESIGN.md. Same masthead, palette, system
-stack, hairlines and notes as the manual. No sidebar and no rail, because
-there is nothing here to navigate; the composition changed, the world did not.
-STORY: A UH instructor who has never heard of MCP learns what this is, reads
-the limits before the promises, sees what an hour of trying it costs, and
-copies four commands.
-FIRST VIEWPORT: Name, one sentence, the paragraph that explains MCP to someone
-who does not know it, and the two inventory headings already in reach.
-FORM: The Ledger, locked by the user from three dealt structures at surface
-scope. Seed 5994eeef, code-led.
+stack, hairlines. One short centred column, no nav either side.
+STORY: A UH instructor reads two sentences, copies one block, and is
+installed before deciding whether to read further.
+FIRST VIEWPORT: Name, the two-sentence tagline, the install block with its
+copy button, the requirements line, and the capability list.
+FORM: Under 200 words by design, after a first attempt at 981 read as a wall.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
-batched review, the contrast script green, and the surface brief written.
+batched review, the contrast script green, and the surface brief updated.
 -->
 </head>
 <body>
@@ -47,168 +43,45 @@ batched review, the contrast script green, and the surface brief written.
 <main id="content" class="solo">
 
   <h1>lamaku-mcp</h1>
-  <p class="tagline">An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace instance.</p>
+  <p class="tagline">An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace
+  instance. Describe a module to your AI assistant and it builds the module in your course.</p>
 
-  <p class="lede">You describe a module to your AI assistant. It builds the module in your course:
-  the pages, the uploaded video, the discussion, the assignment, the grade item. You approve each
-  write before it happens, and everything is created hidden until you say otherwise.</p>
+  <pre><code>git clone https://github.com/JesseTho/lamaku-mcp
+cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
+node dist/cli.js login
+claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
 
-  <p>MCP is the Model Context Protocol, a way for an assistant such as Claude to use tools outside
-  its own chat window. Installing this server hands your assistant 54 tools for Brightspace. It
-  runs on your own machine, signed in as you, with your permissions and no others.</p>
+  <p class="fine">Needs Node 20 or later, a Lamakū account, and an MCP client. Signing in opens a
+  browser for UH SSO. Point it at a <a href="guide/#writes">sandbox course</a> first.</p>
 
-  <p>Every other Brightspace MCP server is read-only. They check grades and due dates, which is
-  useful and much simpler. This one writes, and most of its design is about not damaging a live
-  course.</p>
+  <h2 id="does">What it does</h2>
 
-  <h2 id="ledger">What it does, and what it does not</h2>
+  <ul class="does">
+    <li>Reads your courses: modules, files, assignments, grades, discussions, quizzes</li>
+    <li>Writes content modules and authored HTML pages</li>
+    <li>Uploads video, images and PDFs into the course</li>
+    <li>Creates assignments, grade items, discussions, announcements, checklists</li>
+    <li>Imports a whole course package, which is how quizzes and rubrics get in</li>
+    <li>Previews every write before it happens, and withholds student names by default</li>
+  </ul>
 
-  <p>Both columns are the same answer. The right one is not a footnote, and each entry there says
-  what to do instead.</p>
+  <p>It cannot write quiz questions directly, author rubrics, or set grade values.
+  <a href="guide/#limits">The limits are listed in full</a>, with what to do instead.</p>
 
-  <div class="ledger">
-    <section>
-      <h3>It does</h3>
-      <p class="sub">Every write route below was verified by creating a real object in a sandbox
-      course and deleting it again.</p>
-      <dl>
-        <dt>Reads the whole course</dt>
-        <dd>Modules, topics, files, assignments, submissions, grades, announcements,
-          discussions, quizzes, checklists, deadlines.</dd>
-        <dt>Writes content modules and pages</dt>
-        <dd>Authored HTML, styled from a template, placed in the module order you ask
-          for.</dd>
-        <dt>Uploads media into the course</dt>
-        <dd>Images, video, audio, PDFs. Verified to 36 MB; the largest upload took 24
-          seconds.</dd>
-        <dt>Creates course objects</dt>
-        <dd>Links, announcements, assignments and their categories, grade items, discussion
-          forums and topics, checklists.</dd>
-        <dt>Imports a whole course package</dt>
-        <dd>Common Cartridge or a Brightspace <code>.zip</code>. This is how quizzes and
-          rubrics get in.</dd>
-        <dt>Previews every write before it lands</dt>
-        <dd>The first call returns what it would do and a single-use token. Nothing is written
-          until you spend it, and it expires in five minutes.</dd>
-        <dt>Withholds student identities by default</dt>
-        <dd>Names, usernames, emails and ids are replaced with stable pseudonyms before
-          anything reaches the model.</dd>
-        <dt>Creates everything hidden</dt>
-        <dd>Releasing content to students is a separate, deliberate step.</dd>
-      </dl>
-    </section>
+  <h2 id="docs">Documentation</h2>
 
-    <section>
-      <h3>It does not</h3>
-      <p class="sub">Verified against Lamakū at Learning Environment API version 1.96. These are
-      the real edges, not a roadmap.</p>
-      <dl>
-        <dt>Write quiz questions directly</dt>
-        <dd>Brightspace exposes no route for it. Import a cartridge instead, which is
-          verified: 4 quizzes, 17 questions, every answer key and feedback string intact.</dd>
-        <dt>Author rubrics</dt>
-        <dd>Needs API version 1.97. Lamakū serves 1.96. A Brightspace <code>.zip</code> import
-          carries rubrics today.</dd>
-        <dt>Write grade values</dt>
-        <dd>Untested. The sandbox has no student enrolments, and trying it in a live section
-          would alter a real record.</dd>
-        <dt>List grade items</dt>
-        <dd><code>get_grades</code> returns the calling user's own grades. Items can be created
-          and deleted by id, but not enumerated.</dd>
-        <dt>Create a course</dt>
-        <dd>Organisation-level administrative permission, which an instructor account does not
-          have. Request a sandbox from UH ITS.</dd>
-        <dt>Touch groups, sections, attendance or awards</dt>
-        <dd>Not implemented, and not expressible in either import format either.</dd>
-        <dt>Run without a browser</dt>
-        <dd>Sign-in captures a session through a real window, so this does not suit CI or a
-          headless server.</dd>
-        <dt>Work outside UH, provenly</dt>
-        <dd>OAuth is implemented against <code>auth.brightspace.com</code> but has never been
-          exercised on a non-UH instance.</dd>
-      </dl>
-    </section>
-  </div>
-
-  <h2 id="risk">Before you point it at a real course</h2>
-
-  <p>The thing worth understanding before installing is what happens when the assistant decides to
-  write something. It cannot simply write it.</p>
-
-  <p>A write call returns a preview: the object it would create, the course it would land in, and a
-  single-use token scoped to exactly that action. The write happens only when the token is spent,
-  and the token expires after five minutes. A delete previews the object's name and, for a forum,
-  its post count, so you see what you are about to lose.</p>
-
-  <div class="n">
-    <strong>Note</strong>
-    <p>Build in a sandbox course first. Sandboxes are per-instructor and requested from UH ITS.
-    Nothing here can undo a delete.</p>
-  </div>
-
-  <p>Student privacy works the same way, on by default rather than available on request. Names,
-  usernames, email addresses and institutional ids are replaced with stable pseudonyms before any
-  course data reaches the model, so <code>Student 4b21</code> stays the same person across a whole
-  session without ever being named.</p>
-
-  <h2 id="cost">What it costs to try</h2>
-
-  <dl class="cost">
-    <dt>Node.js 20 or later</dt>
-    <dd>Node 22 is also tested. Earlier versions will not run it.</dd>
-    <dt>A Lamakū account</dt>
-    <dd>Any UH account with course access. Sign-in goes through UH SSO and Duo.</dd>
-    <dt>A sandbox course</dt>
-    <dd>Requested from UH ITS. Strongly recommended before you go near a live section.</dd>
-    <dt>An MCP client</dt>
-    <dd>Claude Code, Claude Desktop, or anything else that speaks MCP.</dd>
-    <dt>About ten minutes</dt>
-    <dd>Install and first sign-in. Sessions last around a day of idleness, then you sign in
-    again.</dd>
-  </dl>
-
-  <h2 id="install">Install it</h2>
-
-  <p>Four steps. Each block has a copy button.</p>
-
-  <ol class="steps">
-    <li><strong>Clone and build</strong>
-      <pre><code>git clone https://github.com/JesseTho/lamaku-mcp
-cd lamaku-mcp
-pnpm install
-pnpm build</code></pre>
-    </li>
-    <li><strong>Sign in</strong>
-      <p>A browser window opens. Complete the UH sign-in and approve the Duo prompt yourself. The
-      session is stored on your own machine.</p>
-      <pre><code>node dist/cli.js login</code></pre>
-    </li>
-    <li><strong>Register it with your assistant</strong>
-      <p>For Claude Code, run this from anywhere:</p>
-      <pre><code>claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js</code></pre>
-      <p>For another client, add the same command to its MCP configuration. The
-      <a href="guide/#install">manual</a> has the JSON.</p>
-    </li>
-    <li><strong>Check it worked</strong>
-      <p>Then ask your assistant to list your courses. If the session has expired, sign in again
-      with the command from step two.</p>
-      <pre><code>node dist/cli.js status</code></pre>
-    </li>
-  </ol>
-
-  <h2 id="next">Then read the manual</h2>
-
-  <p>The <a href="guide/">manual</a> is the reference: how a write preview actually reads, the order
-  of operations for building a course from nothing, the page templates, what each import format
-  carries, all 54 tools by name, and what to do when a call comes back 403.</p>
-
-  <p>The <a href="https://github.com/JesseTho/lamaku-mcp">repository</a> holds the source, the test
-  suite, and the scripts that verified every claim on this page.</p>
+  <ul class="next">
+    <li><a href="guide/#writes">How writes work</a></li>
+    <li><a href="guide/#course">Building a course</a></li>
+    <li><a href="guide/#imports">Course imports</a></li>
+    <li><a href="guide/#privacy">Student privacy</a></li>
+    <li><a href="guide/#tools">Tool index</a></li>
+    <li><a href="guide/#troubleshooting">Troubleshooting</a></li>
+  </ul>
 
   <footer>
     <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
-    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L. Check UH's
-    acceptable-use policy before connecting it to your account.</p>
+    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L.</p>
   </footer>
 
 </main>
