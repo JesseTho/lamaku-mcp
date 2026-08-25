@@ -4,20 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>lamaku-mcp</title>
-<meta name="description" content="An MCP server for Lamakū, UH's D2L Brightspace instance. Describe a course module to your AI assistant and it builds it, with every write previewed first.">
+<meta name="description" content="Build your Lamakū courses with natural language. An MCP server for Lamakū, the University of Hawaiʻi's Brightspace.">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site.css">
 <!--
-THESIS: A tagline and one copy-pastable block, the way a tool page is
-supposed to open. Everything a reference would say lives in the manual, and a
-front door that explains everything explains nothing.
+THESIS: The landing lists and the manual explains. A tagline, one
+copy-pastable block, seven one-line features, links out. The moment a feature
+needs a paragraph it has become documentation and belongs on the other page.
 OWN-WORLD: Inherited whole from DESIGN.md. Same masthead, palette, system
-stack, hairlines. One short centred column, no nav either side.
+stack, hairlines, and the same left sidebar as the manual, carrying the
+documentation. No on-this-page rail: four sections do not need one.
 STORY: A UH instructor reads two sentences, copies one block, and is
 installed before deciding whether to read further.
-FIRST VIEWPORT: Name, the two-sentence tagline, the install block with its
-copy button, the requirements line, and the capability list.
+FIRST VIEWPORT: Name, a one-line tagline, the install block with its copy
+button, the requirements line, and the whole feature list.
 FORM: Under 200 words by design, after a first attempt at 981 read as a wall.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 batched review, the contrast script green, and the surface brief updated.
@@ -88,12 +89,44 @@ batched review, the contrast script green, and the surface brief updated.
   </div>
 </header>
 
-<main id="content" class="solo">
+<div class="shell duo" id="top">
+
+  <nav class="sidebar" aria-label="Site sections">
+    <details open>
+    <summary>Contents</summary>
+    <div class="sidebar-body">
+    <h2>Start</h2>
+    <ul>
+      <li><a href="#install">How to install</a></li>
+      <li><a href="#features">Features</a></li>
+    </ul>
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="guide/#scratch">Setting up from scratch</a></li>
+      <li><a href="guide/#writes">How changes are approved</a></li>
+      <li><a href="guide/#course">Building a course</a></li>
+      <li><a href="guide/#imports">Course imports</a></li>
+      <li><a href="guide/#privacy">Student privacy</a></li>
+      <li><a href="guide/#tools">Tool index</a></li>
+      <li><a href="guide/#limits">Known limits</a></li>
+      <li><a href="guide/#troubleshooting">Troubleshooting</a></li>
+    </ul>
+    <h2>Project</h2>
+    <ul>
+      <li><a href="guide/">Full manual</a></li>
+      <li><a href="https://github.com/JesseTho/lamaku-mcp">Repository</a></li>
+    </ul>
+    </div>
+    </details>
+  </nav>
+  <script>/* no-flash: collapse the nav before paint, not after */
+  if (window.matchMedia && matchMedia('(max-width:64rem)').matches)
+    document.querySelector('.sidebar details').open = false;</script>
+
+  <main id="content" class="solo">
 
   <h1>lamaku-mcp</h1>
-  <p class="tagline">Build your Lamakū courses by describing them. Tell your AI assistant what
-  you want in a module and it creates the pages, uploads the video, and sets up the discussion and
-  the assignment. You see every change before it is made.</p>
+  <p class="tagline">Build your Lamakū courses with natural language.</p>
 
   <h2 id="install">How to install</h2>
 
@@ -102,53 +135,33 @@ cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
 node dist/cli.js login
 claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
 
-  <p class="fine">You will need Node.js 20 or later, your usual Lamakū login, and an assistant
-  that can use outside tools, such as Claude Code. Signing in opens a browser for UH login and
-  Duo. Try it on a sandbox course first: deletes cannot be undone.</p>
+  <p class="fine">Needs Node.js 20+ and an MCP client.
+  <a href="guide/#scratch">Setting up from scratch</a>.</p>
 
   <h2 id="features">Features</h2>
 
   <ul class="does">
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-read"/></svg><span>Reads the courses you already teach, so you can ask what is in them</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-read"/></svg><span>Reads the courses you already teach</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-page"/></svg><span>Creates content modules and pages</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg><span>Uploads video, images and PDFs</span></li>
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-task"/></svg><span>Sets up assignments, grade items, discussions, announcements and checklists</span></li>
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-package"/></svg><span>Imports a course package, which is how quizzes and rubrics come across</span></li>
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-preview"/></svg><span>Shows you every change first, and adds it hidden from students</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-task"/></svg><span>Sets up assignments, grade items, discussions and checklists</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-package"/></svg><span>Imports course packages, including quizzes and rubrics</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-preview"/></svg><span>Shows every change before it is made, and adds it hidden</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg><span>FERPA guard: prevents student data leaking to LLMs</span></li>
   </ul>
 
-  <p>It cannot build quiz questions or rubrics on its own, and it does not enter grades.
-  <a href="guide/#limits">The full list of limits</a> says what to do instead.</p>
-
-  <div class="card">
-    <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>
-    <h3>FERPA guard</h3>
-    <p>Student names, usernames and email addresses do not leave Lamakū. Before any course data
-    goes to the assistant, each student is swapped for an anonymous label such as
-    <code>student:4f2a91</code>. The label stays the same throughout, so you can still ask about
-    the student who missed the third lab without naming anyone.</p>
-    <p class="fine">On by default. Co-instructors are not anonymised, and
-    <a href="guide/#privacy">you can ask for real names</a> when you need them.</p>
-  </div>
-
-  <h2 id="docs">Documentation</h2>
-
-  <ul class="next">
-    <li><a href="guide/#writes">How changes are approved</a></li>
-    <li><a href="guide/#course">Building a course</a></li>
-    <li><a href="guide/#imports">Course imports</a></li>
-    <li><a href="guide/#privacy">Student privacy</a></li>
-    <li><a href="guide/#tools">Tool index</a></li>
-    <li><a href="guide/#troubleshooting">Troubleshooting</a></li>
-  </ul>
+  <p class="fine">It cannot create quiz questions or rubrics directly, or enter grades.
+  <a href="guide/#limits">Full list of limits</a>.</p>
 
   <footer>
     <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
     <p>Icons by <a href="https://lucide.dev">Lucide</a>, ISC licensed.</p>
-    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L.</p>
+    <p>Not endorsed by the University of Hawaiʻi or D2L.</p>
   </footer>
 
-</main>
+  </main>
+
+</div>
 
 <script src="site.js" defer></script>
 </body>

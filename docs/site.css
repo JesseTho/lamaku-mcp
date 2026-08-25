@@ -97,8 +97,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
   gap:2.5rem;max-width:100rem;margin:0 auto;padding:0 1.5rem;
   align-items:start;
 }
+/* The overview has no rail: nine sections is a page that needs one, four is a
+   page that does not. */
+.shell.duo{grid-template-columns:var(--sidebar) minmax(0,44rem)}
+
 @media (max-width:64rem){
-  .shell{grid-template-columns:minmax(0,1fr);gap:0}
+  .shell,.shell.duo{grid-template-columns:minmax(0,1fr);gap:0}
   .sidebar,.rail{position:static;max-height:none;border:0;padding:0}
   .rail{display:none}
   .sidebar{border-bottom:1px solid var(--rule);margin-bottom:1.75rem;padding:.35rem 0 .5rem}
@@ -245,7 +249,7 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .copy[data-done]{color:var(--accent);border-color:var(--accent);background:var(--ground-alt)}
 
 /* ---------- landing ---------- */
-.solo{max-width:38rem;margin:0 auto;padding:2.75rem 1.5rem 5rem}
+.solo{max-width:35rem;padding:2.25rem 0 5rem;min-width:0}
 .lede{font-size:1.1875rem;line-height:1.5;color:var(--ink);margin:0 0 1.5rem}
 .solo h2{margin-top:3rem}
 .solo > h2:first-of-type{margin-top:2rem}
@@ -270,23 +274,6 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .does li{display:flex;gap:.8rem;align-items:flex-start;padding:.4rem 0}
 .does .ic{color:var(--accent);margin-top:.22rem}
 
-/* ---------- feature card ----------
-   A hairline box, flat like everything else. One of these, not a grid of them:
-   the moment there are three it has become a feature wall. */
-.card{
-  display:grid;grid-template-columns:auto 1fr;gap:0 .9rem;
-  border:1px solid var(--rule);border-radius:4px;
-  padding:1rem 1.1rem;margin:1.6rem 0 0;
-}
-.card .ic{width:1.5rem;height:1.5rem;color:var(--accent);grid-row:1/span 3;margin-top:.1rem}
-.card h3{margin:0 0 .3rem;font-size:1rem}
-.card p{margin:0;font-size:.9375rem;color:var(--ink-2)}
-.card .fine{margin-top:.5rem}
 
-/* Where to go next, one destination per line. Seven links inside a sentence
-   is a wall in miniature. */
-.next{list-style:none;margin:0 0 1rem;padding:0;font-size:.9375rem}
-.next li{padding:.3rem 0}
-.next span{color:var(--ink-3)}
 
 

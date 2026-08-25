@@ -57,6 +57,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <ul>
       <li><a href="#about">What it is</a></li>
       <li><a href="#requirements">Requirements</a></li>
+      <li><a href="#scratch">From scratch</a></li>
       <li><a href="#install">Installation</a></li>
       <li><a href="#configuration">Configuration</a></li>
     </ul>
@@ -115,6 +116,47 @@ node dist/cli.js login</code></pre>
       <dt>An MCP client</dt>
       <dd>Claude Code, Claude Desktop, or anything that speaks MCP over stdio.</dd>
     </dl>
+
+    <h2 id="scratch">Setting up from scratch</h2>
+
+    <p>For a machine with none of this on it yet. If <code>node --version</code> already prints
+    <code>v20</code> or higher and <code>pnpm --version</code> prints anything at all, skip to
+    <a href="#install">Installation</a>.</p>
+
+    <ol class="steps">
+      <li><strong>Open a terminal</strong>
+        <p>On macOS, Terminal, in Applications then Utilities. On Windows, Windows Terminal or
+        PowerShell from the Start menu. Everything below is typed there, one line at a time,
+        pressing Enter after each.</p>
+      </li>
+      <li><strong>Install Node.js</strong>
+        <p>Download the LTS installer from <a href="https://nodejs.org">nodejs.org</a> and run it,
+        accepting the defaults. Close the terminal and open a new one afterwards, then check it
+        took:</p>
+        <pre><code>node --version</code></pre>
+        <p>Anything from <code>v20</code> up is fine. Earlier versions will not run this.</p>
+      </li>
+      <li><strong>Install pnpm</strong>
+        <p>npm arrives with Node, and installs pnpm in one command:</p>
+        <pre><code>npm install -g pnpm</code></pre>
+        <p>On macOS a permissions error here is normal; <code>sudo npm install -g pnpm</code>
+        clears it. <code>corepack enable pnpm</code> is an alternative that needs no download.</p>
+      </li>
+      <li><strong>Install an MCP client</strong>
+        <p>Claude Code is the one these instructions assume. Claude Desktop works too and is
+        installed as an ordinary application instead.</p>
+        <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+      </li>
+      <li><strong>Ask UH ITS for a sandbox course</strong>
+        <p>A sandbox is an empty course only you can see. Build there before going near a section
+        students are enrolled in. Nothing in this server can undo a delete, and a mistake in a live
+        course is a mistake in front of real students.</p>
+      </li>
+      <li><strong>Carry on</strong>
+        <p>Everything is in place. <a href="#install">Installation</a> is four commands from
+        here.</p>
+      </li>
+    </ol>
 
     <h2 id="install">Installation</h2>
 
@@ -370,7 +412,7 @@ pnpm build</code></pre>
     <footer>
       <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
       <p>Icons by <a href="https://lucide.dev">Lucide</a>, ISC licensed.</p>
-    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L.</p>
+    <p>Not endorsed by the University of Hawaiʻi or D2L.</p>
     </footer>
   </main>
 
@@ -379,6 +421,7 @@ pnpm build</code></pre>
     <ul>
       <li><a href="#about">What it is</a></li>
       <li><a href="#requirements">Requirements</a></li>
+      <li><a href="#scratch">From scratch</a></li>
       <li><a href="#install">Installation</a></li>
       <li><a href="#configuration">Configuration</a></li>
       <li><a href="#writes">How writes work</a></li>
