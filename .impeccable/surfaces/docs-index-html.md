@@ -36,7 +36,10 @@ They copy one block before deciding whether to read any further, which is the po
 
 ## Content
 
-A one-line tagline, one install block, seven one-line features, links out. About 170 words.
+A one-line tagline, one install block, seven one-line features. About 145 words.
+
+Documentation is not a section at the bottom. It is the left sidebar, shared with the manual, so
+it sits at the top of the page where someone looking for it will look.
 
 **The overview lists and the manual explains.** That is the division, and it is not about length.
 A feature here is one line: what it does, no how and no why. The FERPA guard gets seven words on

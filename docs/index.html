@@ -13,7 +13,8 @@ THESIS: The landing lists and the manual explains. A tagline, one
 copy-pastable block, seven one-line features, links out. The moment a feature
 needs a paragraph it has become documentation and belongs on the other page.
 OWN-WORLD: Inherited whole from DESIGN.md. Same masthead, palette, system
-stack, hairlines. One short centred column, no nav either side.
+stack, hairlines, and the same left sidebar as the manual, carrying the
+documentation. No on-this-page rail: four sections do not need one.
 STORY: A UH instructor reads two sentences, copies one block, and is
 installed before deciding whether to read further.
 FIRST VIEWPORT: Name, a one-line tagline, the install block with its copy
@@ -88,7 +89,41 @@ batched review, the contrast script green, and the surface brief updated.
   </div>
 </header>
 
-<main id="content" class="solo">
+<div class="shell duo" id="top">
+
+  <nav class="sidebar" aria-label="Site sections">
+    <details open>
+    <summary>Contents</summary>
+    <div class="sidebar-body">
+    <h2>Start</h2>
+    <ul>
+      <li><a href="#install">How to install</a></li>
+      <li><a href="#features">Features</a></li>
+    </ul>
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="guide/#scratch">Setting up from scratch</a></li>
+      <li><a href="guide/#writes">How changes are approved</a></li>
+      <li><a href="guide/#course">Building a course</a></li>
+      <li><a href="guide/#imports">Course imports</a></li>
+      <li><a href="guide/#privacy">Student privacy</a></li>
+      <li><a href="guide/#tools">Tool index</a></li>
+      <li><a href="guide/#limits">Known limits</a></li>
+      <li><a href="guide/#troubleshooting">Troubleshooting</a></li>
+    </ul>
+    <h2>Project</h2>
+    <ul>
+      <li><a href="guide/">Full manual</a></li>
+      <li><a href="https://github.com/JesseTho/lamaku-mcp">Repository</a></li>
+    </ul>
+    </div>
+    </details>
+  </nav>
+  <script>/* no-flash: collapse the nav before paint, not after */
+  if (window.matchMedia && matchMedia('(max-width:64rem)').matches)
+    document.querySelector('.sidebar details').open = false;</script>
+
+  <main id="content" class="solo">
 
   <h1>lamaku-mcp</h1>
   <p class="tagline">Build your Lamakū courses with natural language.</p>
@@ -118,24 +153,15 @@ claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
   <p class="fine">It cannot create quiz questions or rubrics directly, or enter grades.
   <a href="guide/#limits">Full list of limits</a>.</p>
 
-  <h2 id="docs">Documentation</h2>
-
-  <ul class="next">
-    <li><a href="guide/#writes">How changes are approved</a></li>
-    <li><a href="guide/#course">Building a course</a></li>
-    <li><a href="guide/#imports">Course imports</a></li>
-    <li><a href="guide/#privacy">Student privacy</a></li>
-    <li><a href="guide/#tools">Tool index</a></li>
-    <li><a href="guide/#troubleshooting">Troubleshooting</a></li>
-  </ul>
-
   <footer>
     <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
     <p>Icons by <a href="https://lucide.dev">Lucide</a>, ISC licensed.</p>
-    <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L.</p>
+    <p>Not endorsed by the University of Hawaiʻi or D2L.</p>
   </footer>
 
-</main>
+  </main>
+
+</div>
 
 <script src="site.js" defer></script>
 </body>

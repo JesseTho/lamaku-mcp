@@ -148,8 +148,10 @@ with it.
 
 The site is two pages sharing one stylesheet, and they are deliberately unequal in weight. The
 **overview** at `/` opens the way a tool page is supposed to: a one-line tagline, then one
-copy-pastable block that installs it. Seven one-line features and a list of links follow, and that
-is the whole page. It runs about 156 words. The **manual** at `/guide/` is where everything else
+copy-pastable block that installs it. Seven one-line features follow, and that is the whole page.
+It runs about 145 words. The documentation lives in the left sidebar, at the top of the page,
+because a reader who wants the manual should not have to reach the bottom of the overview to find
+it. The **manual** at `/guide/` is where everything else
 lives: three columns, dense tables, twelve sections, 1,800 words.
 
 The division between them is not length, it is register. **The overview lists. The manual
@@ -263,13 +265,14 @@ the full list rather than a control that will not open.
 Vertical rhythm runs on the type: `1rem` between paragraphs, `1.4rem` after a table or note,
 `2rem` before a subsection, `3rem` before a section.
 
-The overview uses none of that grid. It is one centred column at `38rem`, which measures about 70
-characters, and it has no sticky nav on either side because there is nothing to navigate. The
-manual's wider `46rem` is deliberate and not drift: its tables need the room, and its prose is
-read in fragments rather than start to finish.
+The overview shares that grid in a two-column variant, `.shell.duo`: the same `17rem` sidebar and
+a `44rem` track, with no on-this-page rail. Nine sections is a page that needs a rail; four is a
+page that does not. Its content column is `35rem`, tighter than the manual's `46rem` because the
+manual's tables need room its prose does not.
 
-Nothing breaks that column. The overview is one measure from the masthead to the footer, which is
-most of why it reads quickly.
+The sidebar is the same component on both pages, and on the overview it carries the documentation:
+Start, Documentation, Project. Nothing breaks the content column, which is most of why the page
+reads quickly.
 
 ## Elevation & Depth
 
