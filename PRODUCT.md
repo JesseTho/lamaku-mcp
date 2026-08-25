@@ -65,7 +65,8 @@ Hard limits that shape what the site can promise:
 
 - **Quiz questions cannot be created directly.** Brightspace exposes `GET` and no create route.
   A Common Cartridge import creates them, verified with 17 questions, their answer keys and their
-  feedback.
+  feedback. The server imports a package; it does not author one, so the cartridge has to come
+  from Brightspace's own export or from an authoring tool.
 - **Rubric authoring needs `le 1.97+`.** Lamakū serves `1.96`. A Brightspace `.zip` import carries
   rubrics today.
 - **Grade value writing is untested**, because the sandbox has no student enrolments and trying it

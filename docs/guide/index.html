@@ -345,6 +345,29 @@ pnpm build</code></pre>
 
     <p>The Brightspace format is the practical way to move a rubric between courses while the rubric API remains unavailable at this Lamakū version.</p>
 
+    <h3>Where a package comes from</h3>
+
+    <p><strong>This server imports a package. It does not build one.</strong>
+    <code>import_course_package</code> takes an absolute path to a file already on your machine,
+    so something else has to produce it first.</p>
+
+    <ul>
+      <li><strong>Brightspace itself.</strong> Export a course package from another course you
+      have access to. This is the route for moving a rubric, because the Brightspace format
+      carries rubrics and the rubric API does not answer at this version.</li>
+      <li><strong>An authoring tool.</strong> Anything that emits IMS Common Cartridge. Quiz
+      questions ride in as QTI, which is what makes them appear at all.</li>
+      <li><strong>A publisher or another LMS.</strong> Common Cartridge is the interchange
+      format, so a package exported from Canvas or Moodle imports here.</li>
+    </ul>
+
+    <div class="n w">
+      <strong>There is no tool here that authors a cartridge</strong>
+      <p>If you have no package and no course to export from, quiz questions cannot be created by
+      this server at all. That is the real shape of the limitation, and it is worth knowing before
+      you plan a course around it.</p>
+    </div>
+
     <div class="n w">
       <strong>Import adds, it does not replace</strong>
       <p>Importing the same package twice produces two copies of everything it contains. Import into an empty course, or verify there is no overlap first.</p>
