@@ -210,12 +210,12 @@
       "css": ".ds-cw { position: relative; } .ds-cw > .ds-pre2 { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8125rem; line-height: 1.6; background: var(--ground-code, #f2f4f2); border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: .9rem 1rem; padding-right: 5rem; margin: 0; overflow-x: auto; color: var(--ink, #1a1c1a); } .ds-copy { position: absolute; top: .5rem; right: .5rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .6875rem; line-height: 1; padding: .4rem .55rem; cursor: pointer; color: var(--ink-3, #646b65); background: var(--ground, #fff); border: 1px solid var(--rule, #d9ddd9); border-radius: 3px; transition: color .12s, border-color .12s, background .12s; } .ds-cw:hover .ds-copy { color: var(--ink-2, #414742); border-color: var(--rule-strong, #868d87); } .ds-copy:hover, .ds-copy:focus-visible { color: var(--accent, #024731); border-color: var(--accent, #024731); outline: none; } .ds-copy[data-done] { color: var(--accent, #024731); border-color: var(--accent, #024731); background: var(--ground-alt, #f6f7f6); }"
     },
     {
-      "name": "The ledger",
+      "name": "Capability list",
       "kind": "custom",
-      "refersTo": "table-header",
-      "description": "Two facing inventories at equal weight. Nothing may tilt them: no colour on one side, no icons, no counts, no ordering that implies one is the exception.",
-      "html": "<div class=\"ds-ledger\"><section><h3>It does</h3><dl><dt>Reads the whole course</dt><dd>Modules, topics, files, assignments, grades, discussions.</dd><dt>Previews every write before it lands</dt><dd>Nothing is written until you spend a single-use token.</dd></dl></section><section><h3>It does not</h3><dl><dt>Write quiz questions directly</dt><dd>Brightspace exposes no route for it. Import a cartridge instead.</dd><dt>Write grade values</dt><dd>Untested. The sandbox has no student enrolments.</dd></dl></section></div>",
-      "css": ".ds-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.5rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-ledger h3 { margin: 0 0 .2rem; padding-bottom: .5rem; font-size: 1rem; font-weight: 600; border-bottom: 1px solid var(--rule-strong, #868d87); } .ds-ledger dl { margin: .8rem 0 0; } .ds-ledger dt { font-weight: 600; font-size: .9375rem; padding-top: .65rem; border-top: 1px solid var(--rule, #d9ddd9); } .ds-ledger dl > dt:first-of-type { border-top: 0; padding-top: .2rem; } .ds-ledger dd { margin: .15rem 0 0; padding-bottom: .65rem; color: var(--ink-3, #646b65); font-size: .875rem; } @media (max-width: 48rem) { .ds-ledger { grid-template-columns: 1fr; } .ds-ledger > section + section { margin-top: 2.5rem; } }"
+      "refersTo": "capability-item",
+      "description": "Six lines on the overview, one clause each. If an item needs a sentence of explanation it belongs in the manual, not here.",
+      "html": "<ul class=\"ds-does\"><li>Reads your courses: modules, files, assignments, grades, discussions, quizzes</li><li>Writes content modules and authored HTML pages</li><li>Uploads video, images and PDFs into the course</li><li>Withholds student names from the model by default</li></ul>",
+      "css": ".ds-does { list-style: none; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.65; color: var(--ink, #1a1c1a); } .ds-does li { padding: .35rem 0 .35rem 1.4rem; position: relative; } .ds-does li::before { content: \"\"; position: absolute; left: .15rem; top: .85rem; width: .4rem; height: .4rem; border-radius: 50%; background: var(--accent, #024731); }"
     }
   ],
   "narrative": {
@@ -227,7 +227,7 @@
       "Hairline rules instead of shadows. The system is entirely flat.",
       "Tables and notes are first-class structure, not decoration.",
       "WCAG 2.2 AA verified by script, not assumed.",
-      "Two pages, one stylesheet: an overview that persuades and a manual that references. Same world, different composition."
+      "Two pages, one stylesheet, deliberately unequal: a front door under 200 words that opens on the install command, and a manual carrying everything else."
     ],
     "rules": [
       {
@@ -251,9 +251,9 @@
         "section": "elevation"
       },
       {
-        "name": "The Equal Column Rule",
-        "body": "The two inventories on the overview carry the same typographic rank. No colour on one side, no icon set, no count, no ordering that implies one is the exception. Equal weight is the argument the page makes.",
-        "section": "components"
+        "name": "The Tagline And The Block",
+        "body": "The overview opens with a two-sentence tagline and one copy-pastable install block, in that order, above every explanation. It is held under 200 words. A first attempt at 981 read as a wall, which is what taught the rule.",
+        "section": "layout"
       }
     ],
     "dos": [
@@ -271,8 +271,8 @@
       "Don't use Mānoa Green as a background, a heading colour, or a card border. Links, current marker, focus ring, skip link.",
       "Don't put a UH logo, seal, or wordmark on the page. The project is not endorsed by the University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.",
       "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason.",
-      "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The manual has no use for them, and the overview answers the same need with the ledger: the honest inventory is the hero.",
-      "Don't style the two inventories differently from each other. Equal weight is the argument, and any colour, icon or ordering that favours one side breaks it."
+      "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The overview's whole argument is that it can be read in thirty seconds.",
+      "Don't let the overview grow, and don't push the install block below anything."
     ]
   }
 }

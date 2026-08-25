@@ -241,44 +241,25 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 /* ---------- landing ---------- */
 .solo{max-width:38rem;margin:0 auto;padding:2.75rem 1.5rem 5rem}
 .lede{font-size:1.1875rem;line-height:1.5;color:var(--ink);margin:0 0 1.5rem}
-.solo h2{margin-top:3.25rem}
+.solo h2{margin-top:3rem}
 .solo pre{white-space:pre-wrap;overflow-wrap:break-word}
 
-/* The two inventories. Equal columns, equal weight: the limits are not a
-   footnote to the capabilities, they are the other half of the same answer. */
-.ledger{
-  display:grid;grid-template-columns:1fr 1fr;gap:0 2.5rem;margin:.5rem 0 0;
-  width:calc(100% + 12rem);margin-left:50%;transform:translateX(-50%);
-}
-@media (max-width:60rem){
-  .ledger{width:100%;margin-left:0;transform:none}
-}
-.ledger > section{min-width:0}
-.ledger h3{
-  margin:0 0 .2rem;padding-bottom:.5rem;font-size:1rem;
-  border-bottom:1px solid var(--rule-strong);
-}
-.ledger .sub{font-size:.8125rem;color:var(--ink-3);margin:.5rem 0 0}
-.ledger dl{margin:.8rem 0 0}
-.ledger dt{
-  font-weight:600;font-size:.9375rem;padding-top:.65rem;
-  border-top:1px solid var(--rule);
-}
-.ledger dl > dt:first-of-type{border-top:0;padding-top:.2rem}
-.ledger dd{
-  margin:.15rem 0 0;padding-bottom:.65rem;
-  color:var(--ink-3);font-size:.875rem;
-}
-@media (max-width:48rem){
-  .ledger{grid-template-columns:minmax(0,1fr);gap:0}
-  .ledger > section + section{margin-top:2.5rem}
+/* One line each, no bold lead-in, no explanatory second line. The list is
+   scanned in a few seconds or it is not doing its job. */
+.solo > pre{margin-top:1.4rem}
+.fine{font-size:.875rem;color:var(--ink-3);margin:0 0 1rem}
+
+.does{list-style:none;margin:0 0 1.5rem;padding:0}
+.does li{padding:.35rem 0 .35rem 1.4rem;position:relative}
+.does li::before{
+  content:"";position:absolute;left:.15rem;top:.85rem;
+  width:.4rem;height:.4rem;border-radius:50%;background:var(--accent);
 }
 
-/* ---------- cost line ---------- */
-dl.cost{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1.2rem}
-dl.cost dt{font-weight:600;font-size:.9375rem;white-space:nowrap}
-dl.cost dd{margin:0;font-size:.9375rem;color:var(--ink-2)}
-@media (max-width:34rem){
-  dl.cost{grid-template-columns:minmax(0,1fr);gap:0}
-  dl.cost dd{margin:0 0 .8rem}
-}
+/* Where to go next, one destination per line. Seven links inside a sentence
+   is a wall in miniature. */
+.next{list-style:none;margin:0 0 1rem;padding:0;font-size:.9375rem}
+.next li{padding:.3rem 0}
+.next span{color:var(--ink-3)}
+
+
