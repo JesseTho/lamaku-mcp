@@ -69,6 +69,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <li><a href="#course">Building a course</a></li>
       <li><a href="#templates">Page templates</a></li>
       <li><a href="#imports">Course imports</a></li>
+      <li><a href="#quizzes-in-practice">Setting up a quiz</a></li>
     </ul>
     <h2>Reference</h2>
     <ul>
@@ -347,32 +348,54 @@ pnpm build</code></pre>
 
     <h3>Where a package comes from</h3>
 
-    <p><strong>This server imports a package. It does not build one.</strong>
-    <code>import_course_package</code> takes an absolute path to a file already on your machine,
-    so something else has to produce it first.</p>
+    <p><code>import_course_package</code> reads a file from the machine the server runs on, which
+    is your machine, the same one your assistant is working on. So the assistant can write a
+    package and then import it, and for quizzes that is the normal route rather than a
+    workaround.</p>
+
+    <p>This is how quiz questions get made at all. Brightspace exposes no question-creation route,
+    so the assistant writes a Common Cartridge carrying QTI and imports it. Verified on a real
+    course: four quizzes, seventeen questions, every answer key and every feedback string intact.
+    Nothing was handed over by hand.</p>
+
+    <p><a href="#quizzes-in-practice">Setting up a quiz</a> below walks the sequence.</p>
+
+    <p>Two other sources, for packages you are not authoring:</p>
 
     <ul>
-      <li><strong>Brightspace itself.</strong> Export a course package from another course you
-      have access to. This is the route for moving a rubric, because the Brightspace format
-      carries rubrics and the rubric API does not answer at this version.</li>
-      <li><strong>An authoring tool.</strong> Anything that emits IMS Common Cartridge. Quiz
-      questions ride in as QTI, which is what makes them appear at all.</li>
-      <li><strong>A publisher or another LMS.</strong> Common Cartridge is the interchange
-      format, so a package exported from Canvas or Moodle imports here.</li>
+      <li><strong>Brightspace's own export</strong>, from another course you have access to. This
+      is the route for <strong>rubrics</strong>: they ride in the Brightspace <code>.zip</code>
+      format, and generating that format from scratch is not something this project has tested.</li>
+      <li><strong>Another LMS or a publisher.</strong> Common Cartridge is the interchange format,
+      so a package exported from Canvas or Moodle imports here.</li>
     </ul>
 
-    <div class="n w">
-      <strong>There is no tool here that authors a cartridge</strong>
-      <p>If you have no package and no course to export from, quiz questions cannot be created by
-      this server at all. That is the real shape of the limitation, and it is worth knowing before
-      you plan a course around it.</p>
-    </div>
+    <h3 id="quizzes-in-practice">Setting up a quiz</h3>
+
+    <p>Two tools, in this order, because they do different halves of the job.</p>
+
+    <ol class="steps">
+      <li><strong>The questions</strong>
+        <p>Your assistant writes a Common Cartridge containing the quiz and its QTI questions,
+        then imports it. The questions arrive with their answer keys and their per-answer
+        feedback.</p>
+        <pre><code>import_course_package(course, filePath)</code></pre>
+      </li>
+      <li><strong>The settings, if the cartridge did not carry them</strong>
+        <p><code>create_quiz</code> makes a quiz shell and everything around it: open and close
+        dates, attempts allowed, a time limit, shuffling, hints, whether points are shown. It
+        cannot add questions, which is the whole reason step one exists.</p>
+        <pre><code>create_quiz(course, name, timeLimitMinutes, attemptsAllowed, ...)</code></pre>
+      </li>
+    </ol>
 
     <div class="n w">
-      <strong>Import adds, it does not replace</strong>
-      <p>Importing the same package twice produces two copies of everything it contains. Import into an empty course, or verify there is no overlap first.</p>
+      <strong>Importing twice makes two of everything</strong>
+      <p>Import adds, it never replaces. Import into an empty course, or check that the package
+      does not overlap what is already there.</p>
     </div>
 
+    
     <h2 id="tools">Tool index</h2>
 
     <p>Run <code>pnpm tools</code> for the current list with full signatures.</p>
@@ -416,7 +439,7 @@ pnpm build</code></pre>
         <tbody>
           <tr>
             <th scope="row">Quiz questions, directly</th><td>Unavailable</td>
-            <td>Brightspace exposes <code>GET</code> and no create route, so <code>create_quiz</code> produces an empty shell. Import a cartridge instead; this is verified.</td>
+            <td>Brightspace exposes <code>GET</code> and no create route, so <code>create_quiz</code> makes the shell and its settings only. The questions come from a cartridge your assistant writes and imports, which is verified. See <a href="#quizzes-in-practice">Setting up a quiz</a>.</td>
           </tr>
           <tr>
             <th scope="row">Rubric authoring</th><td>Version-blocked</td>
@@ -482,6 +505,7 @@ pnpm build</code></pre>
       <li><a href="#course">Building a course</a></li>
       <li><a href="#templates">Page templates</a></li>
       <li><a href="#imports">Course imports</a></li>
+      <li><a href="#quizzes-in-practice">Setting up a quiz</a></li>
       <li><a href="#tools">Tool index</a></li>
       <li><a href="#privacy">Student privacy</a></li>
       <li><a href="#limits">Known limitations</a></li>
