@@ -232,6 +232,9 @@ The `verify-*.mjs` scripts are integration checks and stay manual. They need a l
 `delete_content_topic`, `delete_discussion_forum`, `delete_discussion_topic`,
 `import_course_package`, `get_import_status`
 
+Import takes a package that already exists on your machine. Nothing here authors a cartridge, so
+quiz questions need one exported from Brightspace or produced by an authoring tool first.
+
 **Student side** `submit_assignment`, `create_discussion_post`, `reply_to_post`
 
 ```bash
