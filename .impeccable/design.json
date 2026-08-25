@@ -232,20 +232,12 @@
       "css": ".ds-cw { position: relative; } .ds-cw > .ds-pre2 { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8125rem; line-height: 1.6; background: var(--ground-code, #f2f4f2); border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: .9rem 1rem; padding-right: 5rem; margin: 0; overflow-x: auto; color: var(--ink, #1a1c1a); } .ds-copy { position: absolute; top: .5rem; right: .5rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .6875rem; line-height: 1; padding: .4rem .55rem; cursor: pointer; color: var(--ink-3, #646b65); background: var(--ground, #fff); border: 1px solid var(--rule, #d9ddd9); border-radius: 3px; transition: color .12s, border-color .12s, background .12s; } .ds-cw:hover .ds-copy { color: var(--ink-2, #414742); border-color: var(--rule-strong, #868d87); } .ds-copy:hover, .ds-copy:focus-visible { color: var(--accent, #024731); border-color: var(--accent, #024731); outline: none; } .ds-copy[data-done] { color: var(--accent, #024731); border-color: var(--accent, #024731); background: var(--ground-alt, #f6f7f6); }"
     },
     {
-      "name": "Capability list",
+      "name": "Feature list",
       "kind": "custom",
       "refersTo": "capability-item",
-      "description": "Six lines on the overview, one clause each. If an item needs a sentence of explanation it belongs in the manual, not here.",
+      "description": "Seven lines on the overview, an icon and one clause each. One line is not a target, it is the definition: an item needing a sentence of explanation is documentation and belongs in the manual.",
       "html": "<ul class=\"ds-does\"><li>Reads your courses: modules, files, assignments, grades, discussions, quizzes</li><li>Writes content modules and authored HTML pages</li><li>Uploads video, images and PDFs into the course</li><li>Withholds student names from the model by default</li></ul>",
       "css": ".ds-does { list-style: none; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.65; color: var(--ink, #1a1c1a); } .ds-does li { padding: .35rem 0 .35rem 1.4rem; position: relative; } .ds-does li::before { content: \"\"; position: absolute; left: .15rem; top: .85rem; width: .4rem; height: .4rem; border-radius: 50%; background: var(--accent, #024731); }"
-    },
-    {
-      "name": "Feature card",
-      "kind": "card",
-      "refersTo": "capability-item",
-      "description": "One per page, never a grid. A hairline box pulling out the single feature that deserves to leave the list.",
-      "html": "<div class=\"ds-card\"><svg class=\"ds-ic\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/><path d=\"m9 12 2 2 4-4\"/></svg><h3>FERPA guard</h3><p>Student names, usernames and email addresses do not leave Lamakū. Each student is swapped for an anonymous label before any course data goes to the assistant.</p></div>",
-      "css": ".ds-card { display: grid; grid-template-columns: auto 1fr; gap: 0 .9rem; border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: 1rem 1.1rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-card .ds-ic { width: 1.5rem; height: 1.5rem; color: var(--accent, #024731); grid-row: 1 / span 2; margin-top: .1rem; } .ds-card h3 { margin: 0 0 .3rem; font-size: 1rem; font-weight: 600; } .ds-card p { margin: 0; font-size: .9375rem; color: var(--ink-2, #414742); }"
     }
   ],
   "narrative": {
@@ -291,8 +283,8 @@
         "section": "typography"
       },
       {
-        "name": "One Card",
-        "body": "One feature card on the page, never a grid. Three same-size icon-heading-text cards in a row is a feature wall, which is the arrangement this site exists to avoid.",
+        "name": "The Overview Lists, The Manual Explains",
+        "body": "A feature on the overview is one line: what it does, no how and no why. The moment it needs a paragraph it has stopped being a feature listing and become documentation, and documentation lives on the other page.",
         "section": "components"
       }
     ],
@@ -314,9 +306,10 @@
       "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason.",
       "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The overview's whole argument is that it can be read in thirty seconds.",
       "Don't let the overview grow, and don't push the install block below anything.",
-      "Don't add a second feature card. One is a highlight; three is a feature wall.",
       "Don't hand-draw an icon or reach for an emoji. Take it from Lucide, vendor the path data, and let the stylesheet set the weight.",
-      "Don't write a heading as \"What it does\" or \"What it is\". Name the thing: Features, How to install, Documentation."
+      "Don't write a heading as \"What it does\" or \"What it is\". Name the thing: Features, How to install, Documentation.",
+      "Don't put a paragraph on the overview to explain a feature. The feature line links to the manual and the explanation lives there.",
+      "Don't build a card grid. Same-size icon-heading-text cards in a row is a feature wall."
     ]
   }
 }

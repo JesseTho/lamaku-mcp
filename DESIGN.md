@@ -147,11 +147,16 @@ near-black, and hairline grey, because the accent only reads as a choice when no
 with it.
 
 The site is two pages sharing one stylesheet, and they are deliberately unequal in weight. The
-**overview** at `/` opens the way a tool page is supposed to: a tagline, then one copy-pastable
-block that installs it. Features and a list of links follow, and that is the whole page. It runs
-about 300 words, held there deliberately, because a first attempt at 981 read as a wall and taught
-the rule. The **manual** at `/guide/` is where everything else lives: three columns, dense tables,
-twelve sections, 1,800 words.
+**overview** at `/` opens the way a tool page is supposed to: a one-line tagline, then one
+copy-pastable block that installs it. Seven one-line features and a list of links follow, and that
+is the whole page. It runs about 156 words. The **manual** at `/guide/` is where everything else
+lives: three columns, dense tables, twelve sections, 1,800 words.
+
+The division between them is not length, it is register. **The overview lists. The manual
+explains.** A feature on the overview is one line: what it does, no how and no why. The moment it
+needs a paragraph it has stopped being a feature listing and become documentation, and
+documentation lives on the other page. This was learned by shipping a FERPA guard card with four
+lines of explanation on it, which was documentation wearing a feature's clothes.
 
 Both pages are written for a University of Hawaiʻi instructor, not for a developer. The overview
 says *change* rather than *write*, *anonymous label* rather than *HMAC*, *content module* and
@@ -359,7 +364,7 @@ Stroke width is set once in the stylesheet at `1.75`, lighter than Lucide's defa
 `2` reads heavy beside a 16px system sans. `fill: none`, round caps and joins,
 `stroke: currentColor` so a parent's `color` drives it and dark mode needs no second rule.
 
-`1.25rem` in a list, `1.5rem` in a card. Always `aria-hidden`, because the text beside an icon is
+`1.25rem`, the size of a line of body text. Always `aria-hidden`, because the text beside an icon is
 never a caption for it; the icon is the decoration and the sentence is the content.
 
 The ISC notice rides in a comment above the sprite and, in a form a person can read, in the
@@ -380,24 +385,14 @@ every explanation, because someone who already knows they want it should not hav
 A single line of `ink-muted` beneath carries the prerequisites and the sandbox warning. That line
 is the entire safety brief on this page; the rest is in the manual.
 
-### Feature card
+### Feature list
 
-A hairline box with a `1.5rem` icon in the left column, an `h3`, and a paragraph, plus a `.fine`
-line for the qualification. Flat, like everything else; no shadow, no left bar, since the left bar
-belongs to notes.
+Seven lines on the overview, a Lucide icon and one clause each. No bold lead-in, no explanatory
+second line, no rules between rows.
 
-**One of these on the page, not a grid of them.** Three same-size icon-heading-text cards in a row
-is a feature wall, which is the arrangement this site exists to avoid. The card is for the one
-thing that deserves to be pulled out of the list, and right now that is the FERPA guard.
-
-### Capability list
-
-Six lines on the overview, one clause each, no bold lead-in and no explanatory second line. A
-`0.4rem` Mānoa Green dot marks each item and nothing else does; there are no rules between rows,
-because a divider and a marker doing the same job is noise.
-
-The constraint is the component: if an item needs a sentence of explanation, it belongs in the
-manual, not here.
+The constraint is the component. One line each is not a target, it is the definition: an item that
+needs a sentence of explanation is documentation and belongs in the manual. The FERPA guard is a name and a
+seven-word consequence here, and a whole section there.
 
 ### Browser surfaces
 
@@ -439,7 +434,9 @@ white text. First tab stop on the page.
   The overview's whole argument is that it can be read in thirty seconds.
 - **Don't** let the overview grow, and don't push the install block below anything. Every
   addition is a subtraction from how fast the page reads, and the manual is one click away.
-- **Don't** add a second feature card. One is a highlight; three is a feature wall.
+- **Don't** put a paragraph on the overview to explain a feature. If it needs explaining, the
+  feature line links to the manual and the explanation lives there.
+- **Don't** build a card grid. Same-size icon-heading-text cards in a row is a feature wall.
 - **Don't** hand-draw an icon or reach for an emoji. Take it from Lucide, vendor the path data,
   and let the stylesheet set the weight.
 - **Don't** write a heading as "What it does" or "What it is". Name the thing: Features, How to

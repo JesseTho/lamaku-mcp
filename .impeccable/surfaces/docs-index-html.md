@@ -36,13 +36,15 @@ They copy one block before deciding whether to read any further, which is the po
 
 ## Content
 
-A tagline, one install block, six features with icons, one card, links out.
+A one-line tagline, one install block, seven one-line features, links out. About 170 words.
 
-Prerequisites and the sandbox warning share one small line under the block. One sentence names
-what it cannot do and links to the full list.
+**The overview lists and the manual explains.** That is the division, and it is not about length.
+A feature here is one line: what it does, no how and no why. The FERPA guard gets seven words on
+this page and a whole section on the other one, and a first attempt that gave it a card with four
+lines of explanation was documentation wearing a feature's clothes.
 
-The FERPA guard is the only feature pulled out of the list into a card, because it is the thing a
-faculty member is actually nervous about. There is exactly one card and there should stay one.
+Prerequisites and the sandbox warning share one small line under the install block. One small line
+names what it cannot do and links to the full list.
 
 Only verified claims. No adoption numbers.
 

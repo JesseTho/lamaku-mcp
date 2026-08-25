@@ -270,18 +270,6 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .does li{display:flex;gap:.8rem;align-items:flex-start;padding:.4rem 0}
 .does .ic{color:var(--accent);margin-top:.22rem}
 
-/* ---------- feature card ----------
-   A hairline box, flat like everything else. One of these, not a grid of them:
-   the moment there are three it has become a feature wall. */
-.card{
-  display:grid;grid-template-columns:auto 1fr;gap:0 .9rem;
-  border:1px solid var(--rule);border-radius:4px;
-  padding:1rem 1.1rem;margin:1.6rem 0 0;
-}
-.card .ic{width:1.5rem;height:1.5rem;color:var(--accent);grid-row:1/span 3;margin-top:.1rem}
-.card h3{margin:0 0 .3rem;font-size:1rem}
-.card p{margin:0;font-size:.9375rem;color:var(--ink-2)}
-.card .fine{margin-top:.5rem}
 
 /* Where to go next, one destination per line. Seven links inside a sentence
    is a wall in miniature. */
