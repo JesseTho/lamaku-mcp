@@ -134,7 +134,29 @@
         "name": "collapse",
         "value": "64rem"
       }
-    ]
+    ],
+    "icons": {
+      "source": "Lucide",
+      "version": "1.34.0",
+      "license": "ISC",
+      "url": "https://lucide.dev",
+      "delivery": "inline SVG sprite of <symbol> elements, referenced with <use>",
+      "strokeWidth": "1.75 (Lucide default is 2; lighter suits 16px system sans)",
+      "sizes": {
+        "list": "1.25rem",
+        "card": "1.5rem"
+      },
+      "used": [
+        "layers",
+        "file-text",
+        "upload",
+        "clipboard-list",
+        "package",
+        "eye",
+        "shield-check"
+      ],
+      "rule": "Never hand-drawn, never an emoji. Always aria-hidden; the sentence beside it is the content."
+    }
   },
   "components": [
     {
@@ -216,6 +238,14 @@
       "description": "Six lines on the overview, one clause each. If an item needs a sentence of explanation it belongs in the manual, not here.",
       "html": "<ul class=\"ds-does\"><li>Reads your courses: modules, files, assignments, grades, discussions, quizzes</li><li>Writes content modules and authored HTML pages</li><li>Uploads video, images and PDFs into the course</li><li>Withholds student names from the model by default</li></ul>",
       "css": ".ds-does { list-style: none; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.65; color: var(--ink, #1a1c1a); } .ds-does li { padding: .35rem 0 .35rem 1.4rem; position: relative; } .ds-does li::before { content: \"\"; position: absolute; left: .15rem; top: .85rem; width: .4rem; height: .4rem; border-radius: 50%; background: var(--accent, #024731); }"
+    },
+    {
+      "name": "Feature card",
+      "kind": "card",
+      "refersTo": "capability-item",
+      "description": "One per page, never a grid. A hairline box pulling out the single feature that deserves to leave the list.",
+      "html": "<div class=\"ds-card\"><svg class=\"ds-ic\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/><path d=\"m9 12 2 2 4-4\"/></svg><h3>FERPA guard</h3><p>Student names, usernames and email addresses do not leave Lamakū. Each student is swapped for an anonymous label before any course data goes to the assistant.</p></div>",
+      "css": ".ds-card { display: grid; grid-template-columns: auto 1fr; gap: 0 .9rem; border: 1px solid var(--rule, #d9ddd9); border-radius: 4px; padding: 1rem 1.1rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--ink, #1a1c1a); } .ds-card .ds-ic { width: 1.5rem; height: 1.5rem; color: var(--accent, #024731); grid-row: 1 / span 2; margin-top: .1rem; } .ds-card h3 { margin: 0 0 .3rem; font-size: 1rem; font-weight: 600; } .ds-card p { margin: 0; font-size: .9375rem; color: var(--ink-2, #414742); }"
     }
   ],
   "narrative": {
@@ -252,8 +282,18 @@
       },
       {
         "name": "The Tagline And The Block",
-        "body": "The overview opens with a two-sentence tagline and one copy-pastable install block, in that order, above every explanation. It is held under 200 words. A first attempt at 981 read as a wall, which is what taught the rule.",
+        "body": "The overview opens with a tagline and one copy-pastable install block, in that order, above every explanation. It runs about 300 words and is held there. A first attempt at 981 read as a wall, which is what taught the rule.",
         "section": "layout"
+      },
+      {
+        "name": "The Instructor's Words",
+        "body": "Both pages are written for a University of Hawaiʻi instructor, not a developer. Change, not write. Anonymous label, not HMAC. Content module and grade item, because those are the words on the Brightspace screen.",
+        "section": "typography"
+      },
+      {
+        "name": "One Card",
+        "body": "One feature card on the page, never a grid. Three same-size icon-heading-text cards in a row is a feature wall, which is the arrangement this site exists to avoid.",
+        "section": "components"
       }
     ],
     "dos": [
@@ -263,7 +303,8 @@
       "Do put the semantic meaning in the note's label text, not only in its colour.",
       "Do keep new script as progressive enhancement. The page must be fully readable and fully navigable with JavaScript off.",
       "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference.",
-      "Do theme the browser's own surfaces: selection, caret, scrollbar, focus ring."
+      "Do theme the browser's own surfaces: selection, caret, scrollbar, focus ring.",
+      "Do keep the ISC notice with the Lucide paths, in the sprite comment and in the footer."
     ],
     "donts": [
       "Don't add a webfont. Not for headings, not for code, not for one accent word. The system stack is the reason this page will look the same in ten years.",
@@ -272,7 +313,10 @@
       "Don't put a UH logo, seal, or wordmark on the page. The project is not endorsed by the University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.",
       "Don't let a heading level skip. h2 to h4 is a bug; the tool-index group labels are h3.grp for exactly this reason.",
       "Don't add a hero, a feature grid, a testimonial, or a call-to-action button, on either page. The overview's whole argument is that it can be read in thirty seconds.",
-      "Don't let the overview grow, and don't push the install block below anything."
+      "Don't let the overview grow, and don't push the install block below anything.",
+      "Don't add a second feature card. One is a highlight; three is a feature wall.",
+      "Don't hand-draw an icon or reach for an emoji. Take it from Lucide, vendor the path data, and let the stylesheet set the weight.",
+      "Don't write a heading as \"What it does\" or \"What it is\". Name the thing: Features, How to install, Documentation."
     ]
   }
 }

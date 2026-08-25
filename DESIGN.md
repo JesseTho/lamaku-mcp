@@ -147,11 +147,16 @@ near-black, and hairline grey, because the accent only reads as a choice when no
 with it.
 
 The site is two pages sharing one stylesheet, and they are deliberately unequal in weight. The
-**overview** at `/` opens the way a tool page is supposed to: a two-sentence tagline, then one
-copy-pastable block that installs it. Six lines on what it does and a list of links follow, and
-that is the whole page. It is held under 200 words, because a first attempt at 981 read as a wall
-and taught the rule. The **manual** at `/guide/` is where everything else lives: three columns,
-dense tables, twelve sections, 1,800 words.
+**overview** at `/` opens the way a tool page is supposed to: a tagline, then one copy-pastable
+block that installs it. Features and a list of links follow, and that is the whole page. It runs
+about 300 words, held there deliberately, because a first attempt at 981 read as a wall and taught
+the rule. The **manual** at `/guide/` is where everything else lives: three columns, dense tables,
+twelve sections, 1,800 words.
+
+Both pages are written for a University of Hawaiʻi instructor, not for a developer. The overview
+says *change* rather than *write*, *anonymous label* rather than *HMAC*, *content module* and
+*grade item* because those are the words on the Brightspace screen. Product vocabulary that only
+an engineer would use belongs in the manual, if anywhere.
 
 **Key Characteristics:**
 
@@ -290,6 +295,12 @@ nav, which is transparent at rest so nothing shifts when it lights up.
 
 ## Components
 
+### Masthead links
+
+`ink-muted`, no underline, `1.4rem` apart. They take the accent and an underline on hover and on
+focus. Three underlined accent links in the top corner shout at a reader who came for the page,
+not the navigation.
+
 ### Navigation
 
 Two columns of the same component at two weights. Links are `ink-secondary` at rest with no
@@ -338,6 +349,28 @@ when the block is hovered, to `manoa-green` on its own hover or focus, and holds
 shaded ground for two seconds. The word is the state; the colour only agrees with it. A visually
 hidden `aria-live` region announces the same word.
 
+### Icons
+
+**Lucide v1.34.0, ISC licensed.** Path data is vendored verbatim into an inline SVG sprite at the
+top of the page and referenced with `<use>`. Nothing is hand-drawn and nothing is an emoji, so
+every icon shares one geometry.
+
+Stroke width is set once in the stylesheet at `1.75`, lighter than Lucide's default `2`, because
+`2` reads heavy beside a 16px system sans. `fill: none`, round caps and joins,
+`stroke: currentColor` so a parent's `color` drives it and dark mode needs no second rule.
+
+`1.25rem` in a list, `1.5rem` in a card. Always `aria-hidden`, because the text beside an icon is
+never a caption for it; the icon is the decoration and the sentence is the content.
+
+The ISC notice rides in a comment above the sprite and, in a form a person can read, in the
+footer.
+
+### The product mark
+
+A `1.15rem` Mānoa Green rounded square with three rules in it, sitting before the wordmark in the
+masthead on both pages, and the same shape as `favicon.svg`. The rules are stroked in
+`var(--ground)` rather than white, so the mark inverts correctly in dark mode instead of glaring.
+
 ### The install block
 
 The overview's centrepiece and its only code block. Four lines, in order, that take someone from
@@ -346,6 +379,16 @@ every explanation, because someone who already knows they want it should not hav
 
 A single line of `ink-muted` beneath carries the prerequisites and the sandbox warning. That line
 is the entire safety brief on this page; the rest is in the manual.
+
+### Feature card
+
+A hairline box with a `1.5rem` icon in the left column, an `h3`, and a paragraph, plus a `.fine`
+line for the qualification. Flat, like everything else; no shadow, no left bar, since the left bar
+belongs to notes.
+
+**One of these on the page, not a grid of them.** Three same-size icon-heading-text cards in a row
+is a feature wall, which is the arrangement this site exists to avoid. The card is for the one
+thing that deserves to be pulled out of the list, and right now that is the FERPA guard.
 
 ### Capability list
 
@@ -396,6 +439,11 @@ white text. First tab stop on the page.
   The overview's whole argument is that it can be read in thirty seconds.
 - **Don't** let the overview grow, and don't push the install block below anything. Every
   addition is a subtraction from how fast the page reads, and the manual is one click away.
+- **Don't** add a second feature card. One is a highlight; three is a feature wall.
+- **Don't** hand-draw an icon or reach for an emoji. Take it from Lucide, vendor the path data,
+  and let the stylesheet set the weight.
+- **Don't** write a heading as "What it does" or "What it is". Name the thing: Features, How to
+  install, Documentation.
 - **Don't** put a UH logo, seal, or wordmark on the page. The project is not endorsed by the
   University of Hawaiʻi or D2L. The author works at UH; the project does not speak for it.
 - **Don't** let a heading level skip. `h2` to `h4` is a bug; the tool-index group labels are

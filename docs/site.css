@@ -79,9 +79,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
   padding:.7rem 1.5rem;max-width:100rem;margin:0 auto;
 }
 .masthead .name{font-family:var(--mono);font-size:.95rem;font-weight:600;color:var(--ink);text-decoration:none}
+.mark{width:1.15rem;height:1.15rem;flex:none;align-self:center}
+.mark rect{fill:var(--accent)}
+.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.4;stroke-linecap:round}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
-.masthead .links{display:flex;gap:1rem;font-size:.8125rem}
+.masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
+.masthead .links a{color:var(--ink-3);text-decoration:none}
+.masthead .links a:hover{color:var(--accent);text-decoration:underline}
+.masthead .links a:focus-visible{color:var(--accent)}
 
 /* ---------- three-column shell ---------- */
 .shell{
@@ -242,6 +248,7 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .solo{max-width:38rem;margin:0 auto;padding:2.75rem 1.5rem 5rem}
 .lede{font-size:1.1875rem;line-height:1.5;color:var(--ink);margin:0 0 1.5rem}
 .solo h2{margin-top:3rem}
+.solo > h2:first-of-type{margin-top:2rem}
 .solo pre{white-space:pre-wrap;overflow-wrap:break-word}
 
 /* One line each, no bold lead-in, no explanatory second line. The list is
@@ -249,12 +256,32 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .solo > pre{margin-top:1.4rem}
 .fine{font-size:.875rem;color:var(--ink-3);margin:0 0 1rem}
 
-.does{list-style:none;margin:0 0 1.5rem;padding:0}
-.does li{padding:.35rem 0 .35rem 1.4rem;position:relative}
-.does li::before{
-  content:"";position:absolute;left:.15rem;top:.85rem;
-  width:.4rem;height:.4rem;border-radius:50%;background:var(--accent);
+/* ---------- icons ----------
+   Lucide v1.34.0, ISC. Path data is verbatim; stroke width is set here rather
+   than on each symbol, so every icon on the site carries one weight. */
+.sprite{display:none}
+.ic{
+  width:1.25rem;height:1.25rem;flex:none;
+  fill:none;stroke:currentColor;stroke-width:1.75;
+  stroke-linecap:round;stroke-linejoin:round;
 }
+
+.does{list-style:none;margin:0 0 1.5rem;padding:0}
+.does li{display:flex;gap:.8rem;align-items:flex-start;padding:.4rem 0}
+.does .ic{color:var(--accent);margin-top:.22rem}
+
+/* ---------- feature card ----------
+   A hairline box, flat like everything else. One of these, not a grid of them:
+   the moment there are three it has become a feature wall. */
+.card{
+  display:grid;grid-template-columns:auto 1fr;gap:0 .9rem;
+  border:1px solid var(--rule);border-radius:4px;
+  padding:1rem 1.1rem;margin:1.6rem 0 0;
+}
+.card .ic{width:1.5rem;height:1.5rem;color:var(--accent);grid-row:1/span 3;margin-top:.1rem}
+.card h3{margin:0 0 .3rem;font-size:1rem}
+.card p{margin:0;font-size:.9375rem;color:var(--ink-2)}
+.card .fine{margin-top:.5rem}
 
 /* Where to go next, one destination per line. Seven links inside a sentence
    is a wall in miniature. */

@@ -27,8 +27,56 @@ batched review, the contrast script green, and the surface brief updated.
 
 <a class="skip" href="#content">Skip to content</a>
 
+<!-- Icons from Lucide v1.34.0, ISC licensed. https://lucide.dev
+     Path data is verbatim; only the stroke width is set from the stylesheet. -->
+<svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-read" viewBox="0 0 24 24"><!-- lucide layers -->
+    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" />
+    <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" />
+    <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />
+  </symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><!-- lucide file-text -->
+    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+    <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+    <path d="M10 9H8" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
+  </symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><!-- lucide upload -->
+    <path d="M12 3v12" />
+    <path d="m17 8-5-5-5 5" />
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+  </symbol>
+  <symbol id="i-task" viewBox="0 0 24 24"><!-- lucide clipboard-list -->
+    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+    <path d="M12 11h4" />
+    <path d="M12 16h4" />
+    <path d="M8 11h.01" />
+    <path d="M8 16h.01" />
+  </symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><!-- lucide package -->
+    <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+    <path d="M12 22V12" />
+    <polyline points="3.29 7 12 12 20.71 7" />
+    <path d="m7.5 4.27 9 5.15" />
+  </symbol>
+  <symbol id="i-preview" viewBox="0 0 24 24"><!-- lucide eye -->
+    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+    <circle cx="12" cy="12" r="3" />
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><!-- lucide shield-check -->
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    <path d="m9 12 2 2 4-4" />
+  </symbol>
+</defs></svg>
+
 <header class="masthead">
   <div class="masthead-in">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <rect width="32" height="32" rx="4"/>
+      <g class="mk"><path d="M9 11h14"/><path d="M9 16h14"/><path d="M9 21h8"/></g>
+    </svg>
     <a class="name" href="./">lamaku-mcp</a>
     <span class="ver">54 tools · MIT</span>
     <span class="spacer"></span>
@@ -43,35 +91,50 @@ batched review, the contrast script green, and the surface brief updated.
 <main id="content" class="solo">
 
   <h1>lamaku-mcp</h1>
-  <p class="tagline">An MCP server for Lamakū, the University of Hawaiʻi's D2L Brightspace
-  instance. Describe a module to your AI assistant and it builds the module in your course.</p>
+  <p class="tagline">Build your Lamakū courses by describing them. Tell your AI assistant what
+  you want in a module and it creates the pages, uploads the video, and sets up the discussion and
+  the assignment. You see every change before it is made.</p>
+
+  <h2 id="install">How to install</h2>
 
   <pre><code>git clone https://github.com/JesseTho/lamaku-mcp
 cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
 node dist/cli.js login
 claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
 
-  <p class="fine">Needs Node 20 or later, a Lamakū account, and an MCP client. Signing in opens a
-  browser for UH SSO. Point it at a <a href="guide/#writes">sandbox course</a> first.</p>
+  <p class="fine">You will need Node.js 20 or later, your usual Lamakū login, and an assistant
+  that can use outside tools, such as Claude Code. Signing in opens a browser for UH login and
+  Duo. Try it on a sandbox course first: deletes cannot be undone.</p>
 
-  <h2 id="does">What it does</h2>
+  <h2 id="features">Features</h2>
 
   <ul class="does">
-    <li>Reads your courses: modules, files, assignments, grades, discussions, quizzes</li>
-    <li>Writes content modules and authored HTML pages</li>
-    <li>Uploads video, images and PDFs into the course</li>
-    <li>Creates assignments, grade items, discussions, announcements, checklists</li>
-    <li>Imports a whole course package, which is how quizzes and rubrics get in</li>
-    <li>Previews every write before it happens, and withholds student names by default</li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-read"/></svg><span>Reads the courses you already teach, so you can ask what is in them</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-page"/></svg><span>Creates content modules and pages</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg><span>Uploads video, images and PDFs</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-task"/></svg><span>Sets up assignments, grade items, discussions, announcements and checklists</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-package"/></svg><span>Imports a course package, which is how quizzes and rubrics come across</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-preview"/></svg><span>Shows you every change first, and adds it hidden from students</span></li>
   </ul>
 
-  <p>It cannot write quiz questions directly, author rubrics, or set grade values.
-  <a href="guide/#limits">The limits are listed in full</a>, with what to do instead.</p>
+  <p>It cannot build quiz questions or rubrics on its own, and it does not enter grades.
+  <a href="guide/#limits">The full list of limits</a> says what to do instead.</p>
+
+  <div class="card">
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>
+    <h3>FERPA guard</h3>
+    <p>Student names, usernames and email addresses do not leave Lamakū. Before any course data
+    goes to the assistant, each student is swapped for an anonymous label such as
+    <code>student:4f2a91</code>. The label stays the same throughout, so you can still ask about
+    the student who missed the third lab without naming anyone.</p>
+    <p class="fine">On by default. Co-instructors are not anonymised, and
+    <a href="guide/#privacy">you can ask for real names</a> when you need them.</p>
+  </div>
 
   <h2 id="docs">Documentation</h2>
 
   <ul class="next">
-    <li><a href="guide/#writes">How writes work</a></li>
+    <li><a href="guide/#writes">How changes are approved</a></li>
     <li><a href="guide/#course">Building a course</a></li>
     <li><a href="guide/#imports">Course imports</a></li>
     <li><a href="guide/#privacy">Student privacy</a></li>
@@ -81,6 +144,7 @@ claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
 
   <footer>
     <p>MIT licensed. Derived from <a href="https://github.com/sahildayal/mycourses-mcp">mycourses-mcp</a> by Sahil Dayal.</p>
+    <p>Icons by <a href="https://lucide.dev">Lucide</a>, ISC licensed.</p>
     <p>Built by a UH employee. Not endorsed by the University of Hawaiʻi or D2L.</p>
   </footer>
 
