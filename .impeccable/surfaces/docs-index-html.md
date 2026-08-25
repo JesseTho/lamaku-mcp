@@ -22,10 +22,12 @@ They copy one block before deciding whether to read any further, which is the po
 
 ## Constraints
 
-- **Under 200 words, install block first.** Both are binding, not style preferences. A tool page
-  opens with a tagline and a copy-pastable command; everything below that is optional reading. A
-  first version came in at 981 words, over half the length of the entire manual, and read as a
-  wall. Anything that needs a paragraph goes in the manual.
+- **Install block first, page about 300 words.** A tool page opens with a tagline and a
+  copy-pastable command; everything below that is optional reading. A first version came in at 981
+  words, over half the length of the entire manual, and read as a wall.
+- **Written for an instructor, not a developer.** Change, not write. Anonymous label, not HMAC.
+  The words on the Brightspace screen, not the words in the codebase.
+- **Headings name the thing.** Features, How to install, Documentation. Not "What it does".
 - One measure, no breakouts, no second column. The page is a single column from masthead to
   footer.
 - No repeated bold-term-then-explanation rhythm. Sixteen of those in a row is what made the first
@@ -34,11 +36,13 @@ They copy one block before deciding whether to read any further, which is the po
 
 ## Content
 
-Four things in order: a two-sentence tagline, one install block, six lines on what it does, links
-out.
+A tagline, one install block, six features with icons, one card, links out.
 
-Prerequisites and the sandbox warning share one small line under the block. One sentence names the
-three things it cannot do and links to the full list. None of them gets a section.
+Prerequisites and the sandbox warning share one small line under the block. One sentence names
+what it cannot do and links to the full list.
+
+The FERPA guard is the only feature pulled out of the list into a card, because it is the thing a
+faculty member is actually nervous about. There is exactly one card and there should stay one.
 
 Only verified claims. No adoption numbers.
 
