@@ -29,6 +29,16 @@ It refuses to run without an explicit course id, deliberately. Point it at a san
 LAMAKU_SANDBOX=<courseId> node scripts/verify-writes.mjs
 ```
 
+## Documentation
+
+`build-style-examples.mjs` renders one example course page per template into `docs/examples/`,
+using the same `wrapHtml` the server calls. The manual embeds those files as live previews, so
+run it after `pnpm build` whenever a template changes or the documentation starts lying.
+
+```bash
+node scripts/build-style-examples.mjs
+```
+
 ## Development aids
 
 `diag.mjs` and `analyze-terms.mjs` are ad-hoc. `diag` pokes at the live API while working on
