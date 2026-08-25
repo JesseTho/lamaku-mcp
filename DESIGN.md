@@ -408,19 +408,29 @@ footer.
 
 ### The product mark
 
-**A flame.** *Lamakū* is the Hawaiian word for torch and Lamakū's own logo is a lit torch, so the
-mark is Lucide's `flame` in a terracotta rounded square: `1.15rem` in the masthead of both pages,
-`2.4rem` in the band, and the same shape as `favicon.svg`.
+**A torch.** *Lamakū* is the Hawaiian word for torch and Lamakū's own logo is a lit torch, so the
+mark is one, in a terracotta rounded square: `1.15rem` in the masthead of both pages, `2.4rem` in
+the band, and the same shape as `favicon.svg`.
 
-An authored torch came first and was discarded. It was recognisable and it was worse, because a
-shape drawn beside a sourced set never quite shares its geometry, and that mismatch is visible
-before anyone can say why. Lucide has no `torch`: `flashlight` is an electric one and
-`flame-kindling` reads as a campfire, so `flame` it is.
+Lucide has no `torch`. `flashlight` is an electric one and `flame-kindling` reads as a campfire,
+so the mark is **composed rather than drawn from nothing**: Lucide's `flame`, scaled to 62% and
+set at the top of the 24-unit grid, over a collar and a shaft drawn in the same grammar. Two
+straight strokes, round caps, on the same grid.
 
-Its stroke is `2.25`, heavier than the `1.75` the interface icons carry, because the mark is small
+The detail that makes it work is `vector-effect: non-scaling-stroke` on the flame. Without it the
+scaled path draws at 62% of the stroke width and the flame is visibly thinner than the handle it
+sits on, which is the tell that reads as wrong before anyone can name it. With it, both draw at
+the same width and the torch is one line.
+
+A fully hand-drawn torch was tried first and discarded. It was recognisable and it was worse: a
+shape authored beside a sourced set never quite shares its geometry. Borrowing the flame and
+adding only what Lucide lacks keeps the geometry and gets the word the product is named for.
+
+Its stroke is `2.5`, heavier than the `1.75` the interface icons carry, because the mark is small
 and sits on a filled ground where the lighter weight thins out by 16px. Stroked in `var(--ground)`
 on the masthead square and `var(--band)` on the band's cream square, so it inverts correctly in
-both themes.
+both themes. Checked at 16, 18, 24, 38, 64 and 128 in both, which is how the shaft length and the
+collar width were settled.
 
 ### The header band
 
@@ -494,8 +504,11 @@ white text. First tab stop on the page.
 - **Don't** put a paragraph on the overview to explain a feature. If it needs explaining, the
   feature line links to the manual and the explanation lives there.
 - **Don't** build a card grid. Same-size icon-heading-text cards in a row is a feature wall.
-- **Don't** hand-draw an icon or reach for an emoji, the mark included. Take it from Lucide,
-  vendor the path data, and let the stylesheet set the weight.
+- **Don't** hand-draw an interface icon or reach for an emoji. Take it from Lucide, vendor the
+  path data, and let the stylesheet set the weight.
+- **Don't** extend the mark without `vector-effect: non-scaling-stroke` on anything scaled. A
+  scaled path draws a thinner line, and mismatched weight is what made the first two attempts at
+  this mark look wrong.
 - **Don't** fill any surface but the header band with the accent.
 - **Don't** write a heading as "What it does" or "What it is". Name the thing: Features, How to
   install, Documentation.
