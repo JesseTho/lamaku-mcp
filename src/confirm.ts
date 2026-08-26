@@ -51,7 +51,10 @@ export function stage(
     note:
       'Nothing has been sent to Lamaku yet. Show this plan to the user and ' +
       'get their go-ahead, then call the same tool again with this confirmToken ' +
-      'to actually perform it. The token works once and expires in 5 minutes.',
+      'to actually perform it. The token works once and expires in 5 minutes. ' +
+      'The confirm call runs exactly what is previewed here: passing different ' +
+      'arguments alongside the token changes nothing. To alter the action, ' +
+      'drop the token and request a fresh preview.',
   };
 }
 

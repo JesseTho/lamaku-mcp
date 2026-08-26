@@ -29,17 +29,37 @@ function looksLikeAuthFailure(body: string): boolean {
   return /<form[^>]+login|d2l\/login/.test(head);
 }
 
-/** Simple token bucket. Brightspace is not generous with burst traffic. */
 /**
- * Statuses worth retrying. 429 is the rate cap; 502/503/504 are a gateway or
- * an instance briefly unavailable. 500 is deliberately absent — Brightspace
- * returns it for malformed bodies, and retrying those just repeats the
- * mistake more slowly.
+ * Statuses worth retrying, by whether the request mutates anything.
+ *
+ * For a read, 429 and the transient 5xx family all mean "try again". For a
+ * write they do not: a 502 or 504 is the gateway giving up, and the origin can
+ * perfectly well have completed the write behind it. Retrying a POST there is
+ * how a course build ends up with two copies of a module and nobody sure why.
+ * So writes retry only on 429, where Brightspace refused before doing
+ * anything. 500 is absent from both sets — Brightspace returns it for
+ * malformed bodies, and retrying those just repeats the mistake more slowly.
  */
-const RETRYABLE = new Set([429, 502, 503, 504]);
+const RETRYABLE_READ = new Set([429, 502, 503, 504]);
+const RETRYABLE_WRITE = new Set([429]);
 const RETRY_LIMIT = 4;
 const RETRY_BASE_MS = 500;
 const RETRY_MAX_WAIT_MS = 20_000;
+
+/** Exported for the tests: the retry decision, free of any I/O. */
+export function canRetry(method: string, status: number): boolean {
+  const mutating = method !== 'GET' && method !== 'HEAD';
+  return (mutating ? RETRYABLE_WRITE : RETRYABLE_READ).has(status);
+}
+
+/**
+ * Node's fetch has no default timeout, so one hung socket would hang a tool
+ * call forever and the user would see nothing but a stuck assistant. Reads get
+ * a minute; uploads and imports get ten, since a 500 MB video over campus
+ * wifi is slow legitimately.
+ */
+const READ_TIMEOUT_MS = 60_000;
+const UPLOAD_TIMEOUT_MS = 600_000;
 
 class RateLimiter {
   private tokens: number;
@@ -112,6 +132,7 @@ export class D2LClient {
 
     const response = await fetch(this.url('/d2l/api/versions/'), {
       headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(READ_TIMEOUT_MS),
     });
     if (!response.ok) {
       throw new D2LApiError(
@@ -164,23 +185,27 @@ export class D2LClient {
     };
     if (init.contentType) headers['Content-Type'] = init.contentType;
 
+    const isUpload =
+      typeof init.body !== 'string' && init.body !== undefined;
+    const timeoutMs = isUpload ? UPLOAD_TIMEOUT_MS : READ_TIMEOUT_MS;
+
     let response = await fetch(this.url(path, init.query), {
       method,
       headers,
       body: init.body,
       redirect: 'manual',
+      signal: AbortSignal.timeout(timeoutMs),
     });
 
     // Reactive backoff, on top of the proactive token bucket above.
     //
     // The limiter keeps a single well-behaved client under the rate cap, but
     // it cannot know about other clients on the same account, a slow instance,
-    // or a maintenance window. 429 and the transient 5xx family are worth
-    // waiting out rather than surfacing as a failed course build half way
-    // through. Retries are bounded and only ever applied to statuses that
-    // mean "try again", never to a 4xx that means "this request is wrong".
+    // or a maintenance window. Retries are bounded, never applied to a 4xx
+    // that means "this request is wrong", and never applied to a write on a
+    // gateway error — see canRetry for why.
     for (let attempt = 1; attempt <= RETRY_LIMIT; attempt++) {
-      if (!RETRYABLE.has(response.status)) break;
+      if (!canRetry(method, response.status)) break;
 
       // Brightspace sends Retry-After on 429, in seconds. Honour it when
       // present, since guessing shorter is how you stay rate limited.
@@ -196,6 +221,7 @@ export class D2LClient {
         headers,
         body: init.body,
         redirect: 'manual',
+        signal: AbortSignal.timeout(timeoutMs),
       });
     }
 
@@ -253,7 +279,14 @@ export class D2LClient {
     const value = (await response.json()) as T;
 
     if (ttl > 0) {
-      this.cache.set(cacheKey, { expiresAt: Date.now() + ttl * 1000, value });
+      // Evict what has already expired before adding more. Without this the
+      // map only ever loses an entry when the same key is re-read, and a long
+      // session accumulates every response it ever cached.
+      const now = Date.now();
+      for (const [key, entry] of this.cache) {
+        if (entry.expiresAt <= now) this.cache.delete(key);
+      }
+      this.cache.set(cacheKey, { expiresAt: now + ttl * 1000, value });
     }
     return value;
   }

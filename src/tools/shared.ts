@@ -1,6 +1,7 @@
 import { AuthError } from '../auth/provider.js';
 import { D2LApiError } from '../api/client.js';
 import { ConfirmError } from '../confirm.js';
+import { PRIVACY_MODE } from '../privacy.js';
 import type { RichText } from '../api/types.js';
 
 export interface ToolResult {
@@ -40,10 +41,40 @@ export async function guard(fn: () => Promise<ToolResult>): Promise<ToolResult> 
       if (error.status === 404) {
         return fail(`Not found (404): ${error.path}. Check the ids you passed.`);
       }
-      return fail(`${error.message}\n${error.body}`);
+      return fail(`${error.message}\n${safeErrorBody(error.body)}`);
     }
     return fail(error instanceof Error ? error.message : String(error));
   }
+}
+
+/**
+ * What a failed response's body may say to the model.
+ *
+ * Everything the FERPA guard does applies to successful results; an error body
+ * is raw Brightspace output and can carry whatever the route was about,
+ * including the identities strict mode exists to withhold. So under strict,
+ * only the fields of D2L's own error shape pass through — Message and Errors —
+ * and anything else is summarised, with the full body on stderr where a person
+ * debugging can read it and a transcript cannot.
+ */
+export function safeErrorBody(body: string): string {
+  if (PRIVACY_MODE === 'off') return body;
+  if (!body.trim()) return '';
+  try {
+    const parsed = JSON.parse(body) as {
+      Message?: unknown;
+      Errors?: { Message?: unknown }[];
+    };
+    const messages = [
+      parsed.Message,
+      ...(Array.isArray(parsed.Errors) ? parsed.Errors.map((e) => e?.Message) : []),
+    ].filter((m): m is string => typeof m === 'string' && m.length > 0);
+    if (messages.length > 0) return messages.join('; ');
+  } catch {
+    // Not JSON — fall through to the summary.
+  }
+  console.error('lamaku-mcp: full error body (withheld from the model):', body.slice(0, 2000));
+  return `(response body withheld under the FERPA guard; the full body is on stderr)`;
 }
 
 /** Brightspace returns HTML almost everywhere; collapse it for reading. */
