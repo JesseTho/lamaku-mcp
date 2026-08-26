@@ -159,7 +159,11 @@ export async function interactiveLogin(
       `Timed out after ${Math.round(timeoutMs / 60_000)} minutes waiting for sign-in.`,
     );
   } finally {
-    await context.close();
+    // Guarded: a user who closes the window themselves right after the
+    // session is captured makes close() throw, and an error thrown from a
+    // finally block replaces the function's result — a completed sign-in
+    // would be reported as a failure.
+    await context.close().catch(() => {});
   }
 }
 

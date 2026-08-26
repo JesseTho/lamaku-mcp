@@ -85,7 +85,10 @@ class RateLimiter {
         return;
       }
       const waitMs = ((1 - this.tokens) / this.refillPerSecond) * 1000;
-      await new Promise((resolve) => setTimeout(resolve, Math.ceil(waitMs)));
+      // unref: while a client is connected, stdin keeps the process alive, so
+      // this changes nothing. After the client disconnects it stops a pending
+      // backoff from holding the process open for up to 20 more seconds.
+      await new Promise((resolve) => setTimeout(resolve, Math.ceil(waitMs)).unref());
     }
   }
 }
@@ -214,7 +217,7 @@ export class D2LClient {
         ? Math.min(header * 1000, RETRY_MAX_WAIT_MS)
         : Math.min(RETRY_BASE_MS * 2 ** (attempt - 1), RETRY_MAX_WAIT_MS);
 
-      await new Promise((resolve) => setTimeout(resolve, waitMs));
+      await new Promise((resolve) => setTimeout(resolve, waitMs).unref());
       await this.limiter.take();
       response = await fetch(this.url(path, init.query), {
         method,
