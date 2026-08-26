@@ -332,6 +332,16 @@ which contributed the browser-session auth, the confirmation gate, and the clien
 layers. The instructor authoring tools, the FERPA guard, the role preflight and the Lamakū
 targeting are new here.
 
+### Every tool disappeared mid-session
+
+The server process died. A stdio server has nowhere to report that, and
+`claude mcp list` will still say it is connected, because checking spawns a
+fresh process rather than inspecting the one your session is talking to.
+
+Restart the client to get the tools back. The server now logs the cause to
+stderr and survives an unhandled rejection rather than exiting on it, so a
+repeat should leave a trail.
+
 Not endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use
 policy before pointing this at your account.
 

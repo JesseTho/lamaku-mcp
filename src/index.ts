@@ -63,7 +63,49 @@ export function createServer(): { server: McpServer; client: D2LClient } {
   return { server, client };
 }
 
+/**
+ * What exit code a stdout write error deserves. EPIPE means the client closed
+ * the pipe and went away, which is an ordinary end to a session rather than a
+ * failure. Anything else is a real problem. Split out so it can be tested
+ * without killing the test runner.
+ */
+export function stdoutExitCode(error: NodeJS.ErrnoException): number {
+  return error.code === 'EPIPE' ? 0 : 1;
+}
+
+/**
+ * A stdio MCP server dies quietly. There is no window to show a crash in, and
+ * the client reports the server as healthy afterwards because checking it
+ * spawns a fresh process. So the failure a user actually sees is that every
+ * tool vanished, with nothing anywhere saying why.
+ *
+ * Node terminates on an unhandled rejection by default. One rejected fetch,
+ * one timer that settles after a call was abandoned, and all 54 tools go with
+ * it for the rest of that session. That trade is wrong for this process: log
+ * it loudly and keep serving.
+ *
+ * An uncaught exception still exits, because state may genuinely be corrupt
+ * by then, but it exits having said so.
+ */
+export function installProcessGuards(): void {
+  process.on('unhandledRejection', (reason) => {
+    console.error('lamaku-mcp: unhandled rejection, still serving:', reason);
+  });
+
+  process.on('uncaughtException', (error) => {
+    console.error('lamaku-mcp: uncaught exception, shutting down:', error);
+    process.exit(1);
+  });
+
+  process.stdout.on('error', (error: NodeJS.ErrnoException) => {
+    const code = stdoutExitCode(error);
+    if (code !== 0) console.error('lamaku-mcp: stdout failed:', error);
+    process.exit(code);
+  });
+}
+
 export async function startServer(): Promise<void> {
+  installProcessGuards();
   const { server } = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
