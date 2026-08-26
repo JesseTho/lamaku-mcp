@@ -487,6 +487,16 @@ pnpm build</code></pre>
     <h3>Sign-in does not complete</h3>
     <p>The window can open behind others; check the taskbar before assuming it failed. Some execution policies block the browser launcher, in which case set <code>LAMAKU_BROWSER</code> to a browser you already have installed.</p>
 
+    <h3>Every tool disappeared mid-session</h3>
+
+    <p>The server process died. A stdio server has nowhere to report that, and
+    <code>claude mcp list</code> will still say it is connected, because checking spawns a fresh
+    process rather than inspecting the one your session is talking to.</p>
+
+    <p>Restart your client to get the tools back. Nothing needs re-authenticating; the stored
+    session is a file and survives independently. The server survives an unhandled rejection
+    rather than exiting on it now, and logs the cause to stderr, so a repeat leaves a trail.</p>
+
     <h3>Content is missing after building a course</h3>
     <p>Everything is created hidden. Run <code>release_course_content</code>, or check <code>hiddenCount</code> in a listing.</p>
 
