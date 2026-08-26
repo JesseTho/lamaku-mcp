@@ -2,14 +2,13 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { pathToFileURL } from 'node:url';
 
 import { stdoutExitCode, installProcessGuards } from '../dist/index.js';
 
 const run = promisify(execFile);
-const DIST = pathToFileURL(
-  new URL('../dist/index.js', import.meta.url).pathname.replace(/^\//, ''),
-).href;
+// Already a file:// URL on every platform. Taking .pathname and patching the
+// leading slash by hand works on Windows and produces a relative path on Linux.
+const DIST = new URL('../dist/index.js', import.meta.url).href;
 
 /** Run a snippet in its own process and report how it went. */
 async function inChildProcess(source) {
