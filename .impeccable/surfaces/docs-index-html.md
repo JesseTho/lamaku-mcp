@@ -66,4 +66,4 @@ and a link, which turns out to be enough.
   overview by the word budget, but the manual could carry one.
 - Nothing in the repo connects this server to the skill that writes the cartridges it imports.
   The two halves already fit and the docs do not say so.
-- Install is still clone-and-build. Publishing to npm would collapse steps one and three.
+- Resolved: the package is published to npm, and the install block is two npx lines.

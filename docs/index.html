@@ -153,10 +153,8 @@ batched review, the contrast script green, and the surface brief updated.
 
   <h2 id="install">How to install</h2>
 
-  <pre><code>git clone https://github.com/JesseTho/lamaku-mcp
-cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
-node dist/cli.js login
-claude mcp add lamaku -- node "$PWD/dist/index.js"</code></pre>
+  <pre><code>npx -y lamaku-mcp login
+claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
   <p class="fine">Needs Node.js 20+ and an MCP client.
   <a href="guide/#scratch">Setting up from scratch</a>.</p>
