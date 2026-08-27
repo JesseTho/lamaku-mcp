@@ -17,9 +17,9 @@ stack, hairlines, and the same left sidebar as the manual, carrying the
 documentation. No on-this-page rail: four sections do not need one.
 STORY: A UH instructor reads two sentences, copies one block, and is
 installed before deciding whether to read further.
-FIRST VIEWPORT: A Mānoa Green band carrying the mark, the name and the
-tagline, then the install block with its copy button, the requirements line,
-and the whole feature list.
+FIRST VIEWPORT: A terracotta band carrying the mark, the name and the
+tagline, then the sign-in line and the per-client register lines, each with
+its own copy button.
 FORM: Under 200 words by design, after a first attempt at 981 read as a wall.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 batched review, the contrast script green, and the surface brief updated.
@@ -77,10 +77,13 @@ batched review, the contrast script green, and the surface brief updated.
   <div class="masthead-in">
     <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
       <rect width="32" height="32" rx="4"/>
-      <g class="mk" transform="translate(4,4)"><!-- torch: lucide flame + handle -->
-        <g transform="translate(4.56,.15) scale(.62)">
+      <g class="mk"><!-- power symbol; lucide flame as the I -->
+        <g transform="translate(7.2,-1) scale(.4)">
           <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" vector-effect="non-scaling-stroke"/>
         </g>
+        <path d="M12 9.2V16"/>
+        <path d="M17.36 10A7 7 0 1 1 6.64 10"/>
+      </g>
         <path d="M9.5 14.6h5"/>
         <path d="M12 15.2v6.3"/>
       </g>
@@ -100,10 +103,13 @@ batched review, the contrast script green, and the surface brief updated.
   <div class="band-in">
     <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
       <rect width="32" height="32" rx="4"/>
-      <g class="mk" transform="translate(4,4)"><!-- torch: lucide flame + handle -->
-        <g transform="translate(4.56,.15) scale(.62)">
+      <g class="mk"><!-- power symbol; lucide flame as the I -->
+        <g transform="translate(7.2,-1) scale(.4)">
           <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" vector-effect="non-scaling-stroke"/>
         </g>
+        <path d="M12 9.2V16"/>
+        <path d="M17.36 10A7 7 0 1 1 6.64 10"/>
+      </g>
         <path d="M9.5 14.6h5"/>
         <path d="M12 15.2v6.3"/>
       </g>
@@ -153,21 +159,31 @@ batched review, the contrast script green, and the surface brief updated.
 
   <h2 id="install">How to install</h2>
 
-  <pre><code>npx -y lamaku-mcp login
-claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
+  <pre><code>npx -y lamaku-mcp login</code></pre>
 
-  <p class="fine">Needs Node.js 20+ and an MCP client.
-  <a href="guide/#scratch">Setting up from scratch</a>.</p>
+  <p class="fine">Then register it with your assistant:</p>
+
+  <div class="clients">
+    <div class="client"><span>Claude Code</span>
+      <pre><code>claude mcp add lamaku -- npx -y lamaku-mcp</code></pre></div>
+    <div class="client"><span>Codex CLI</span>
+      <pre><code>codex mcp add lamaku -- npx -y lamaku-mcp</code></pre></div>
+    <div class="client"><span>Gemini CLI</span>
+      <p class="fine"><a href="guide/#gemini">One entry in <code>settings.json</code></a>, since its
+      add command is unreliable at the moment.</p></div>
+  </div>
+
+  <p class="fine">Needs Node.js 20+. <a href="guide/#scratch">Setting up from scratch</a>.</p>
 
   <h2 id="features">Features</h2>
 
   <ul class="does">
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-read"/></svg><span>Reads the courses you already teach</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-read"/></svg><span>Reads your courses</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-page"/></svg><span>Creates content modules and pages</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-upload"/></svg><span>Uploads video, images and PDFs</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-task"/></svg><span>Sets up assignments, grade items, discussions and checklists</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-package"/></svg><span>Imports whole course packages</span></li>
-    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-preview"/></svg><span>Shows every change before it is made, and adds it hidden</span></li>
+    <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-preview"/></svg><span>Asks for approval before every change</span></li>
     <li><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg><span>FERPA guard: prevents student data leaking to LLMs</span></li>
   </ul>
 
@@ -176,8 +192,7 @@ claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
   <a href="guide/#limits">Full list of limits</a>.</p>
 
   <footer>
-    <p>Not endorsed by the University of Hawaiʻi or D2L. MIT licensed; credits are in the
-    <a href="https://github.com/JesseTho/lamaku-mcp#credits">repository</a>.</p>
+    <p>Not endorsed by the University of Hawaiʻi or D2L. MIT licensed.</p>
   </footer>
 
   </main>

@@ -409,29 +409,22 @@ belong to the repo.
 
 ### The product mark
 
-**A torch.** *Lamakū* is the Hawaiian word for torch and Lamakū's own logo is a lit torch, so the
-mark is one, in a terracotta rounded square: `1.15rem` in the masthead of both pages, `2.4rem` in
-the band, and the same shape as `favicon.svg`.
+**The power symbol, lit.** The mark is the universal power icon with the torch as its I: Lucide's
+`flame` above, a shaft through the ring's gap, the broken circle as the O. *Lamakū* means torch;
+the power symbol means on. Together they are the product: the torch, switched on. It sits in a
+terracotta rounded square, `1.15rem` in the masthead of both pages, `1.9rem` and `2.4rem` in the
+two band variants, and it is the same shape as `favicon.svg`.
 
-Lucide has no `torch`. `flashlight` is an electric one and `flame-kindling` reads as a campfire,
-so the mark is **composed rather than drawn from nothing**: Lucide's `flame`, scaled to 62% and
-set at the top of the 24-unit grid, over a collar and a shaft drawn in the same grammar. Two
-straight strokes, round caps, on the same grid.
+Composed in the set's own grammar, never hand-drawn: the flame is vendored Lucide path data at
+40% with `vector-effect: non-scaling-stroke`, so the scaled path still draws at the mark's own
+stroke width; the shaft and ring are two strokes on the same 24-unit grid. Stroke `2.1`
+throughout the mark. The ring radius is 7 with a 100° gap, which is what keeps the flame clear
+of the ring's ends at 16 px; three constructions were rendered at 16 through 120 px in both
+themes before this one was chosen.
 
-The detail that makes it work is `vector-effect: non-scaling-stroke` on the flame. Without it the
-scaled path draws at 62% of the stroke width and the flame is visibly thinner than the handle it
-sits on, which is the tell that reads as wrong before anyone can name it. With it, both draw at
-the same width and the torch is one line.
-
-A fully hand-drawn torch was tried first and discarded. It was recognisable and it was worse: a
-shape authored beside a sourced set never quite shares its geometry. Borrowing the flame and
-adding only what Lucide lacks keeps the geometry and gets the word the product is named for.
-
-Its stroke is `2.5`, heavier than the `1.75` the interface icons carry, because the mark is small
-and sits on a filled ground where the lighter weight thins out by 16px. Stroked in `var(--ground)`
-on the masthead square and `var(--band)` on the band's cream square, so it inverts correctly in
-both themes. Checked at 16, 18, 24, 38, 64 and 128 in both, which is how the shaft length and the
-collar width were settled.
+Two earlier marks are on record so they are not retried: a fully hand-drawn torch, discarded
+because a shape authored beside a sourced set never shares its geometry, and a bare Lucide
+`flame`, discarded because it dropped the word the product is named for.
 
 ### The header band
 
@@ -439,8 +432,9 @@ The overview's header: a full-bleed `--band` surface carrying the mark at `2.4re
 cream, and the tagline in `--band-ink`. Its inner width is `63.5rem`, the shell's two tracks plus
 their gap, so its left edge lands exactly on the sidebar's.
 
-It stacks to a column below `34rem`. The manual has no band; a reference page does not need a
-hero, and the shared masthead is what makes the two pages read as one site.
+It stacks to a column below `34rem`. The manual carries the same band in a slim variant: same
+surface and mark, reference proportions, inner width following the three-column shell. One header
+architecture on both pages is what makes them read as one site.
 
 ### The install block
 
