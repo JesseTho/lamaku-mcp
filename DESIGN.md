@@ -409,11 +409,13 @@ belong to the repo.
 
 ### The product mark
 
-**The power symbol, lit.** The mark is the universal power icon with the torch as its I: Lucide's
-`flame` above, a shaft through the ring's gap, the broken circle as the O. *Lamakū* means torch;
-the power symbol means on. Together they are the product: the torch, switched on. It sits in a
-terracotta rounded square, `1.15rem` in the masthead of both pages, `1.9rem` and `2.4rem` in the
-two band variants, and it is the same shape as `favicon.svg`.
+**The power symbol, lit — where it fits.** The full mark is the universal power icon with the
+torch as its I: Lucide's `flame` above, a shaft through the ring's gap, the broken circle as the
+O. *Lamakū* means torch; the power symbol means on. Rendered honestly at every size, it needs
+about 30px: below that the three elements collapse into a knot. So the mark is responsive, the
+way wordmarks ship a monogram. The bands carry the full mark (`2.4rem` and `2.1rem`); the
+masthead (`1.15rem`) and `favicon.svg` carry the torch alone, at stroke `2.5` where the full
+mark uses `2.1`.
 
 Composed in the set's own grammar, never hand-drawn: the flame is vendored Lucide path data at
 40% with `vector-effect: non-scaling-stroke`, so the scaled path still draws at the mark's own
