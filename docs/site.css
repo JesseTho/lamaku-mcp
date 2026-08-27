@@ -95,7 +95,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
   fill:none;stroke:var(--accent);stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round;
 }
-.mark-icon g path{fill:var(--accent)}
+/* Only the flame fills — the nested group scopes it. The bare selector
+   flooded the ring and shaft too, because everything sits inside .mk. */
+.mark-icon .mk g path{fill:var(--accent)}
 /* Heavier than the 1.75 the interface icons use: the mark is small, sits on
    a filled ground, and thins out at 16px at the lighter weight. The flame
    inside carries vector-effect:non-scaling-stroke, so its scaled-down path
