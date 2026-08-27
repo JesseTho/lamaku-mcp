@@ -56,8 +56,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <div class="band-in">
     <svg class="mark" width="38" height="38" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
       <rect width="32" height="32" rx="4"/>
-      <g class="mk"><!-- power symbol; lucide flame nested in the ring's mouth.
-           Ring centre pinned to (16,16): the circle is what centres. -->
+      <g class="mk" transform="translate(0,1.3)"><!-- power symbol; lucide flame nested in the
+           ring's mouth. Ring on the tile's horizontal centre; dropped 1.3 because the flame's
+           mass above the ring makes the geometric position sit optically high. -->
         <g transform="translate(10,1.47) scale(.5)">
           <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" vector-effect="non-scaling-stroke"/>
         </g>
@@ -98,6 +99,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <ul>
       <li><a href="#tools">Tool index</a></li>
       <li><a href="#privacy">Student privacy</a></li>
+      <li><a href="#student-misuse">Can a student cheat?</a></li>
       <li><a href="#limits">Known limitations</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ul>
@@ -478,6 +480,20 @@ claude mcp add lamaku-dev -- node "$PWD/dist/index.js"</code></pre>
       <p>You can read your roster in Brightspace at any time. The purpose is keeping it out of prompts and model retention unless you intend otherwise. <a href="https://github.com/JesseTho/lamaku-mcp/blob/main/SECURITY.md">SECURITY.md</a> describes what this does and does not protect.</p>
     </div>
 
+    <h3 id="student-misuse">Can a student use this to cheat?</h3>
+
+    <p>Not by gaining anything their account does not already have. The server signs in as the
+    user, and Brightspace enforces permissions on its side, so a student role cannot write
+    grades, read hidden content, or use the instructor tools. There is deliberately no
+    quiz-taking tool: quizzes can be listed, and nothing starts an attempt or reads a
+    question.</p>
+
+    <p>What it changes is friction. A student account can submit assignments and post to
+    discussions, so an agent can write and submit work end to end, and an API submission looks
+    identical to one made in the browser. That is the same academic-integrity exposure as any
+    chatbot plus a paste, automated; it belongs to the account's own permissions, not to a hole
+    this server could close while legitimate self-submission exists.</p>
+
     <h2 id="limits">Known limitations</h2>
 
     <div class="tw">
@@ -564,6 +580,7 @@ claude mcp add lamaku-dev -- node "$PWD/dist/index.js"</code></pre>
       <li><a href="#quizzes-in-practice">Setting up a quiz</a></li>
       <li><a href="#tools">Tool index</a></li>
       <li><a href="#privacy">Student privacy</a></li>
+      <li><a href="#student-misuse">Can a student cheat?</a></li>
       <li><a href="#limits">Known limitations</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ul>

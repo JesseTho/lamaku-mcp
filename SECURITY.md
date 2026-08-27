@@ -86,3 +86,20 @@ through filenames or rich text, and anything that causes a write the user did no
 
 Out of scope: Brightspace's own vulnerabilities (report those to D2L), and the fact that
 holding a valid session lets you do what that session can do.
+
+## Can a student use this to complete a course?
+
+Not by gaining anything their account does not already have. The server signs in as the user and
+Brightspace enforces permissions server-side, so a student role cannot write grades, read hidden
+content, or touch instructor tools; the role preflight here is a courtesy error, not the
+enforcement. There is deliberately no quiz-taking tool: `list_quizzes` lists, and no tool starts
+an attempt or reads questions.
+
+What it does change is friction. A student's account can `submit_assignment` and post to
+discussions, so an agent can write and submit work end to end, and a submission made through the
+API is indistinguishable from one made in the browser. That is the same academic-integrity
+exposure as any LLM plus a paste, automated. It is inherent to the account holding those
+permissions, not something this server can remove while legitimate self-submission exists.
+
+If that trade is wrong for your context, remove the student-side write tools from your build:
+they are registered in one place in `src/index.ts`.
