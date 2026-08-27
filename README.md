@@ -19,7 +19,7 @@ course end to end, the page templates, and all 54 tools.
 
 Building and maintaining a course from an agent, without clicking through Brightspace.
 
-The three D2L MCP servers I could find are read-only. They check grades and due dates, which is
+Existing D2L MCPs only check grades and due dates, which is
 useful, and it is a different job from this one. If you want to ask what is due on Thursday,
 those are simpler. If you want to construct a course and put it in Lamakū, this is the one that
 can.
