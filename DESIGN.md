@@ -425,10 +425,11 @@ the stem sits on the geometric centre, but the flame's mass hangs left of its st
 read left-heavy against a ruled centre line at 3×. Optical centring is judged on a render, never
 by arithmetic.
 
-The flame in both marks is a **small cut**: Lucide's outer silhouette with the inner curl
-dropped. A scaled-down copy of the full path turns to a filled blob at 1× density, because
-Lucide draws for 24px and the curl needs that size to breathe. A logo ships a simplified small
-cut the way type ships optical sizes; the interface icons remain vendored verbatim.
+The flame in both marks is Lucide's own, kept whole: a simplified small cut was tried and
+rejected for losing the flame's character. The trade accepted with it: at 1× density and small
+sizes the inner curl runs tight, and that is the flame's real face rather than a defect to
+redraw. Every icon viewBox pads by half the stroke width on all sides, because a stroke reaches
+past its path and a tight box clips the glyph's flanks.
 
 Mark previews are judged at **device pixel ratio 1 as well as 2**. Every earlier round was
 previewed at 2× and 3× only, where subpixel smoothing hides stroke congestion, and the blob
