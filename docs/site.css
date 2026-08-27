@@ -92,7 +92,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
    glyph's own 10:22 box. */
 .mark-icon{
   height:1.35rem;width:auto;flex:none;align-self:center;
-  fill:none;stroke:var(--accent);stroke-width:2.5;
+  fill:none;stroke:var(--accent);stroke-width:2.2;
   stroke-linecap:round;stroke-linejoin:round;
 }
 /* Heavier than the 1.75 the interface icons use: the mark is small, sits on

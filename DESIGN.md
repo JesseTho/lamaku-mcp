@@ -425,6 +425,15 @@ the stem sits on the geometric centre, but the flame's mass hangs left of its st
 read left-heavy against a ruled centre line at 3×. Optical centring is judged on a render, never
 by arithmetic.
 
+The flame in both marks is a **small cut**: Lucide's outer silhouette with the inner curl
+dropped. A scaled-down copy of the full path turns to a filled blob at 1× density, because
+Lucide draws for 24px and the curl needs that size to breathe. A logo ships a simplified small
+cut the way type ships optical sizes; the interface icons remain vendored verbatim.
+
+Mark previews are judged at **device pixel ratio 1 as well as 2**. Every earlier round was
+previewed at 2× and 3× only, where subpixel smoothing hides stroke congestion, and the blob
+shipped twice because of it.
+
 Composed in the set's own grammar, never hand-drawn: the flame is vendored Lucide path data at
 40% with `vector-effect: non-scaling-stroke`, so the scaled path still draws at the mark's own
 stroke width; the shaft and ring are two strokes on the same 24-unit grid. Stroke `2.1`
