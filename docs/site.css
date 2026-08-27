@@ -91,7 +91,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 /* The masthead torch: an icon, not a tile. Height leads; width follows the
    glyph's own 10:22 box. */
 .mark-icon{
-  height:1.4rem;width:auto;flex:none;align-self:center;
+  /* Sized so the ring matches the wordmark's cap height and the flame
+     ascends like a letter's ascender; nudged so the ring's centre sits on
+     the text's optical midline (measured on the render, not assumed). */
+  height:1.2rem;width:auto;flex:none;align-self:center;
+  transform:translateY(-0.75px);
   fill:none;stroke:var(--accent);stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round;
 }
