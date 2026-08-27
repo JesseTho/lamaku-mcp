@@ -413,17 +413,12 @@ belong to the repo.
 torch as its I: Lucide's `flame` above, a shaft through the ring's gap, the broken circle as the
 O. *Lamakū* means torch; the power symbol means on. Rendered honestly at every size, it needs
 about 30px: below that the three elements collapse into a knot. So the mark is responsive, the
-way wordmarks ship a monogram. The bands carry the full mark on its tile (`2.4rem` and
-`2.1rem`); the masthead and `favicon.svg` carry the torch alone as a **bare icon in the accent
-colour, tight viewBox, no tile**. A thin glyph knocked out of a large square reads as a sliver;
-hugging its own bounds is what makes it an icon. Stroke `2.5` on the icon, `2.1` on the full
-mark. The favicon carries a `prefers-color-scheme` rule inside the SVG so the glyph lightens on
-dark tab strips.
-
-Inside the tile the torch takes a `+0.4` optical nudge right while the symmetric ring stays put:
-the stem sits on the geometric centre, but the flame's mass hangs left of its stem, and the tile
-read left-heavy against a ruled centre line at 3×. Optical centring is judged on a render, never
-by arithmetic.
+way wordmarks ship a monogram — **retired by direction: one mark everywhere.** The masthead and
+favicon carry the same nested power-torch as the bands, bare and in the accent colour, at the
+cost of a tight flame at the smallest sizes; a trade the user chose over two marks. The ring's
+centre is pinned to the tile's centre, because the circle is the dominant shape and the circle
+is what must read as centred; the flame tip rides above it. The favicon keeps its
+`prefers-color-scheme` rule.
 
 The flame in both marks is Lucide's own, kept whole: a simplified small cut was tried and
 rejected for losing the flame's character. The trade accepted with it: at 1× density and small
