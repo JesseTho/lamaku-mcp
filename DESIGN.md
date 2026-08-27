@@ -403,8 +403,9 @@ Stroke width is set once in the stylesheet at `1.75`, lighter than Lucide's defa
 `1.25rem`, the size of a line of body text. Always `aria-hidden`, because the text beside an icon is
 never a caption for it; the icon is the decoration and the sentence is the content.
 
-The ISC notice rides in a comment above the sprite and, in a form a person can read, in the
-footer.
+The ISC notice rides in a comment above the sprite, where the vendored path data lives, and in
+the repository README's credits. The page footer carries only the disclaimer; credit lines
+belong to the repo.
 
 ### The product mark
 

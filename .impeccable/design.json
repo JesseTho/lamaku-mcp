@@ -336,7 +336,7 @@
       "Do keep new script as progressive enhancement. The page must be fully readable and fully navigable with JavaScript off.",
       "Do render the ʻokina (U+02BB) and kahakō correctly in Lamakū, Hawaiʻi, Mānoa, and JABSOM. This is a brand commitment, not a typographic preference.",
       "Do theme the browser's own surfaces: selection, caret, scrollbar, focus ring.",
-      "Do keep the ISC notice with the Lucide paths, in the sprite comment and in the footer.",
+      "Do keep the ISC notice with the Lucide paths, in the sprite comment and in the repository credits.",
       "Do keep the palette anchored to Lamaku's own identity rather than drifting on its own."
     ],
     "donts": [
