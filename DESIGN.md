@@ -413,9 +413,17 @@ belong to the repo.
 torch as its I: Lucide's `flame` above, a shaft through the ring's gap, the broken circle as the
 O. *Lamakū* means torch; the power symbol means on. Rendered honestly at every size, it needs
 about 30px: below that the three elements collapse into a knot. So the mark is responsive, the
-way wordmarks ship a monogram. The bands carry the full mark (`2.4rem` and `2.1rem`); the
-masthead (`1.15rem`) and `favicon.svg` carry the torch alone, at stroke `2.5` where the full
-mark uses `2.1`.
+way wordmarks ship a monogram. The bands carry the full mark on its tile (`2.4rem` and
+`2.1rem`); the masthead and `favicon.svg` carry the torch alone as a **bare icon in the accent
+colour, tight viewBox, no tile**. A thin glyph knocked out of a large square reads as a sliver;
+hugging its own bounds is what makes it an icon. Stroke `2.5` on the icon, `2.1` on the full
+mark. The favicon carries a `prefers-color-scheme` rule inside the SVG so the glyph lightens on
+dark tab strips.
+
+Inside the tile the torch takes a `+0.4` optical nudge right while the symmetric ring stays put:
+the stem sits on the geometric centre, but the flame's mass hangs left of its stem, and the tile
+read left-heavy against a ruled centre line at 3×. Optical centring is judged on a render, never
+by arithmetic.
 
 Composed in the set's own grammar, never hand-drawn: the flame is vendored Lucide path data at
 40% with `vector-effect: non-scaling-stroke`, so the scaled path still draws at the mark's own
