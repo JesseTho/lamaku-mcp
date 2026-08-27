@@ -89,6 +89,10 @@ npx -y lamaku-mcp login          # opens a browser; complete UH login and Duo yo
 claude mcp add lamaku -- npx -y lamaku-mcp
 ```
 
+Gemini CLI reads the same JSON shape from `~/.gemini/settings.json`; Codex CLI takes
+`codex mcp add lamaku -- npx -y lamaku-mcp` or a `[mcp_servers.lamaku]` block in
+`~/.codex/config.toml` with the same command and args.
+
 Or for any MCP client that speaks stdio:
 
 ```jsonc
@@ -348,4 +352,8 @@ repeat should leave a trail.
 Not endorsed by the University of Hawaiʻi or D2L. Check UH's acceptable-use
 policy before pointing this at your account.
 
-MIT licensed.
+## Credits
+
+MIT licensed. Derived from [mycourses-mcp](https://github.com/sahildayal/mycourses-mcp) by
+Sahil Dayal. Site icons are from [Lucide](https://lucide.dev), ISC licensed; the notice also
+rides with the vendored path data in `docs/`.
