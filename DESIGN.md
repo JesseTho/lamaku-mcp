@@ -420,6 +420,11 @@ centre is pinned to the tile's centre, because the circle is the dominant shape 
 is what must read as centred; the flame tip rides above it. The favicon keeps its
 `prefers-color-scheme` rule.
 
+The flame is **filled with its own line colour** in every context. At icon sizes its inner curl
+is sub-pixel noise as an outline, and no stroke weight rescues detail that has no pixels to live
+in; solid, it reads as a lit flame. The fill is universal rather than a small-size variant so the
+mark stays one thing.
+
 The flame in both marks is Lucide's own, kept whole: a simplified small cut was tried and
 rejected for losing the flame's character. The trade accepted with it: at 1× density and small
 sizes the inner curl runs tight, and that is the flame's real face rather than a defect to
