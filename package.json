@@ -23,6 +23,10 @@
     "type": "git",
     "url": "git+https://github.com/JesseTho/lamaku-mcp.git"
   },
+  "homepage": "https://jessetho.github.io/lamaku-mcp/",
+  "bugs": {
+    "url": "https://github.com/JesseTho/lamaku-mcp/issues"
+  },
   "engines": {
     "node": ">=20"
   },

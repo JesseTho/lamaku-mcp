@@ -85,18 +85,8 @@ explanation instead of a bare 403.
 ## Setup
 
 ```bash
-pnpm install
-pnpm build
-node dist/cli.js login          # opens a browser; complete UH login and Duo yourself
-```
-
-The committed lockfile is pnpm's, and CI installs with `--frozen-lockfile`. `npm` works fine
-locally if you prefer it, but do not commit the `package-lock.json` it generates.
-
-Register with Claude Code:
-
-```bash
-claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js
+npx -y lamaku-mcp login          # opens a browser; complete UH login and Duo yourself
+claude mcp add lamaku -- npx -y lamaku-mcp
 ```
 
 Or for any MCP client that speaks stdio:
@@ -105,13 +95,26 @@ Or for any MCP client that speaks stdio:
 {
   "mcpServers": {
     "lamaku": {
-      "command": "node",
-      "args": ["/absolute/path/to/lamaku-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "lamaku-mcp"],
       "env": { "LAMAKU_HOST": "lamaku.hawaii.edu" }
     }
   }
 }
 ```
+
+### From source
+
+For working on the server itself:
+
+```bash
+git clone https://github.com/JesseTho/lamaku-mcp
+cd lamaku-mcp && pnpm install && pnpm build
+claude mcp add lamaku-dev -- node "$PWD/dist/index.js"
+```
+
+The committed lockfile is pnpm's, and CI installs with `--frozen-lockfile`. `npm` works fine
+locally if you prefer it, but do not commit the `package-lock.json` it generates.
 
 The login opens a real browser window because UH requires Duo. Sessions last about a day of
 idleness and expire hard after a few days, at which point you run `login` again.

@@ -95,10 +95,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
     <p>It reads your courses, and it writes to them: content modules, authored HTML pages, uploaded video and images, links, discussions, assignments, grade items, and whole course packages. Every write is previewed before it lands, and student identities are withheld from the model by default.</p>
 
-<pre><code><span class="c"># install and sign in</span>
-git clone https://github.com/JesseTho/lamaku-mcp
-cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
-node dist/cli.js login</code></pre>
+<pre><code><span class="c"># sign in, then register with your assistant</span>
+npx -y lamaku-mcp login
+claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
     <h2 id="about">What it is</h2>
 
@@ -127,8 +126,7 @@ node dist/cli.js login</code></pre>
     <h2 id="scratch">Setting up from scratch</h2>
 
     <p>For a machine with none of this on it yet. If <code>node --version</code> already prints
-    <code>v20</code> or higher and <code>pnpm --version</code> prints anything at all, skip to
-    <a href="#install">Installation</a>.</p>
+    <code>v20</code> or higher, skip to <a href="#install">Installation</a>.</p>
 
     <ol class="steps">
       <li><strong>Open a terminal</strong>
@@ -143,12 +141,6 @@ node dist/cli.js login</code></pre>
         <pre><code>node --version</code></pre>
         <p>Anything from <code>v20</code> up is fine. Earlier versions will not run this.</p>
       </li>
-      <li><strong>Install pnpm</strong>
-        <p>npm arrives with Node, and installs pnpm in one command:</p>
-        <pre><code>npm install -g pnpm</code></pre>
-        <p>On macOS a permissions error here is normal; <code>sudo npm install -g pnpm</code>
-        clears it. <code>corepack enable pnpm</code> is an alternative that needs no download.</p>
-      </li>
       <li><strong>Install an MCP client</strong>
         <p>Claude Code is the one these instructions assume. Claude Desktop works too and is
         installed as an ordinary application instead.</p>
@@ -160,43 +152,50 @@ node dist/cli.js login</code></pre>
         course is a mistake in front of real students.</p>
       </li>
       <li><strong>Carry on</strong>
-        <p>Everything is in place. <a href="#install">Installation</a> is four commands from
+        <p>Everything is in place. <a href="#install">Installation</a> is two commands from
         here.</p>
       </li>
     </ol>
 
     <h2 id="install">Installation</h2>
 
-<pre><code>git clone https://github.com/JesseTho/lamaku-mcp
-cd lamaku-mcp
-pnpm install
-pnpm build</code></pre>
-
-    <p>The repository commits a pnpm lockfile. <code>npm</code> works locally if you prefer it, but do not commit the <code>package-lock.json</code> it generates.</p>
+    <p>The package is on npm, so <code>npx</code> fetches and runs it with nothing to clone or
+    build. The first run downloads it; after that it starts from the cache.</p>
 
     <h3>Signing in</h3>
 
-<pre><code>node dist/cli.js login</code></pre>
+<pre><code>npx -y lamaku-mcp login</code></pre>
 
     <p>A browser window opens. Complete the UH sign-in and approve the Duo prompt yourself; the window closes once the session is captured. The session is stored encrypted under your user profile.</p>
 
-    <p>Sessions last about a day of idleness and expire after a few days. Re-running <code>login</code> is routine rather than a sign that something is wrong. Check the current state with <code>node dist/cli.js status</code>.</p>
+    <p>Sessions last about a day of idleness and expire after a few days. Re-running <code>login</code> is routine rather than a sign that something is wrong. Check the current state with <code>npx -y lamaku-mcp status</code>.</p>
 
     <h3>Registering with Claude Code</h3>
 
-<pre><code>claude mcp add lamaku -- node /absolute/path/to/lamaku-mcp/dist/index.js</code></pre>
+<pre><code>claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
     <h3>Registering with another MCP client</h3>
 
 <pre><code>{
   "mcpServers": {
     "lamaku": {
-      "command": "node",
-      "args": ["/absolute/path/to/lamaku-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "lamaku-mcp"],
       "env": { "LAMAKU_HOST": "lamaku.hawaii.edu" }
     }
   }
 }</code></pre>
+
+    <h3>From source</h3>
+
+    <p>For working on the server itself rather than using it:</p>
+
+<pre><code>git clone https://github.com/JesseTho/lamaku-mcp
+cd lamaku-mcp &amp;&amp; pnpm install &amp;&amp; pnpm build
+claude mcp add lamaku-dev -- node "$PWD/dist/index.js"</code></pre>
+
+    <p>The committed lockfile is pnpm's. <code>npm</code> works locally if you prefer it, but do
+    not commit the <code>package-lock.json</code> it generates.</p>
 
     <h2 id="configuration">Configuration</h2>
 

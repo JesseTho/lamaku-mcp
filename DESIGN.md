@@ -443,7 +443,7 @@ hero, and the shared masthead is what makes the two pages read as one site.
 
 ### The install block
 
-The overview's centrepiece and its only code block. Four lines, in order, that take someone from
+The overview's centrepiece and its only code block. Two lines, in order, that take someone from
 nothing to a registered server, with a copy button. It sits directly under the tagline, above
 every explanation, because someone who already knows they want it should not have to read past it.
 
