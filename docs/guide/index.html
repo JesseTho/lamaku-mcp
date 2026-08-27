@@ -33,10 +33,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   <div class="masthead-in">
     <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
       <rect width="32" height="32" rx="4"/>
-      <g class="mk" transform="translate(4,4)"><!-- torch: lucide flame + handle -->
-        <g transform="translate(4.56,.15) scale(.62)">
+      <g class="mk"><!-- power symbol; lucide flame as the I -->
+        <g transform="translate(7.2,-1) scale(.4)">
           <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" vector-effect="non-scaling-stroke"/>
         </g>
+        <path d="M12 9.2V16"/>
+        <path d="M17.36 10A7 7 0 1 1 6.64 10"/>
+      </g>
         <path d="M9.5 14.6h5"/>
         <path d="M12 15.2v6.3"/>
       </g>
@@ -52,6 +55,25 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     </span>
   </div>
 </header>
+
+<div class="band slim">
+  <div class="band-in">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <rect width="32" height="32" rx="4"/>
+      <g class="mk"><!-- power symbol; lucide flame as the I -->
+        <g transform="translate(7.2,-1) scale(.4)">
+          <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" vector-effect="non-scaling-stroke"/>
+        </g>
+        <path d="M12 9.2V16"/>
+        <path d="M17.36 10A7 7 0 1 1 6.64 10"/>
+      </g>
+    </svg>
+    <div>
+      <h1>Manual</h1>
+      <p class="tagline">Reference for lamaku-mcp. If you have not installed it yet, start on the <a href="../">overview</a>.</p>
+    </div>
+  </div>
+</div>
 
 <div class="shell" id="top">
 
@@ -90,8 +112,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     document.querySelector('.sidebar details').open = false;</script>
 
   <main id="content">
-    <h1>Manual</h1>
-    <p class="tagline">Reference for lamaku-mcp. If you have not installed it yet, start on the <a href="../">overview</a>.</p>
 
     <p>It reads your courses, and it writes to them: content modules, authored HTML pages, uploaded video and images, links, discussions, assignments, grade items, and whole course packages. Every write is previewed before it lands, and student identities are withheld from the model by default.</p>
 
@@ -170,11 +190,11 @@ claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
     <p>Sessions last about a day of idleness and expire after a few days. Re-running <code>login</code> is routine rather than a sign that something is wrong. Check the current state with <code>npx -y lamaku-mcp status</code>.</p>
 
-    <h3>Registering with Claude Code</h3>
+    <h3 id="claude-code">Registering with Claude Code</h3>
 
 <pre><code>claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
-    <h3>Registering with Gemini CLI</h3>
+    <h3 id="gemini">Registering with Gemini CLI</h3>
 
     <p>Add the server to <code>~/.gemini/settings.json</code> (create the file if it does not
     exist):</p>
@@ -192,7 +212,7 @@ claude mcp add lamaku -- npx -y lamaku-mcp</code></pre>
     terminal, but recent releases have written a shape the loader then rejects, so the file is
     the dependable route. <code>/mcp</code> inside Gemini lists what loaded.</p>
 
-    <h3>Registering with Codex CLI</h3>
+    <h3 id="codex">Registering with Codex CLI</h3>
 
 <pre><code>codex mcp add lamaku -- npx -y lamaku-mcp</code></pre>
 
@@ -528,8 +548,7 @@ claude mcp add lamaku-dev -- node "$PWD/dist/index.js"</code></pre>
     <p>Everything is created hidden. Run <code>release_course_content</code>, or check <code>hiddenCount</code> in a listing.</p>
 
     <footer>
-    <p>Not endorsed by the University of Hawaiʻi or D2L. MIT licensed; credits are in the
-    <a href="https://github.com/JesseTho/lamaku-mcp#credits">repository</a>.</p>
+    <p>Not endorsed by the University of Hawaiʻi or D2L. MIT licensed.</p>
     </footer>
   </main>
 

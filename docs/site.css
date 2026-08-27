@@ -92,7 +92,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
    a filled ground, and thins out at 16px at the lighter weight. The flame
    inside carries vector-effect:non-scaling-stroke, so its scaled-down path
    still draws at this width and the torch reads as one line weight. */
-.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
 .masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
@@ -115,6 +115,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
   .band-in{flex-direction:column;gap:.9rem;padding:2rem 0 2.2rem}
   .band .mark{width:2rem;height:2rem;margin-top:0}
 }
+
+/* The manual's band: same surface, reference proportions. Its inner width
+   follows the three-column shell rather than the overview's two. */
+.band.slim .band-in{max-width:84rem;padding:1.5rem 0 1.7rem}
+.band.slim h1{font-size:1.5rem;margin-bottom:.15rem}
+.band.slim .tagline{font-size:.9375rem}
+.band.slim .mark{width:1.9rem;height:1.9rem;margin-top:.15rem}
+.band .tagline a{color:#fff}
 
 /* ---------- three-column shell ---------- */
 .shell{
@@ -297,6 +305,16 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
   stroke-linecap:round;stroke-linejoin:round;
 }
 
+/* One register line per client. The label is not a heading: it names which
+   line is yours, nothing more. */
+.clients{display:grid;gap:.7rem;margin:0 0 1.2rem}
+.client > span{
+  display:block;font-family:var(--mono);font-size:.6875rem;
+  color:var(--ink-3);margin-bottom:.25rem;
+}
+.client pre{margin:0}
+.client .fine{margin:0}
+
 .does{list-style:none;margin:0 0 1.5rem;padding:0}
 .does li{display:flex;gap:.8rem;align-items:flex-start;padding:.4rem 0}
 .does .ic{color:var(--accent);margin-top:.22rem}
@@ -323,3 +341,4 @@ body{caret-color:var(--accent);scrollbar-color:var(--rule-strong) var(--ground)}
 .tpl iframe{width:100%;height:17rem;border:0;display:block}
 .tpl figcaption{margin-top:.6rem;font-size:.8125rem;color:var(--ink-3)}
 .tpl figcaption b{color:var(--ink-2);font-family:var(--mono);font-size:.9em;font-weight:600}
+
