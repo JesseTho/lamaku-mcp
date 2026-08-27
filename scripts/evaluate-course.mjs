@@ -59,10 +59,21 @@ const check = (area, label, pass, detail = '') =>
 // ── Structure ─────────────────────────────────────────────────────────────
 const mods = await call('list_modules');
 const modules = mods.modules ?? [];
+// Only pages this course authored are held to its authoring rules. A link
+// topic serves someone else's site, and grading the AAMC's homepage against
+// our density limit produces findings nobody can act on.
 const pages = [];
+const external = [];
 for (const m of modules) {
   const d = await call('get_module', { moduleId: m.moduleId });
-  for (const it of d.items ?? []) if (it.url) pages.push({ module: m.title, ...it });
+  for (const it of d.items ?? []) {
+    if (!it.url) continue;
+    if (/^https?:/i.test(it.url) && !it.url.includes(HOST)) external.push(it.title ?? it.url);
+    // Quiz topics are served by Brightspace's own quiz player, whose chrome
+    // (h1 included) is not this course's to fix.
+    else if (/quizzing|\/quizzes\//i.test(it.url)) external.push(it.title ?? it.url);
+    else pages.push({ module: m.title, ...it });
+  }
 }
 const assignments = (await call('list_assignments')).assignments ?? [];
 const forums = (await call('list_forums')).forums ?? [];
@@ -142,8 +153,10 @@ const sr = sample
   : null;
 if (sr) {
   const html = await sr.text();
-  check('Style', 'Pages use the UH shared template',
-    /SYS_custom\.css/.test(html) && /col-sm-10 offset-sm-1/.test(html));
+  const uh = /SYS_custom\.css/.test(html) && /col-sm-10 offset-sm-1/.test(html);
+  const jabsom = /jabsom-page/.test(html);
+  check('Style', 'Pages use a known template (uh or jabsom)', uh || jabsom,
+    uh ? 'uh' : jabsom ? 'jabsom' : 'neither marker found');
 }
 
 // ── Report ────────────────────────────────────────────────────────────────
@@ -151,7 +164,8 @@ const pad = (s, n) => String(s).padEnd(n);
 let area = '';
 let passed = 0;
 console.log(`\nAudit of course ${COURSE} on ${HOST}`);
-console.log(`${pages.length} authored pages, ${fetched} fetched and inspected\n`);
+console.log(`${pages.length} authored pages, ${fetched} fetched and inspected, ` +
+  `${external.length} external links left to their own sites\n`);
 for (const r of results) {
   if (r.area !== area) { area = r.area; console.log(`  ${area}`); }
   if (r.pass) passed++;
