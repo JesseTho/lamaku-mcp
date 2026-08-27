@@ -91,8 +91,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 /* The masthead torch: an icon, not a tile. Height leads; width follows the
    glyph's own 10:22 box. */
 .mark-icon{
-  height:1.35rem;width:auto;flex:none;align-self:center;
-  fill:none;stroke:var(--accent);stroke-width:2.5;
+  height:1.4rem;width:auto;flex:none;align-self:center;
+  fill:none;stroke:var(--accent);stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round;
 }
 /* Heavier than the 1.75 the interface icons use: the mark is small, sits on
@@ -102,8 +102,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 /* The mark is responsive: the full power-torch needs about 30px to read, so
    the bands carry it, while the masthead and favicon carry the torch alone at
    a heavier stroke. Same flame, same grid, two crops. */
-.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.band .mark .mk{stroke-width:2.1}
+.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
 .masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
