@@ -92,7 +92,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
    a filled ground, and thins out at 16px at the lighter weight. The flame
    inside carries vector-effect:non-scaling-stroke, so its scaled-down path
    still draws at this width and the torch reads as one line weight. */
-.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+/* The mark is responsive: the full power-torch needs about 30px to read, so
+   the bands carry it, while the masthead and favicon carry the torch alone at
+   a heavier stroke. Same flame, same grid, two crops. */
+.mark .mk{fill:none;stroke:var(--ground);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.band .mark .mk{stroke-width:2.1}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
 .masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
@@ -121,7 +125,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 .band.slim .band-in{max-width:84rem;padding:1.5rem 0 1.7rem}
 .band.slim h1{font-size:1.5rem;margin-bottom:.15rem}
 .band.slim .tagline{font-size:.9375rem}
-.band.slim .mark{width:1.9rem;height:1.9rem;margin-top:.15rem}
+.band.slim .mark{width:2.1rem;height:2.1rem;margin-top:.15rem}
 .band .tagline a{color:#fff}
 
 /* ---------- three-column shell ---------- */
