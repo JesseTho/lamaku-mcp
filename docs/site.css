@@ -101,7 +101,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 }
 /* Only the flame fills — the nested group scopes it. The bare selector
    flooded the ring and shaft too, because everything sits inside .mk. */
-.mark-icon .mk g path{fill:var(--accent)}
+.mark-icon .mk g path{fill:var(--accent);stroke:none}
 /* Heavier than the 1.75 the interface icons use: the mark is small, sits on
    a filled ground, and thins out at 16px at the lighter weight. The flame
    inside carries vector-effect:non-scaling-stroke, so its scaled-down path
@@ -113,8 +113,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{
 /* The flame is filled with its own line colour. At icon sizes the inner curl
    is sub-pixel noise as an outline; solid, it reads as a lit flame at every
    size, so the fill is universal rather than a small-size variant. */
-.mark .mk g path{fill:var(--ground)}
-.band .mark .mk g path{fill:var(--band)}
+.mark .mk g path{fill:var(--ground);stroke:none}
+.band .mark .mk g path{fill:var(--band);stroke:none}
 .masthead .ver{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
 .masthead .spacer{flex:1}
 .masthead .links{display:flex;gap:1.4rem;font-size:.8125rem}
