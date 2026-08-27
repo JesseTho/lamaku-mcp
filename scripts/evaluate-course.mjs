@@ -38,6 +38,13 @@ function cookie() {
 }
 const COOKIE = cookie();
 
+/** Topic urls arrive both relative and absolute; join only the relative. */
+const unreachable = [];
+
+function absolute(u) {
+  return /^https?:/i.test(u) ? u : `https://${HOST}${u}`;
+}
+
 const { server } = createServer();
 const [ct, st] = InMemoryTransport.createLinkedPair();
 const client = new Client({ name: 'auditor', version: '0' }, { capabilities: {} });
@@ -98,7 +105,8 @@ check('Design rule DI-1', 'No quiz is used as an assessment vehicle',
 let fetched = 0;
 const problems = { alt: [], svg: [], h1: [], notes: [], tables: [], long: [], time: [], iframe: [] };
 for (const p of pages) {
-  const r = await fetch(`https://${HOST}${p.url}`, { headers: { Cookie: COOKIE } });
+  const r = await fetch(absolute(p.url), { headers: { Cookie: COOKIE } }).catch(() => null);
+  if (!r) { unreachable.push(p.title ?? p.url); continue; }
   if (!r.ok) continue;
   const html = await r.text();
   fetched++;
@@ -129,9 +137,11 @@ check('Design rule DI-9', 'Every page states its own time estimate', problems.ti
 
 // UH template applied
 const sample = pages[0];
-if (sample) {
-  const r = await fetch(`https://${HOST}${sample.url}`, { headers: { Cookie: COOKIE } });
-  const html = await r.text();
+const sr = sample
+  ? await fetch(absolute(sample.url), { headers: { Cookie: COOKIE } }).catch(() => null)
+  : null;
+if (sr) {
+  const html = await sr.text();
   check('Style', 'Pages use the UH shared template',
     /SYS_custom\.css/.test(html) && /col-sm-10 offset-sm-1/.test(html));
 }

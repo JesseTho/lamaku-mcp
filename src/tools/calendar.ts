@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { D2LClient } from '../api/client.js';
+import { D2LApiError, type D2LClient } from '../api/client.js';
 import type { CalendarEvent } from '../api/types.js';
 import { fetchMyCourses } from './courses.js';
 import { formatDate, guard, ok, relativeTo, stripHtml } from './shared.js';
@@ -51,15 +51,42 @@ export function register(server: McpServer, client: D2LClient): void {
         const end = new Date(Date.now() + (days ?? 14) * 86_400_000).toISOString();
 
         const path = await client.le('/calendar/events/myEvents/');
-        const events = await client.getAllPages<CalendarEvent>(path, {
-          cacheSeconds: 120,
-          query: {
-            orgUnitIdsCSV: courses.map((c) => c.OrgUnit.Id).join(','),
-            startDateTime: start,
-            endDateTime: end,
-            ...(dueDatesOnly ? { eventType: 'DueDate' } : {}),
-          },
-        });
+        const window = {
+          startDateTime: start,
+          endDateTime: end,
+          ...(dueDatesOnly ? { eventType: 'DueDate' } : {}),
+        };
+
+        // One batched call first. Brightspace refuses the whole batch when any
+        // single course denies the calendar permission to the caller's role
+        // there, so a 403 falls back to asking course by course and keeping
+        // what answers, rather than reporting nothing because one enrolment
+        // is locked down.
+        let events: CalendarEvent[];
+        const refused: string[] = [];
+        try {
+          events = await client.getAllPages<CalendarEvent>(path, {
+            cacheSeconds: 120,
+            query: {
+              orgUnitIdsCSV: courses.map((c) => c.OrgUnit.Id).join(','),
+              ...window,
+            },
+          });
+        } catch (batchError) {
+          if (!(batchError instanceof D2LApiError) || batchError.status !== 403) throw batchError;
+          events = [];
+          for (const c of courses) {
+            try {
+              const some = await client.getAllPages<CalendarEvent>(path, {
+                cacheSeconds: 120,
+                query: { orgUnitIdsCSV: String(c.OrgUnit.Id), ...window },
+              });
+              events.push(...some);
+            } catch {
+              refused.push(c.OrgUnit.Name ?? String(c.OrgUnit.Id));
+            }
+          }
+        }
 
         const sorted = events
           .map((event) => ({
@@ -76,6 +103,10 @@ export function register(server: McpServer, client: D2LClient): void {
         return ok({
           window: { from: start, to: end },
           coursesSearched: courses.length,
+          ...(refused.length > 0
+            ? { calendarRefusedFor: refused,
+                note: 'Some courses refused calendar access for your role there; their events are not included.' }
+            : {}),
           courseNames: courses.map((c) => c.OrgUnit.Name),
           count: sorted.length,
           ...(sorted.length === 0

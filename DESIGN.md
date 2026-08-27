@@ -420,7 +420,9 @@ centre is pinned to the tile's centre, because the circle is the dominant shape 
 is what must read as centred; the flame tip rides above it. The favicon keeps its
 `prefers-color-scheme` rule.
 
-The flame is **filled with its own line colour** in every context. At icon sizes its inner curl
+The flame is **filled with its own line colour, and carries no stroke of its own**, in every
+context. Fill plus a same-colour stroke bloats the silhouette from the outside at icon sizes,
+which is how the flame became a droplet in the masthead; fill alone is the path's true contour. At icon sizes its inner curl
 is sub-pixel noise as an outline, and no stroke weight rescues detail that has no pixels to live
 in; solid, it reads as a lit flame. The fill is universal rather than a small-size variant so the
 mark stays one thing.

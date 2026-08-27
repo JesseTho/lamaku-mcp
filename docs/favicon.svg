@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0.9 22 25.8" role="img" aria-label="lamaku-mcp">
   <style>
     g, path { stroke: #a9481d; }
-    g > g > path { fill: #a9481d; }
+    g > g > path { fill: #a9481d; stroke: none; }
     @media (prefers-color-scheme: dark) {
       g, path { stroke: #c4643a; }
-      g > g > path { fill: #c4643a; }
+      g > g > path { fill: #c4643a; stroke: none; }
     }
   </style>
   <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
